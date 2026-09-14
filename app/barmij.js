@@ -1080,7 +1080,7 @@ function drawTurtle(ctx, x, y, hdeg) {
   const h = (90 - hdeg) * Math.PI / 180; /* logical heading → math angle */
   ctx.save();
   ctx.translate(x, -y); ctx.rotate(-h + Math.PI / 2);
-  ctx.fillStyle = "#3f9d6e";
+  ctx.fillStyle = "#007A59"; /* charter green — same family as the Run button */
   ctx.beginPath(); ctx.moveTo(0, -10); ctx.lineTo(7, 8); ctx.lineTo(-7, 8); ctx.closePath(); ctx.fill();
   ctx.restore();
 }
@@ -2052,7 +2052,7 @@ function flashFeedback(kind, text) {
 function confetti() {
   const c = document.getElementById("confetti"), ctx = c.getContext("2d");
   c.width = innerWidth; c.height = innerHeight;
-  const cols = ["#5b8dc9", "#9c86cf", "#d99a2b", "#d96a57", "#3f9d6e"];
+  const cols = ["#0072B2", "#CC79A7", "#E69F00", "#D55E00", "#007A59"]; /* the charter palette celebrates too */
   const parts = Array.from({ length: 90 }, () => ({
     x: Math.random() * c.width, y: -20 - Math.random() * 120,
     vx: (Math.random() - .5) * 2.4, vy: 2.2 + Math.random() * 3.2,

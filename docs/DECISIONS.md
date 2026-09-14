@@ -1,5 +1,24 @@
 # Decisions Log — Barmij
 
+- **2026-09-14 / B46 — The beauty pass (founder: "beauty, aesthetics?").** A designer's
+  critique after six functional audits — fixes stay inside the charter (calm, roles-not-
+  decoration, Okabe-Ito):
+  1. FAVICON: the browser tab showed a generic globe — on a ministry projector, an undressed
+     detail. Now an inline-SVG zellij eight-point star (amber square rotated under a blue
+     square, white heart) — role colors, geometry from World 3, no mascot.
+  2. PALETTE DISCIPLINE: confetti and the turtle glyph still used the PRE-charter palette
+     (#5b8dc9…, #3f9d6e) — the exact colors B20/B21 retired. Both now celebrate in
+     Okabe-Ito (turtle = charter green, same family as the Run button).
+  3. THE SIGNATURE RIBBON: a 3px line under the header — blue → lavender → amber → rose, the
+     four roles in teaching order, at half opacity. The design language itself, worn quietly.
+     (Not decoration: it is the legend, distilled.)
+  4. CONSISTENT ACCENT LANGUAGE: feedback verdicts now carry the same left accent bar as the
+     mission/predict/hint cards (green for ok, vermillion for err) — one dialect everywhere.
+  5. Typography & dignity: lesson titles 25px with tightened tracking; drawer stars in amber
+     (earned gold, not ink); brand-tinted text selection; a proper :focus-visible ring for
+     keyboard children (was the browser default).
+  Verified in the live app (ribbon, feedback accents, footer, fresh boot); assets v24.
+
 - **2026-09-14 / B45 — The family-on-the-line pass (founder: an auditor who "would lose his
   family" if anything slipped — crashes, ugly, nonsensical, jumps).** Sixth and final audit:
   1. NONSENSE REJECTION (the embarrassment class): w3l4's promise-check demanded the counter

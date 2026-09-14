@@ -454,6 +454,10 @@ function showThinking(it) {
       `<b>Thought ${idx + 1} of ${steps.length}:</b> ${steps[idx]}`;
     document.getElementById("thinkNext").textContent =
       idx < steps.length - 1 ? "next thought ▸" : "▶ Now run it";
+    document.getElementById("thinkPrev").style.display = idx > 0 ? "" : "none";
+  };
+  document.getElementById("thinkPrev").onclick = () => {
+    if (idx > 0) { idx--; render(); } /* a glance away never costs a thought (B49) */
   };
   document.getElementById("thinkNext").onclick = () => {
     if (idx < steps.length - 1) { idx++; render(); }
@@ -1007,7 +1011,7 @@ function friendly(msg) {
   if (/ValueError: invalid literal for int/.test(last))
     return "int() needs digits — like 7 — but it got words (or nothing, if Cancel was pressed). Run again and type a number when the question pops up.";
   if (/RecursionError/.test(last))
-    return "Your word calls ITSELF, forever! A word may use other words — but a word that says itself needs an exit door. (That's advanced magic — for now, call a different word.)";
+    return "Your word calls ITSELF, forever! A word that says itself needs an exit door — advanced magic. For now, call a different word.";
   if (/ZeroDivisionError/.test(last))
     return "You divided by zero! Even computers can't do that one 🙂";
   if (/SyntaxError/.test(last))

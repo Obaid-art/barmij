@@ -1,5 +1,20 @@
 # Decisions Log — Barmij
 
+- **2026-09-14 / B50 — ADHD limits applied EVERYWHERE, and made LAW (founder: "applied
+  everywhere… no leftovers").** B49 covered lessons; this pass covered everything else:
+  1. FULL-SURFACE SCAN: all 199 bank captions/remix-hints, every think-aloud step, all 12
+     challenge goals + hint ladders, and every child-visible string in the engine (feedback
+     templates, friendly errors, UI strings). ONE violation in the entire product: the
+     RecursionError message at 32 words — trimmed to 23.
+  2. THE LAST RECOVERY ASYMMETRY: 🧠 think-alouds could only go forward — a missed thought
+     was gone. A "◀ back" now steps through thoughts both ways (hidden on thought 1),
+     matching Step mode, demo Watch-again, and build replay: nowhere in Barmij does a
+     glance away cost the child anything.
+  3. MADE PERMANENT: check_content.py now gates ALL of it, forever — lessons (task 30w /
+     hint 26w / msg 24w / say 16w), bank (caption+remix 22w / think 30w), challenges
+     (goal+hints 26w), engine strings (32w). A future wall of text FAILS the build.
+  Verified live (back-stepping, trimmed message at 23 words); gate PASS everywhere. v27.
+
 - **2026-09-14 / B49 — The ADHD audit (founder: "ADHD check bro").** The founding law (one
   calm column, one idea at a time — B18/B19/B22) audited with instruments, not vibes:
   1. TEXT LOAD, machine-scanned beyond the beat gate: every task ≤30 words, every hint ≤26,

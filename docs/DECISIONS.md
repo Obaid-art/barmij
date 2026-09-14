@@ -1,5 +1,30 @@
 # Decisions Log — Barmij
 
+- **2026-09-14 / B40 — Post-completion hardening audit (founder: "flag anything slowing down
+  or breaking — fix right away").** Four engine defects found by review, each proven live
+  before and after the fix:
+  1. GHOST OVERLAY WAS BROKEN (silent): setting canvas.width wipes the bitmap even when
+     unchanged, so every Challenge/Puzzle mismatch showed the child's attempt WITHOUT the
+     ghost — the "compare with the ghost" feedback was a lie. setupCanvas now resizes only on
+     real size change, clears explicitly, and takes keep=true for overlays. Pixel-verified:
+     ghost + attempt both present.
+  2. DOUBLE-CLICK RUN RACE: an older run's animation watchdog could repaint the previous
+     drawing over the new one. animSession token (any clear cancels in-flight animation) +
+     runSeq token (a newer Run supersedes one still awaiting downloads/exec). Verified: only
+     the second run's drawing survives.
+  3. STALE GLOBALS BETWEEN RUNS: _run_guarded kept yesterday's variables/defs/imports alive,
+     so deleted lines could keep "working" until reload — "it worked yesterday" poison, and
+     checks could pass on state the code no longer creates. _run_guarded now scrubs to the
+     preamble baseline like _step_run always did: every Run is a fresh program. All 259
+     programs (199 bank + 48 starters + 12 challenge targets) re-ran clean under fresh
+     semantics — zero hidden cross-item dependencies.
+  4. CRASH + FREEZE-LOOK PAPER CUTS: tapping a puzzle before Pyodide wakes crashed on null
+     (now a kind "still waking up" flash, same for Run); the FIRST sklearn Run stalled ~3s
+     silently after download (first import) — the notice now keeps talking through it.
+  Perf: canvas no longer realloc'd 30-60x/sec in LIVE/animation (real cost on school
+  laptops). Full sweep: 259/259 clean, only flagged cost is sklearn's one-time ~3s first
+  import (inherent, now narrated). Assets v18.
+
 - **2026-09-14 / B39 — World 8 shipped: Thinking Machines. THE CURRICULUM IS COMPLETE.**
   Six lessons closing the arc that صفر opened in W5: al-Khwarizmi named the algorithm, and the
   world's story ends with the child WRITING one. Ladder: champion pattern (max by hand, no

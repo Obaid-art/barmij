@@ -95,9 +95,20 @@ def _live_tick():
 
 import sys as _sys
 
+def _scrub():
+    """Every Run starts as a FRESH program — yesterday's variables and defs are gone.
+    (Honesty: code must work because of what it says, never because of what ran before.)"""
+    global _BASELINE
+    if _BASELINE is None:
+        _BASELINE = set(globals().keys()) | {"_BASELINE"}
+    for _k in list(globals().keys()):
+        if _k not in _BASELINE and not _k.startswith("_"):
+            del globals()[_k]
+
 def _run_guarded(code):
     """Normal Run, but a runaway loop is caught kindly instead of freezing the browser.
     Only the CHILD's lines count — libraries (matplotlib etc.) are neither counted nor traced."""
+    _scrub()
     _cnt = [0]
     def _t(frame, event, arg):
         if frame.f_code.co_filename != "<run>":
@@ -117,12 +128,7 @@ _BASELINE = None  # snapshot of pristine globals, taken after preamble loads
 def _step_run(code):
     """Run user code under a line tracer; return the full time-line for replay:
     per executed line -> (line no, user variables, drawing length, print count)."""
-    global _BASELINE
-    if _BASELINE is None:
-        _BASELINE = set(globals().keys()) | {"_BASELINE"}
-    for _k in list(globals().keys()):
-        if _k not in _BASELINE and not _k.startswith("_"):
-            del globals()[_k]
+    _scrub()
     reset()
     _outs = []
     _tr = []
@@ -738,8 +744,10 @@ function showHint() {
 }
 
 /* ---------------- running code ---------------- */
+let runSeq = 0; /* a newer Run supersedes an older one still awaiting — no interleaved verdicts */
 async function run() {
-  if (!pyReady) return;
+  if (!pyReady) { flashFeedback("err", "Python is still waking up — one moment, hero."); return; }
+  const myRun = ++runSeq;
   runsThisLesson++;
   stopLive();
   hideSaveBar();
@@ -770,8 +778,10 @@ async function run() {
       fb1.textContent = "The learning machine couldn't download — check the internet and Run again.";
       return;
     }
-    fb1.className = "feedback";
+    /* first import is also heavy (~3s) — keep talking so it never looks frozen */
+    fb1.textContent = "🧠 The learning machine is here — waking it up and teaching it now…";
   }
+  if (runSeq !== myRun) return; /* a newer Run started while the toolbox downloaded */
   try {
     pyodide.runPython("reset()");
     pyodide.runPython("_fresh_game()");
@@ -779,9 +789,10 @@ async function run() {
     await pyodide.runPythonAsync("_run_guarded(_usercode)");
     cmds = JSON.parse(pyodide.runPython("_dump()"));
   } catch (err) {
-    showError(err);
+    if (runSeq === myRun) showError(err);
     return;
   }
+  if (runSeq !== myRun) return;
   if (isLive) {
     /* a living program: simulate 90 silent heartbeats for the check, then hand it to the child */
     window._barmijKeys = { left: 0, right: 0, up: 0, down: 0, space: 0 };
@@ -796,7 +807,8 @@ async function run() {
       pyodide.runPython("_fresh_game()");
       stdoutBuf = "";
       await pyodide.runPythonAsync("_run_guarded(_usercode)");
-    } catch (err) { showError(err); return; }
+    } catch (err) { if (runSeq === myRun) showError(err); return; }
+    if (runSeq !== myRun) return;
     renderStdout();
     if (frames[60]) drawAll(frames[60]);
     lastRun = { code, hadCmds: (frames[60] || []).length > 0, firstOut: stdoutBuf.split("\n").find(s => s.trim()) || "" };
@@ -831,6 +843,7 @@ async function run() {
   }
   renderStdout();
   await animate(cmds);
+  if (runSeq !== myRun) return;
   const lines = cmds.filter(c => c.t === "line");
   lastRun = { code, hadCmds: cmds.length > 0, firstOut: stdoutBuf.split("\n").find(s => s.trim()) || "" };
   showSaveBar(); /* anything that runs may be kept — art is never gated by a test */
@@ -939,19 +952,24 @@ function showError(err) {
 
 /* ---------------- canvas & animation ---------------- */
 const cv = () => document.getElementById("world");
-function setupCanvas() {
+/* setting canvas.width ALWAYS wipes the bitmap (even to the same value) — so we resize only
+   when the size truly changed, and clear explicitly. keep=true preserves what's drawn
+   (overlays: the child's attempt on top of the ghost). Cheaper too: no realloc per frame. */
+function setupCanvas(keep) {
   const c = cv(), dpr = window.devicePixelRatio || 1;
   const w = c.clientWidth || 640, h = 460;
-  c.width = w * dpr; c.height = h * dpr;
+  if (c.width !== w * dpr || c.height !== h * dpr) { c.width = w * dpr; c.height = h * dpr; }
   const ctx = c.getContext("2d");
+  ctx.setTransform(1, 0, 0, 1, 0, 0);
+  if (!keep) ctx.clearRect(0, 0, c.width, c.height);
   ctx.setTransform(dpr, 0, 0, dpr, w * dpr / 2, h * dpr / 2);
   ctx.lineCap = "round"; ctx.lineJoin = "round";
   return ctx;
 }
+let animSession = 0; /* any clear cancels an in-flight animation — no stale repaint races */
 function clearCanvas() {
-  const ctx = setupCanvas();
-  ctx.save(); ctx.setTransform(1, 0, 0, 1, 0, 0);
-  ctx.clearRect(0, 0, cv().width, cv().height); ctx.restore();
+  animSession++;
+  setupCanvas();
 }
 /* logical coords: y up, origin center → canvas: (x, -y) */
 function drawSeg(ctx, s, t) { /* t in [0,1] */
@@ -1079,23 +1097,23 @@ function stopLive() {
 }
 function animate(cmds) {
   return new Promise((resolve) => {
+    const my = ++animSession; /* a later Run/clear cancels this animation cleanly */
     const segs = cmds;
     if (!segs.length) { resolve(); return; }
     const totalLen = segs.reduce((a, s) => a + (s.t === "line" ? Math.hypot(s.x2 - s.x1, s.y2 - s.y1) : 20), 0);
     const dur = Math.min(5000, Math.max(700, totalLen * 2.2));
     const t0 = performance.now();
     let done = false;
-    const finish = () => { if (done) return; done = true; drawAll(segs); resolve(); };
+    const finish = () => { if (done) return; done = true; if (animSession === my) drawAll(segs); resolve(); };
     /* rAF pauses in hidden tabs — the watchdog guarantees completion */
     setTimeout(finish, dur + 600);
     if (document.hidden) { finish(); return; }
     function frame(now) {
       if (done) return;
+      if (animSession !== my) { done = true; resolve(); return; }
       const p = Math.min(1, (now - t0) / dur);
       const drawnLen = totalLen * (1 - Math.pow(1 - p, 2)); /* ease-out */
       const ctx = setupCanvas();
-      ctx.save(); ctx.setTransform(1, 0, 0, 1, 0, 0);
-      ctx.clearRect(0, 0, cv().width, cv().height); ctx.restore();
       let acc = 0, tip = null, tipH = 0;
       for (const s of segs) {
         const L = s.t === "line" ? Math.hypot(s.x2 - s.x1, s.y2 - s.y1) : 20;
@@ -1470,7 +1488,7 @@ function challengeEvaluate(cmds) {
   }
   /* their attempt in color over the ghost — the difference is the teacher */
   drawGhost(chState.targetCmds);
-  const ctx = setupCanvas();
+  const ctx = setupCanvas(true);
   for (const s of cmds) {
     if (s.t === "dot") { ctx.fillStyle = s.c; ctx.beginPath(); ctx.arc(s.x, -s.y, s.r, 0, 7); ctx.fill(); }
     else { ctx.strokeStyle = s.c; ctx.lineWidth = s.w; ctx.beginPath(); ctx.moveTo(s.x1, -s.y1); ctx.lineTo(s.x2, -s.y2); ctx.stroke(); }
@@ -1681,6 +1699,7 @@ function drawGhost(cmds) {
 }
 
 async function puzzleStart(it) {
+  if (!pyReady) { flashFeedback("err", "Python is still waking up — one moment, hero."); return; }
   exitStep();
   hideSaveBar();
   document.getElementById("thinkCard").style.display = "none";
@@ -1799,7 +1818,7 @@ async function puzzleCheck() {
   } else {
     /* their attempt in color, the goal as ghost underneath — the difference teaches */
     drawGhost(puz.targetCmds);
-    const ctx = setupCanvas();
+    const ctx = setupCanvas(true);
     for (const s of cmds) {
       if (s.t === "dot") { ctx.fillStyle = s.c; ctx.beginPath(); ctx.arc(s.x, -s.y, s.r, 0, 7); ctx.fill(); }
       else { ctx.strokeStyle = s.c; ctx.lineWidth = s.w; ctx.beginPath(); ctx.moveTo(s.x1, -s.y1); ctx.lineTo(s.x2, -s.y2); ctx.stroke(); }

@@ -1,7 +1,7 @@
 # Narration Recording Script
 _One line per clip. Record as `app/audio/<ID>.mp3`, then map the ID in
 `app/audio_manifest.js`. Warm, unhurried, like reading to one child. (B33)_
-**110 clips total.**
+**149 clips total.**
 
 
 ## Lesson w1l1
@@ -95,6 +95,57 @@ _One line per clip. Record as `app/audio/<ID>.mp3`, then map the ID in
 - **w2l6-b1** — Ingredients: input to ask if / elif / else to choose 3 moods minimum.
 - **w2l6-b2** — Happy golden sun? Sleepy blue waves? Excited pink firework?
 - **w2l6-b3** — You are artist AND engineer. There is no wrong machine.
+
+## Lesson w3l1
+- **w3l1-b0** — New power: repeat the repeating .
+- **w3l1-b1** — Watch a loop climb inside another loop:
+- **w3l1-b2** — Indent depth says who you belong to.
+- **w3l1-b3** — Small code, huge work — that's what computers are FOR.
+- **w3l1-d0** — The outer spell first — you know this one:
+- **w3l1-d1** — Enter, FOUR spaces — then a second for. The double handshake begins:
+- **w3l1-d2** — Enter, EIGHT spaces now — the deepest level:
+- **w3l1-d3** — Still eight spaces deep:
+- **w3l1-d4** — Back to four — this turn belongs to the outer loop:
+- **w3l1-bl0** — The outer loop — six turns of the wheel.
+- **w3l1-bl1** — INSIDE it, a second loop. Deeper indent: it belongs to the first.
+- **w3l1-bl2** — The deepest lines run six times six — thirty-six times.
+- **w3l1-bl3** — Back one indent — this line belongs to the OUTER loop only.
+
+## Lesson w3l2
+- **w3l2-b0** — Zellij — the tile art of our mosques. Pure geometry, pure patience.
+- **w3l2-b1** — The recipe: draw a shape. Turn a little. Draw again.
+- **w3l2-b2** — To close the circle: small turn × repeats = 360 .
+- **w3l2-b3** — Twelve squares × turns of 30 = a rose window.
+
+## Lesson w3l3
+- **w3l3-b0** — range can count YOUR way: start, stop, step.
+- **w3l3-b1** — Watch the three numbers take their places:
+- **w3l3-b2** — Backwards too: range(120, 19, -20) counts down .
+- **w3l3-bl0** — The loop jar this time is called size.
+- **w3l3-bl1** — START counting at 20…
+- **w3l3-bl2** — …STOP before 121…
+- **w3l3-bl3** — …STEPPING by 20 each time.
+
+## Lesson w3l4
+- **w3l4-b0** — Meet while : repeat AS LONG AS something is true.
+- **w3l4-b1** — Watch the promise being built:
+- **w3l4-b2** — Forget the promise the loop runs forever.
+- **w3l4-b3** — Don't fear it: I catch runaway loops and tell you kindly.
+- **w3l4-bl0** — A counter jar, starting at zero.
+- **w3l4-bl1** — while — keep going AS LONG AS n is under six.
+- **w3l4-bl2** — The work: one petal per lap.
+- **w3l4-bl3** — The PROMISE — the counter grows, so the loop can end.
+
+## Lesson w3l5
+- **w3l5-b0** — December 2nd. The sky over the Union. Your code lights it.
+- **w3l5-b1** — Each rocket: jump somewhere, pick a color, burst in a circle.
+- **w3l5-b2** — Nested: outer loop = rockets. Inner loop = one burst.
+
+## Lesson w3l6
+- **w3l6-b0** — Design YOUR tile — the one only you would make.
+- **w3l6-b1** — Choose N shapes: 6, 8, 10 or 12. Turn = 360 ÷ N.
+- **w3l6-b2** — Any inner shape: square, triangle, hexagon… or something stranger.
+- **w3l6-b3** — Mosques kept these patterns for centuries. Yours starts today.
 
 ## Guided thinking (Code Bank)
 - **cb001-t0** — What do I want? A square — four equal sides.

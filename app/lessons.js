@@ -502,6 +502,195 @@ const WORLD2_LESSONS = [
   },
 ];
 
+/* ================= World 3 — Patterns & Power ================= */
+
+const WORLD3_LESSONS = [
+  {
+    id: "w3l1",
+    title: "The loop inside a loop",
+    subtitle: "Repeat the repeating",
+    beats: [
+      { t: "New power: repeat the <b>repeating</b>." },
+      { t: "Watch a loop climb inside another loop:",
+        build: {
+          steps: [
+            { text: "for i in range(6):", say: "The outer loop — six turns of the wheel." },
+            { text: "\n    for j in range(6):", say: "INSIDE it, a second loop. Deeper indent: it belongs to the first." },
+            { text: "\n        forward(60)\n        right(60)", say: "The deepest lines run six times six — thirty-six times." },
+            { text: "\n    right(60)", say: "Back one indent — this line belongs to the OUTER loop only." },
+          ],
+          effect: "a ring of 6 hexagons",
+          done: "Four little lines. Thirty-six moves. That is the power of nesting.",
+        } },
+      { t: "Indent depth says who you belong to." },
+      { t: "Small code, huge work — that's what computers are FOR." },
+    ],
+    predict: "Six hexagons, each drawn after a turn of 60 — what ring appears?",
+    demo: { steps: [
+      { say: "The outer spell first — you know this one:", text: "for i in range(4):" },
+      { say: "Enter, FOUR spaces — then a second for. The double handshake begins:", text: "\n    for j in range(4):" },
+      { say: "Enter, EIGHT spaces now — the deepest level:", text: "\n        forward(50)" },
+      { say: "Still eight spaces deep:", text: "\n        right(90)" },
+      { say: "Back to four — this turn belongs to the outer loop:", text: "\n    right(90)" },
+    ]},
+    starter: `color("darkslateblue")\nwidth(2)\nfor i in range(6):\n    for j in range(6):\n        forward(60)\n        right(60)\n    right(60)\n`,
+    task: "Run the ring. Then change BOTH range numbers and the last right() — hunt for a ring you love.",
+    hints: [
+      "Outer range = how many shapes. Inner range = the shape's sides.",
+      "The LAST right() must be 360 ÷ (outer number), or the ring won't close.",
+      "Try 8 shapes of 4 sides with a final right(45).",
+    ],
+    check: (ctx) => {
+      if (!/\n\s+for\s+\w+\s+in\b/.test(ctx.code))
+        return { pass: false, msg: "Put a loop INSIDE the loop — the inner for needs a deeper indent." };
+      if (ctx.lines.length < 12) return { pass: false, msg: "Let the nest draw — at least 12 lines." };
+      return { pass: true, msg: "You commanded a loop to command a loop. That's real computational power." };
+    },
+  },
+  {
+    id: "w3l2",
+    title: "The zellij window",
+    subtitle: "The tile art of our mosques",
+    beats: [
+      { t: "Zellij — the tile art of our mosques. Pure geometry, pure patience." },
+      { t: "The recipe: draw a shape. Turn a little. Draw again." },
+      { t: "To close the circle: small turn × repeats = <b>360</b>." },
+      { t: "Twelve squares × turns of 30 = a rose window." },
+    ],
+    predict: "Twelve overlapping squares — what blooms where they cross?",
+    starter: `color("darkcyan")\nwidth(2)\nfor i in range(12):\n    for j in range(4):\n        forward(95)\n        right(90)\n    right(30)\n`,
+    task: "Run the window. Then craft two more tiles: 8 squares with right(45), and 10 with right(36).",
+    hints: [
+      "Only TWO numbers change between tiles: the outer range and the last right().",
+      "They must multiply to 360: 12×30, 8×45, 10×36, 6×60…",
+      "Triangles instead of squares? Inner range(3) with right(120).",
+    ],
+    check: (ctx) => {
+      if (!/\n\s+for\s+\w+\s+in\b/.test(ctx.code))
+        return { pass: false, msg: "A zellij needs the nest: a shape-loop inside a rotation-loop." };
+      if (ctx.lines.length < 24) return { pass: false, msg: "More repeats — a window needs at least 24 lines." };
+      return { pass: true, msg: "Craftsmen spent years learning this geometry. You just computed it." };
+    },
+  },
+  {
+    id: "w3l3",
+    title: "Counting your way",
+    subtitle: "range with start, stop, step",
+    beats: [
+      { t: "range can count YOUR way: start, stop, step." },
+      { t: "Watch the three numbers take their places:",
+        build: {
+          steps: [
+            { text: "for size in range(", say: "The loop jar this time is called size." },
+            { text: "20", say: "START counting at 20…" },
+            { text: ", 121", say: "…STOP before 121…" },
+            { text: ", 20):", say: "…STEPPING by 20 each time." },
+          ],
+          effect: "size = 20, 40, 60, 80, 100, 120",
+          done: "Six sizes from one line. The step is yours to choose.",
+        } },
+      { t: "Backwards too: range(120, 19, -20) counts <b>down</b>." },
+    ],
+    predict: "Six squares, each 20 bigger, all from one corner — what staircase of squares appears?",
+    starter: `color("goldenrod")\nwidth(3)\nfor size in range(20, 121, 20):\n    for j in range(4):\n        forward(size)\n        right(90)\n`,
+    task: "Run it. Then make it count DOWN: range(120, 19, -20). Does the drawing change? Think, then check.",
+    hints: [
+      "Counting down draws the same squares — in reverse order. The drawing keeps the secret.",
+      "A tighter staircase: step of 10. A wilder one: step of 35.",
+    ],
+    check: (ctx) => {
+      if (!/range\([^)]+,[^)]+,[^)]+\)/.test(ctx.code))
+        return { pass: false, msg: "Use the three-number range: range(start, stop, step)." };
+      if (ctx.lines.length < 16) return { pass: false, msg: "Let it draw the full family of squares — at least 16 lines." };
+      return { pass: true, msg: "start, stop, step — you now command HOW the machine counts." };
+    },
+  },
+  {
+    id: "w3l4",
+    title: "The patient while",
+    subtitle: "Repeat as long as it's true",
+    beats: [
+      { t: "Meet <code class=\"k\">while</code>: repeat AS LONG AS something is true." },
+      { t: "Watch the promise being built:",
+        build: {
+          steps: [
+            { text: "n = 0", say: "A counter jar, starting at zero." },
+            { text: "\nwhile n < 6:", say: "while — keep going AS LONG AS n is under six." },
+            { text: "\n    forward(90)\n    back(90)\n    right(60)", say: "The work: one petal per lap." },
+            { text: "\n    n = n + 1", say: "The PROMISE — the counter grows, so the loop can end." },
+          ],
+          effect: "6 petals — then it stops itself",
+          done: "No promise, no escape. The counter is the loop's word of honor.",
+        } },
+      { t: "Forget the promise → the loop runs forever." },
+      { t: "Don't fear it: I catch runaway loops and tell you kindly." },
+    ],
+    predict: "What happens if n = n + 1 is deleted? (Try it later — I'll catch you.)",
+    starter: `color("seagreen")\nwidth(5)\nn = 0\nwhile n < 6:\n    forward(90)\n    back(90)\n    right(60)\n    n = n + 1\n`,
+    task: "Run the six petals. Then grow the flower: 12 petals (fix BOTH the condition and the angle).",
+    hints: [
+      "12 petals: while n < 12, and the turn becomes 30 (12 × 30 = 360).",
+      "Brave experiment: delete n = n + 1 and run. Read what I tell you. Then put it back.",
+    ],
+    check: (ctx) => {
+      if (!/^\s*while\b/m.test(ctx.code))
+        return { pass: false, msg: "This lesson's power is while — use it instead of for." };
+      if (!/\bn\s*=\s*n\s*[+\-]|[+\-]=\s*\d/.test(ctx.code))
+        return { pass: false, msg: "Where is the promise? The counter must change inside the loop." };
+      if (ctx.lines.length < 10) return { pass: false, msg: "Let it bloom — at least 10 drawn lines." };
+      return { pass: true, msg: "You made a loop that knows when to stop. That's engineering wisdom." };
+    },
+  },
+  {
+    id: "w3l5",
+    title: "The National Day show",
+    subtitle: "Nested loops light the sky",
+    beats: [
+      { t: "December 2nd. The sky over the Union. Your code lights it." },
+      { t: "Each rocket: jump somewhere, pick a color, burst in a circle." },
+      { t: "Nested: outer loop = rockets. Inner loop = one burst." },
+    ],
+    predict: "Eight rockets of twelve rays — how many lines will light the sky?",
+    starter: `import random\n\nfor i in range(8):\n    penup()\n    jump(random.randint(-170, 170), random.randint(-110, 130))\n    pendown()\n    color(random.choice(["gold", "crimson", "seagreen", "hotpink", "royalblue"]))\n    L = random.randint(28, 55)\n    for j in range(12):\n        forward(L)\n        back(L)\n        right(30)\n`,
+    task: "Run the show. Then: 15 rockets, add TWO colors of your own, and a gold dot() at each rocket's heart.",
+    hints: [
+      "The dot goes after the inner loop finishes — color(\"gold\") then dot(6).",
+      "More rays per burst: inner range(18) with right(20).",
+    ],
+    check: (ctx) => {
+      if (!/\n\s+for\s+\w+\s+in\b/.test(ctx.code))
+        return { pass: false, msg: "The show needs the nest: bursts (inner loop) inside rockets (outer loop)." };
+      if (!/random\./.test(ctx.code)) return { pass: false, msg: "Fireworks need chance — keep random in the sky." };
+      if (ctx.lines.length < 60) return { pass: false, msg: "A shy show — light at least 60 rays." };
+      return { pass: true, msg: "Eid Al Etihad! A whole celebration, commanded by nested loops. 🇦🇪" };
+    },
+  },
+  {
+    id: "w3l6",
+    title: "Challenge: your own zellij",
+    subtitle: "Make — the tile only you would make",
+    beats: [
+      { t: "Design YOUR tile — the one only you would make." },
+      { t: "Choose N shapes: 6, 8, 10 or 12. Turn = 360 ÷ N." },
+      { t: "Any inner shape: square, triangle, hexagon… or something stranger." },
+      { t: "Mosques kept these patterns for centuries. Yours starts today." },
+    ],
+    starter: `# Your zellij. The recipe:\n#   outer loop  = how many shapes (N)\n#   inner loop  = one shape\n#   last right() = 360 / N\n\ncolor("darkslateblue")\nwidth(2)\n\n`,
+    task: "Craft an original tile: nested loops, your N, your shape, your colors. At least 18 lines of geometry.",
+    hints: [
+      "Start from the rose window recipe and change ONE thing at a time.",
+      "Two colors? Change color() between the outer laps: color inside the outer loop, before the inner.",
+      "Stars as the inner shape: range(5) with right(144). Zellij of stars!",
+    ],
+    check: (ctx) => {
+      if (!/\n\s+for\s+\w+\s+in\b/.test(ctx.code))
+        return { pass: false, msg: "A zellij is born from the nest — a loop inside a loop." };
+      if (ctx.lines.length < 18) return { pass: false, msg: "Grow it — a true tile carries at least 18 lines." };
+      return { pass: true, msg: "🕌 A pattern that never existed until you commanded it. World 3 — complete. Fakhamah!" };
+    },
+  },
+];
+
 /* ---------------- worlds & flat index ---------------- */
 const WORLDS = [
   { id: "w1", title: "World 1 — First Lines",
@@ -510,5 +699,8 @@ const WORLDS = [
   { id: "w2", title: "World 2 — Decisions",
     sub: "Programs that listen, choose, and surprise you.",
     lessons: WORLD2_LESSONS },
+  { id: "w3", title: "World 3 — Patterns & Power",
+    sub: "Repeat the repeating — the geometry of our mosques, the shows of our Union.",
+    lessons: WORLD3_LESSONS },
 ];
 const LESSONS = WORLDS.flatMap(w => w.lessons);

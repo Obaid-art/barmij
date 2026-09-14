@@ -27,8 +27,9 @@ INTRO = {
     "if": (2, 2), "else": (2, 2), "comparisons": (2, 2),
     "randint": (2, 3), "choice": (2, 3),
     "int-conv": (2, 5), "elif": (2, 5), "str-conv": (2, 5),
+    "nested-loops": (3, 1), "step-range": (3, 3), "while": (3, 4),
 }
-PEEK = {"nested-loops [W3]", "step-range [W3]", "while [W3]"}  # rank r only
+PEEK = set()  # World 3 shipped 2026-09-14; next peeks arrive with World 4 (def/return)
 
 EXTRA_DETECTORS = {"str-conv": lambda c: "str(" in c}
 

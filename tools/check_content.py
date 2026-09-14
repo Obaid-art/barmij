@@ -48,7 +48,7 @@ def main():
     print(f"{'lesson':8} {'beats':>5} {'max words':>10} {'FK grade':>9}  notes")
     for block in lesson_blocks:
         lid = block.split('"', 1)[0]
-        beats_m = re.search(r"beats:\s*\[(.*?)\n\s*\]", block, re.S)
+        beats_m = re.search(r"beats:\s*\[(.*?)\n {4}\]", block, re.S)
         if not beats_m:
             continue
         beats = re.findall(r'\bt:\s*"((?:[^"\\]|\\.)*)"', beats_m.group(1))

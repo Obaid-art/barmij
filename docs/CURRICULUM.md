@@ -25,7 +25,7 @@ in founder-reviewed batches under CONTENT_POLICY.md. First batch (~40) shipped 2
 |---|---|---|---|
 | 1 | **First Lines** ✅ built | print, the turtle, sequence, variables, for-loops | Geometric art: your own star/spiral gallery |
 | 2 | **Decisions** ✅ built | if/elif/else, ==, input, int(), randomness | Fortune teller, guessing game, the Mood Machine |
-| 3 | **Patterns & Power** | nested loops, while, loop variables as artists | Islamic geometric patterns (real zellij math); National Day fireworks show |
+| 3 | **Patterns & Power** ✅ built | nested loops, bounded while, range(start, stop, step), zellij angle math | The rose window & an original zellij tile of your own; the National Day fireworks show |
 | 4 | **Your Own Magic Words** | functions, parameters, return | A personal art library; the Eid card generator |
 | 5 | **Collections** | lists, strings, dictionaries | Quiz app; secret-code (cipher — the Arabic صفر story!) machine; majlis guest list manager |
 | 6 | **Living Programs** | events, animation loop, game state | A real playable game (falcon catch / dhow dodge) |

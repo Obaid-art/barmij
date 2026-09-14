@@ -1,5 +1,16 @@
 # Decisions Log — Barmij
 
+- **2026-09-14 / B34 — World 3 shipped: Patterns & Power** — six lessons (nested loops with a
+  double-handshake typing demo + build beat · the zellij rose window · range(start, stop, step)
+  build · the patient while with its "promise" build · the National Day fireworks show ·
+  Make: your own zellij tile). All charter gates pass (beats ≤13 words, FK -0.5–2.9; coverage
+  floors met by a 14-item W3 bank batch, bank = 119 engine-verified; progression: W3 concepts
+  now shipped concepts, zero queue-jumping, W3·L1/L3/L4 unlock with 9/7/7 items). Narration
+  script regenerated (149 clips). **Safety shipped with while (essential):** every Run is
+  guarded — a runaway loop is caught at 20,000 steps in ~20 ms with a kind explanation of the
+  missing "promise", and the canvas surrenders gracefully past 3,000 marks; W3L4 teaches the
+  guard's existence honestly ("I catch runaway loops and tell you kindly"). Rank ladder intact:
+  completing Worlds 1-2 still earns Ra'id.
 - **2026-09-14 / B33 — 🔊 Narration: the turtle's voice** (Mayer's modality principle — spoken
   words + pictures beat printed words for young readers). A 🔊 header toggle, OFF by default
   (B7: no sound uninvited); when on, every teaching moment speaks: beats as they reveal, demo

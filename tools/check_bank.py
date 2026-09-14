@@ -30,14 +30,14 @@ DETECTORS = {
     "comparisons": lambda c: "==" in c or re.search(r"[<>]", c) is not None,
     "randint": lambda c: "randint" in c,
     "choice": lambda c: "choice" in c,
-    "nested-loops [W3]": lambda c: _nested_for(c),
-    "step-range [W3]": lambda c: re.search(r"range\([^)]+,[^)]+,[^)]+\)", c) is not None,
-    "while [W3]": lambda c: re.search(r"^\s*while\b", c, re.M) is not None,
+    "nested-loops": lambda c: _nested_for(c),
+    "step-range": lambda c: re.search(r"range\([^)]+,[^)]+,[^)]+\)", c) is not None,
+    "while": lambda c: re.search(r"^\s*while\b", c, re.M) is not None,
 }
 
 # minimum items per shipped-world concept (blueprint ladder = 10; interim floor while growing)
 MIN_PER_CONCEPT = 6
-SHIPPED = [k for k in DETECTORS if "[W3]" not in k]
+SHIPPED = list(DETECTORS)  # Worlds 1-3 all shipped (W3: 2026-09-14)
 
 
 def _nested_for(c):

@@ -30,6 +30,8 @@ def reset():
     _cmds = []
     _state = {"x":0.0,"y":0.0,"h":0.0,"pen":True,"color":"#0072B2","width":4}
 def forward(d):
+    if len(_cmds) > 3000:
+        raise RuntimeError("DRAW_LIMIT")
     x2 = _state["x"] + d*math.sin(math.radians(_state["h"]))
     y2 = _state["y"] + d*math.cos(math.radians(_state["h"]))
     if _state["pen"]:
@@ -47,10 +49,27 @@ def pendown(): _state["pen"] = True
 def jump(x, y):
     _state["x"], _state["y"] = float(x), float(y)
 def dot(r=8):
+    if len(_cmds) > 3000:
+        raise RuntimeError("DRAW_LIMIT")
     _cmds.append({"t":"dot","x":_state["x"],"y":_state["y"],"r":float(r),"c":_state["color"]})
 def _dump(): return json.dumps(_cmds)
 
 import sys as _sys
+
+def _run_guarded(code):
+    """Normal Run, but a runaway loop is caught kindly instead of freezing the browser."""
+    _cnt = [0]
+    def _t(frame, event, arg):
+        if event == "line":
+            _cnt[0] += 1
+            if _cnt[0] > 20000:
+                raise RuntimeError("LOOP_LIMIT")
+        return _t
+    _sys.settrace(_t)
+    try:
+        exec(compile(code, "<run>", "exec"), globals())
+    finally:
+        _sys.settrace(None)
 _BASELINE = None  # snapshot of pristine globals, taken after preamble loads
 
 def _step_run(code):
@@ -243,10 +262,11 @@ function computeGate(code) {
   add(/^\s*if\b/m.test(code) || /^\s*else\s*:/m.test(code) || /==|[<>]/.test(code), 2, 2);
   add(/randint|choice/.test(code), 2, 3);
   add(/(?<![A-Za-z_])int\(|\belif\b|str\(/.test(code), 2, 5);
-  const peek = /^\s*while\b/m.test(code) ||
-    /range\([^)]+,[^)]+,[^)]+\)/.test(code) || _nestedForJS(code);
-  const g = peek ? 99 : (gates.length ? Math.max(...gates) : 11);
-  return { g, peek, label: peek ? "🔭 World 3 peek" : `after W${Math.floor(g / 10)}·L${g % 10}` };
+  add(_nestedForJS(code), 3, 1);
+  add(/range\([^)]+,[^)]+,[^)]+\)/.test(code), 3, 3);
+  add(/^\s*while\b/m.test(code), 3, 4);
+  const g = gates.length ? Math.max(...gates) : 11;
+  return { g, peek: false, label: `after W${Math.floor(g / 10)}·L${g % 10}` };
 }
 CODEBANK.forEach(it => Object.assign(it, computeGate(it.code)));
 const RANK_ORDER = { m: 0, b: 1, r: 2 };
@@ -656,7 +676,8 @@ async function run() {
   let cmds = [];
   try {
     pyodide.runPython("reset()");
-    await pyodide.runPythonAsync(code);
+    pyodide.globals.set("_usercode", code);
+    await pyodide.runPythonAsync("_run_guarded(_usercode)");
     cmds = JSON.parse(pyodide.runPython("_dump()"));
   } catch (err) {
     showError(err);
@@ -724,6 +745,10 @@ function friendly(msg) {
     return "The spaces at the start of a line confused Python. Lines inside a loop need 4 spaces in front — and lines outside need none.";
   if (/TypeError: .*missing \d+ required/.test(last))
     return "This magic word needs something inside its brackets — like forward(100).";
+  if (/LOOP_LIMIT/.test(last))
+    return "Your loop never found its way out — it ran 20,000 steps! A while needs its promise to come true (like n = n + 1 inside the loop).";
+  if (/DRAW_LIMIT/.test(last))
+    return "Over 3,000 drawn lines — the turtle is exhausted! Try smaller numbers in range().";
   if (/ZeroDivisionError/.test(last))
     return "You divided by zero! Even computers can't do that one 🙂";
   if (/SyntaxError/.test(last))
@@ -1482,7 +1507,8 @@ async function puzzleCheck() {
   let cmds;
   try {
     pyodide.runPython("reset()");
-    await pyodide.runPythonAsync(code);
+    pyodide.globals.set("_usercode", code);
+    await pyodide.runPythonAsync("_run_guarded(_usercode)");
     cmds = JSON.parse(pyodide.runPython("_dump()"));
   } catch (err) { showError(err); return; }
   const outOk = stdoutBuf.trim() === puz.targetOut;

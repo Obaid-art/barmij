@@ -44,9 +44,9 @@ every World. "It has to be a grown-up initiative" — the founder. Companion to 
     ministries speak.
 15. **Self-pacing is sacred**: the child advances every beat, every stage, every lesson.
     Nothing auto-plays past them; nothing rushes them; nothing shames slowness.
-16. **Narration (SHIPPED, B33)**: the turtle speaks each beat aloud — browser voice today,
-    the founder's recorded voice clip-by-clip tomorrow; English (B29) (Mayer: modality
-    principle — the single biggest gift to the 8-year-old who reads slowly).
+16. **Narration REMOVED (B48, founder call — was B33)**: the written captions ARE the voice,
+    and they honor the slow reader with time instead of sound: every caption stays on screen
+    for real reading time (~380ms a word, never under ~2s) before the code types on.
 17. Failure is always gentle, specific, and followed by an invitation to retry (existing law:
     no red X, no buzzer — reaffirmed here as charter).
 

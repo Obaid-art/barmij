@@ -1,5 +1,21 @@
 # Decisions Log — Barmij
 
+- **2026-09-14 / B48 — Captions get reading time; narration REMOVED (founder: "too fast,
+  the sentences below + no need for voice no more").**
+  1. PACING: build and demo captions held a flat 1.1s regardless of length — too fast to
+     read. Now readTime(): ~380ms per word, floor ~1.9s, ceiling 4.2s. Measured live:
+     "print — Python's word…" holds 4.1s, "The doors open…" 2.2s (was 1.1s both); the
+     closing caption stays on screen. The letter-by-letter typing pace itself is unchanged
+     (the founder-approved ~4-5 chars/sec).
+  2. NARRATION REMOVED (was B33, the 🔊 jewel): button, TTS, audio manifest, the 305-clip
+     script and its build tool — all gone (git history keeps them if ever reopened). The
+     founder no longer records clips — one task struck from his list. Mayer's modality gift
+     to slow readers is honored with TIME instead of sound: the captions ARE the voice.
+     DESIGN_CHARTER §16 and NOT_YET_BUILT updated; localStorage key barmij_narration is a
+     harmless orphan on old devices.
+  Verified live: caption timings, demo watch, lesson pass, clean boot; no narration
+  references remain in code. Assets v25.
+
 - **2026-09-14 / B47 — The student-answer matrix (founder: "correct and incorrect answers —
   any crash?").** Every lesson tested against the full spectrum of what a real child submits,
   through the exact run() pipeline (exec + frames + safeCheck). The matrix:

@@ -245,14 +245,6 @@ window.addEventListener("DOMContentLoaded", async () => {
   document.getElementById("bankCount").textContent = CODEBANK.length;
   document.getElementById("galleryBtn").addEventListener("click", openGallery);
   galCountRefresh();
-  document.getElementById("narrBtn").addEventListener("click", () => {
-    narrOn = !narrOn;
-    store(NARR_KEY, narrOn ? "1" : "0");
-    if (!narrOn) stopNarration();
-    else narrate("live", "Read-aloud is on. I'll read each step to you, hero.");
-    renderNarrBtn();
-  });
-  renderNarrBtn();
   document.getElementById("challengesBtn").addEventListener("click", openChallenges);
   document.getElementById("challengesCount").textContent = CHALLENGES.length;
   document.getElementById("chExit").addEventListener("click", exitChallenge);
@@ -462,7 +454,6 @@ function showThinking(it) {
       `<b>Thought ${idx + 1} of ${steps.length}:</b> ${steps[idx]}`;
     document.getElementById("thinkNext").textContent =
       idx < steps.length - 1 ? "next thought ▸" : "▶ Now run it";
-    narrate(`${it.id}-t${idx}`, steps[idx]);
   };
   document.getElementById("thinkNext").onclick = () => {
     if (idx < steps.length - 1) { idx++; render(); }
@@ -488,7 +479,6 @@ function openBank() {
   if (challengeMode) exitChallenge();
   document.getElementById("challengesPanel").style.display = "none";
   document.getElementById("challengesBtn").classList.remove("active");
-  stopNarration();
   stopLive();
   hideSaveBar();
   if (puz) puzzleExit();
@@ -543,6 +533,8 @@ function renderBank() {
 /* ---------------- beats — the page writes itself, one idea at a time (charter §I) --------- */
 const REDUCED_MOTION = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 const sleep = (ms) => new Promise(r => setTimeout(r, ms));
+/* a caption stays long enough to be READ by a child: ~380ms a word, never under ~2s */
+const readTime = (t) => Math.min(4200, Math.max(1900, String(t).split(/\s+/).length * 380));
 let beatIdx = 0;
 let buildSession = 0;
 
@@ -575,8 +567,7 @@ async function playBuild(container, build, instant) {
       if (st !== lastStep) {
         lastStep = st;
         cap.textContent = "🐢 " + build.steps[st].say;
-        narrate(`${LESSONS[current].id}-bl${st}`, build.steps[st].say);
-        if (!instant) await sleep(1100);
+        if (!instant) await sleep(readTime(build.steps[st].say));
       }
       if (!instant) await sleep(160 + Math.random() * 70);
     }
@@ -626,10 +617,6 @@ function revealBeat(upto, instant) {
       b.classList.add("on");
       if (REDUCED_MOTION || instant) b.classList.add("in");
       else requestAnimationFrame(() => requestAnimationFrame(() => b.classList.add("in")));
-      if (i === upto && !instant) {
-        const def = (LESSONS[current].beats || [])[i];
-        if (def) narrate(`${LESSONS[current].id}-b${i}`, def.t);
-      }
     }
   }
   beatIdx = upto;
@@ -757,7 +744,6 @@ function openLesson(i, keepQuiet) {
   if (challengeMode) exitChallenge();
   document.getElementById("challengesPanel").style.display = "none";
   document.getElementById("challengesBtn").classList.remove("active");
-  stopNarration();
   stopLive();
   hideSaveBar();
   if (puz) puzzleExit();
@@ -886,7 +872,6 @@ async function run() {
       if (verdict.pass) {
         fb.className = "feedback ok";
         fb.textContent = "✅ " + verdict.msg + " (Playing now — Esc stops.)";
-        narrate("live", verdict.msg);
         const stars = hintsUsed === 0 ? (runsThisLesson <= 2 ? 3 : 2) : 1;
         if (stars > (progress[LESSONS[current].id] || 0)) {
           progress[LESSONS[current].id] = stars;
@@ -925,7 +910,6 @@ async function run() {
     const YAY = ["Mumtaz! 🌟", "Ya salam! ✨", "Wallah, beautiful! 🎨", "Genius! 🧠", "Masha'Allah! 🌙", "Yalla, look at that! 🚀"];
     fb.className = "feedback ok";
     fb.textContent = "✅ " + YAY[(Math.random() * YAY.length) | 0] + " " + verdict.msg;
-    narrate("live", fb.textContent);
     const stars = hintsUsed === 0 ? (runsThisLesson <= 2 ? 3 : 2) : 1;
     if (stars > (progress[LESSONS[current].id] || 0)) {
       progress[LESSONS[current].id] = stars;
@@ -1328,8 +1312,7 @@ async function demoWatch() {
       if (st !== lastStep) {
         lastStep = st;
         $d("demoSay").textContent = LESSONS[current].demo.steps[st].say;
-        narrate(`${LESSONS[current].id}-d${st}`, LESSONS[current].demo.steps[st].say);
-        if (!window._demoFast) await new Promise(r => setTimeout(r, 1100));
+        if (!window._demoFast) await new Promise(r => setTimeout(r, readTime(LESSONS[current].demo.steps[st].say)));
       }
       if (!window._demoFast) {
         const ch = demo.chars[i].ch;
@@ -1422,54 +1405,8 @@ function demoTake() {
   editor.focus();
 }
 
-/* ---------------- 🔊 Narration — the turtle's voice (DECISIONS B33) ----------------
-   Mayer's modality principle: spoken words + pictures beat printed words + pictures for
-   young readers. OFF by default (no sound uninvited — B7). Placeholder voice: the browser's
-   speech engine; the founder's recordings (audio_manifest.js) override it clip by clip. */
-const NARR_KEY = "barmij_narration";
-let narrOn = loadStr(NARR_KEY) === "1";
-let narrVoice = null, narrAudio = null;
-
-function pickNarrVoice() {
-  if (!window.speechSynthesis) return;
-  const vs = speechSynthesis.getVoices();
-  narrVoice =
-    vs.find(v => /^en/i.test(v.lang) && /natural|neural|online/i.test(v.name)) ||
-    vs.find(v => /^en/i.test(v.lang)) || null;
-}
-if (window.speechSynthesis) {
-  speechSynthesis.onvoiceschanged = pickNarrVoice;
-  pickNarrVoice();
-}
-
-function stopNarration() {
-  try { if (window.speechSynthesis) speechSynthesis.cancel(); } catch (e) {}
-  if (narrAudio) { narrAudio.pause(); narrAudio = null; }
-}
-
-function narrate(id, text) {
-  if (!narrOn || !text) return;
-  stopNarration();
-  const clean = String(text).replace(/<[^>]+>/g, " ")
-    .replace(/[🐢🔮🧭🌀⭐🎯🧩💡▸◀►·→⇥]/g, " ").replace(/\s+/g, " ").trim();
-  if (!clean) return;
-  if (typeof AUDIO_MANIFEST !== "undefined" && AUDIO_MANIFEST[id]) {
-    narrAudio = new Audio(AUDIO_MANIFEST[id]);
-    narrAudio.play().catch(() => {});
-    return;
-  }
-  if (!window.speechSynthesis) return;
-  const u = new SpeechSynthesisUtterance(clean);
-  if (narrVoice) u.voice = narrVoice;
-  u.rate = 0.95;
-  speechSynthesis.speak(u);
-}
-
-function renderNarrBtn() {
-  const b = document.getElementById("narrBtn");
-  b.textContent = narrOn ? "🔊" : "🔇";
-  b.title = narrOn ? "Read-aloud is ON — tap to turn off" : "Read aloud (tap to turn on)";
-}
+/* 🔊 Narration REMOVED by the founder (B48, 2026-09-14) — the written captions, paced for
+   reading, are the single voice. (The feature lives in git history if ever reopened.) */
 
 /* ---------------- 🎯 Challenges — match the masterpiece (DECISIONS B32) ----------------
    Deliberate practice (Ericsson): the ghost is the goal, the editor starts blank, feedback is
@@ -1487,7 +1424,7 @@ function openChallenges() {
   challengeMode = false; chState = null;
   galleryMode = false; bankMode = false; currentBankItem = null;
   if (puz) puzzleExit();
-  stopNarration(); stopLive();
+  stopLive();
   exitStep(); hideSaveBar();
   ["lessonPanel", "bankPanel", "galleryPanel", "demoCard", "taskText", "thinkCard", "hintBox", "nextWrap", "chGoalCard"]
     .forEach(id => document.getElementById(id).style.display = "none");
@@ -1541,7 +1478,6 @@ async function startChallenge(c) {
   showCanvas(true);
   editor.setValue("# Summon the ghost. Your code, your way.\n\n");
   drawGhost(chState.targetCmds);
-  narrate(`${c.id}-goal`, c.title + ". " + c.goal);
   document.getElementById("chGoalCard").scrollIntoView({ behavior: REDUCED_MOTION ? "auto" : "smooth", block: "center" });
   editor.focus();
 }
@@ -1696,7 +1632,6 @@ function showSaveForm() {
 function openGallery() {
   stashEditor(); editorOwner = null;
   galleryMode = true; bankMode = false; currentBankItem = null;
-  stopNarration();
   if (challengeMode) exitChallenge();
   document.getElementById("challengesPanel").style.display = "none";
   document.getElementById("challengesBtn").classList.remove("active");

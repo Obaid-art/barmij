@@ -26,8 +26,6 @@ puzzles, gallery, challenges, narration, Step mode, LIVE mode all SHIPPED. What 
 
 ## Initiative
 - [ ] Pilot with 3-5 real kids (think-aloud protocol, observe silently, iterate).
-- [ ] Founder records the narration clips (docs/NARRATION_SCRIPT.md, 305 clips) →
-      app/audio/<ID>.mp3 + audio_manifest.js.
 - [ ] Ministry pitch pack: working demo + pilot evidence + PEDAGOGY.md + Worlds↔official-
       outcomes map.
 - [x] Final name: **Barmij** (locked by founder). Domain/trademark check still open.
@@ -35,6 +33,7 @@ puzzles, gallery, challenges, narration, Step mode, LIVE mode all SHIPPED. What 
 - [ ] Verification debt in SOURCES.md.
 
 ## Closed unless the founder reopens
+- Narration / read-aloud voice (B48: removed — paced written captions are the single voice).
 - Arabic content track / RTL lesson text (B29: English-only product; the language toggle was
   removed. Latin warmth words stay).
 - Mascots / guide characters (B23: killed — "no mascots, ever").

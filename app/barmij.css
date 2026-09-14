@@ -300,6 +300,37 @@ figure svg [fill="#3f9d6e"] { fill: var(--green); }
 }
 .CodeMirror .step-line { background: var(--lav-soft) !important; }
 
+/* 🖼️ My Gallery — a private portfolio; lives only on this device */
+.savebar {
+  display: flex; align-items: center; gap: 10px; flex-wrap: wrap;
+  background: var(--card); border: 1.5px solid var(--line); border-radius: var(--radius);
+  padding: 10px 14px; box-shadow: var(--shadow);
+}
+.savebar input {
+  flex: 1; min-width: 150px; border: 1.5px solid var(--line); border-radius: 9px;
+  padding: 8px 12px; font: inherit; font-size: 14px;
+}
+.savebar input:focus { outline: none; border-color: var(--blue); }
+.savebar .btn { padding: 8px 16px; font-size: 14px; }
+.gal-privacy { font-size: 12px; color: var(--muted); font-weight: 700; }
+.gal-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 14px; }
+@media (max-width: 640px) { .gal-grid { grid-template-columns: 1fr; } }
+.gal-card {
+  border: 1.5px solid var(--line); border-radius: 14px; background: #fff;
+  overflow: hidden; display: flex; flex-direction: column;
+}
+.gal-card img { width: 100%; display: block; background: #f8f9fc; aspect-ratio: 4/3; object-fit: cover; }
+.gal-body { padding: 10px 12px 12px; display: flex; flex-direction: column; gap: 5px; }
+.gal-title { font-weight: 900; font-size: 15px; cursor: pointer; }
+.gal-title:hover { color: var(--blue-text); }
+.gal-refl { font-size: 12.5px; color: var(--lav-text); font-weight: 700; }
+.gal-date { font-size: 11px; color: var(--muted); font-weight: 700; }
+.gal-actions { display: flex; gap: 6px; margin-top: 6px; }
+.gal-empty {
+  background: var(--panel); border-radius: 14px; padding: 26px 20px; text-align: center;
+  color: var(--muted); font-weight: 700; margin-top: 14px;
+}
+
 /* 🧩 Parsons puzzles — order the thoughts */
 .puz-goal { font-size: 14.5px; font-weight: 700; color: var(--lav-text); margin-bottom: 10px; }
 .puz-label { font-size: 11.5px; font-weight: 800; color: var(--muted); text-transform: uppercase; letter-spacing: .4px; margin: 12px 0 6px; }

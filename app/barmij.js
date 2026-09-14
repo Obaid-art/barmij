@@ -130,6 +130,8 @@ window.addEventListener("DOMContentLoaded", async () => {
   document.getElementById("demoCode").addEventListener("keydown", heroKey);
   document.getElementById("bankBtn").addEventListener("click", openBank);
   document.getElementById("bankCount").textContent = CODEBANK.length;
+  document.getElementById("galleryBtn").addEventListener("click", openGallery);
+  galCountRefresh();
   const toggleDrawer = () => document.body.classList.toggle("drawer-open");
   document.getElementById("journeyBtn").addEventListener("click", toggleDrawer);
   document.getElementById("drawerOverlay").addEventListener("click", toggleDrawer);
@@ -320,6 +322,10 @@ function openBank() {
   setCodeStage(true); /* the bank IS the doing stage */
   document.getElementById("taskText").style.display = "none";
   document.getElementById("thinkCard").style.display = "none";
+  galleryMode = false;
+  document.getElementById("galleryPanel").style.display = "none";
+  document.getElementById("galleryBtn").classList.remove("active");
+  hideSaveBar();
   if (puz) puzzleExit();
   exitStep();
   document.getElementById("hintBox").style.display = "none";
@@ -562,6 +568,10 @@ function openLesson(i, keepQuiet) {
   document.getElementById("bankPanel").style.display = "none";
   document.getElementById("taskText").style.display = "";
   document.getElementById("thinkCard").style.display = "none";
+  galleryMode = false;
+  document.getElementById("galleryPanel").style.display = "none";
+  document.getElementById("galleryBtn").classList.remove("active");
+  hideSaveBar();
   if (puz) puzzleExit();
   exitStep();
   document.getElementById("bankBtn").classList.remove("active");
@@ -607,6 +617,7 @@ function showHint() {
 async function run() {
   if (!pyReady) return;
   runsThisLesson++;
+  hideSaveBar();
   clearOutputs(); clearCanvas();
   document.getElementById("feedback").className = "feedback";
   stdoutBuf = "";
@@ -623,8 +634,10 @@ async function run() {
   renderStdout();
   await animate(cmds);
   const lines = cmds.filter(c => c.t === "line");
+  lastRun = { code, hadCmds: cmds.length > 0, firstOut: stdoutBuf.split("\n").find(s => s.trim()) || "" };
+  showSaveBar(); /* anything that runs may be kept — art is never gated by a test */
   const fb = document.getElementById("feedback");
-  if (bankMode) {
+  if (bankMode || galleryMode) {
     fb.className = "feedback ok";
     fb.textContent = "✨ It ran! " + (currentBankItem ? "Remix idea: " + currentBankItem.remix : "Change a number and run again — that's how it becomes yours.");
     fb.scrollIntoView({ behavior: "smooth", block: "nearest" });
@@ -966,6 +979,165 @@ function demoTake() {
   editor.focus();
 }
 
+/* ---------------- 🖼️ My Gallery — private portfolio (DECISIONS B31) ----------------
+   Constructionism's payoff: artifacts a child OWNS. Privacy by design (device-only, stated in
+   the UI), no likes/feeds/comparison (deliberate anti-features), saving never gated by a test
+   passing, one optional reflection prompt (portfolio practice + self-explanation). All child-
+   entered text rendered via textContent only. */
+const GAL_KEY = "barmij_gallery";
+let gallery = JSON.parse(localStorage.getItem(GAL_KEY) || "[]");
+let galleryMode = false;
+let lastRun = null; /* {code, hadCmds, firstOut} — what the save bar would save */
+
+function galSave() {
+  try { localStorage.setItem(GAL_KEY, JSON.stringify(gallery)); return true; }
+  catch (e) { return false; }
+}
+function galCountRefresh() {
+  document.getElementById("galleryCount").textContent = gallery.length || "";
+}
+
+function makeThumb(hadCmds, firstOut) {
+  const off = document.createElement("canvas");
+  off.width = 240; off.height = 180;
+  const c2 = off.getContext("2d");
+  c2.fillStyle = "#f8f9fc"; c2.fillRect(0, 0, 240, 180);
+  if (hadCmds) {
+    c2.drawImage(cv(), 0, 0, 240, 180);
+  } else {
+    c2.fillStyle = "#f8e0d2";
+    c2.beginPath(); c2.roundRect(20, 62, 200, 56, 14); c2.fill();
+    c2.fillStyle = "#A84300"; c2.font = "700 15px monospace"; c2.textAlign = "center";
+    c2.fillText((firstOut || "…").slice(0, 22), 120, 95);
+  }
+  return off.toDataURL("image/jpeg", 0.65);
+}
+
+function showSaveBar() {
+  const bar = document.getElementById("saveBar");
+  bar.style.display = "flex";
+  bar.innerHTML = "";
+  const btn = document.createElement("button");
+  btn.className = "btn demo-primary"; btn.textContent = "💾 Save to My Gallery";
+  btn.onclick = showSaveForm;
+  const pic = document.createElement("button");
+  pic.className = "btn ghost"; pic.textContent = "⬇ Picture";
+  pic.onclick = () => {
+    const a = document.createElement("a");
+    a.download = "barmij-art.png"; a.href = cv().toDataURL("image/png"); a.click();
+  };
+  const priv = document.createElement("span");
+  priv.className = "gal-privacy";
+  priv.textContent = "Your gallery lives only on this device — nothing is uploaded, ever.";
+  bar.appendChild(btn);
+  if (lastRun && lastRun.hadCmds) bar.appendChild(pic);
+  bar.appendChild(priv);
+}
+function hideSaveBar() { document.getElementById("saveBar").style.display = "none"; }
+
+function showSaveForm() {
+  const bar = document.getElementById("saveBar");
+  bar.innerHTML = "";
+  const name = document.createElement("input");
+  name.maxLength = 40; name.placeholder = "Name your creation…";
+  const refl = document.createElement("input");
+  refl.maxLength = 120; refl.placeholder = "What did you teach the computer? (optional)";
+  const ok = document.createElement("button");
+  ok.className = "btn run"; ok.textContent = "Save ✔";
+  ok.onclick = () => {
+    const title = name.value.trim() || "Untitled masterpiece";
+    gallery.unshift({
+      id: Date.now(), t: title, refl: refl.value.trim(), code: lastRun.code,
+      thumb: makeThumb(lastRun.hadCmds, lastRun.firstOut), when: new Date().toISOString().slice(0, 10),
+    });
+    let saved = galSave();
+    if (!saved) { gallery[0].thumb = ""; saved = galSave(); } /* storage full: keep code, drop image */
+    galCountRefresh();
+    hideSaveBar();
+    flashFeedback("ok", saved ? `🖼️ "${title}" is in your gallery — yours, forever.`
+                              : "Saved the code — the device's picture storage is full.");
+    if (galleryMode) renderGallery();
+  };
+  const cancel = document.createElement("button");
+  cancel.className = "btn ghost"; cancel.textContent = "✕";
+  cancel.onclick = showSaveBar;
+  bar.appendChild(name); bar.appendChild(refl); bar.appendChild(ok); bar.appendChild(cancel);
+  name.focus();
+}
+
+function openGallery() {
+  galleryMode = true; bankMode = false; currentBankItem = null;
+  if (puz) puzzleExit();
+  exitStep();
+  hideSaveBar();
+  document.getElementById("lessonPanel").style.display = "none";
+  document.getElementById("bankPanel").style.display = "none";
+  document.getElementById("galleryPanel").style.display = "block";
+  document.getElementById("demoCard").style.display = "none";
+  setCodeStage(true);
+  document.getElementById("taskText").style.display = "none";
+  document.getElementById("thinkCard").style.display = "none";
+  document.getElementById("hintBox").style.display = "none";
+  document.getElementById("nextWrap").style.display = "none";
+  document.getElementById("feedback").className = "feedback";
+  document.getElementById("bankBtn").classList.remove("active");
+  document.getElementById("galleryBtn").classList.add("active");
+  document.body.classList.remove("drawer-open");
+  renderGallery();
+  window.scrollTo({ top: 0, behavior: "smooth" });
+}
+
+function renderGallery() {
+  const panel = document.getElementById("galleryPanel");
+  panel.innerHTML = `
+    <h1>My Gallery</h1>
+    <div class="sub">Everything here is yours — made by you, kept by you.
+    It lives only on this device; nothing is uploaded, ever.</div>`;
+  if (!gallery.length) {
+    const empty = document.createElement("div");
+    empty.className = "gal-empty";
+    empty.textContent = "Your gallery is waiting for its first masterpiece. Run something you love — then press 💾 Save.";
+    panel.appendChild(empty);
+    return;
+  }
+  const grid = document.createElement("div");
+  grid.className = "gal-grid";
+  gallery.forEach(item => {
+    const card = document.createElement("div");
+    card.className = "gal-card";
+    if (item.thumb) { const img = document.createElement("img"); img.src = item.thumb; img.alt = ""; card.appendChild(img); }
+    const body = document.createElement("div");
+    body.className = "gal-body";
+    const title = document.createElement("div");
+    title.className = "gal-title"; title.textContent = item.t; title.title = "click to rename";
+    title.onclick = () => {
+      const n = window.prompt("New name for this creation:", item.t);
+      if (n && n.trim()) { item.t = n.trim().slice(0, 40); galSave(); renderGallery(); }
+    };
+    body.appendChild(title);
+    if (item.refl) { const r = document.createElement("div"); r.className = "gal-refl"; r.textContent = "🗒 " + item.refl; body.appendChild(r); }
+    const date = document.createElement("div");
+    date.className = "gal-date"; date.textContent = item.when;
+    body.appendChild(date);
+    const actions = document.createElement("div");
+    actions.className = "gal-actions";
+    const open = document.createElement("button");
+    open.className = "puz-mini"; open.textContent = "▶ Open & run";
+    open.onclick = () => { editor.setValue(item.code); run(); document.getElementById("canvasCard").scrollIntoView({ behavior: "smooth", block: "center" }); };
+    const del = document.createElement("button");
+    del.className = "puz-mini"; del.textContent = "✕";
+    del.onclick = () => {
+      if (del.dataset.arm) { gallery = gallery.filter(g => g.id !== item.id); galSave(); galCountRefresh(); renderGallery(); }
+      else { del.dataset.arm = "1"; del.textContent = "really delete?"; setTimeout(() => { del.dataset.arm = ""; del.textContent = "✕"; }, 2600); }
+    };
+    actions.appendChild(open); actions.appendChild(del);
+    body.appendChild(actions);
+    card.appendChild(body);
+    grid.appendChild(card);
+  });
+  panel.appendChild(grid);
+}
+
 /* ---------------- 🧩 Parsons puzzles — order the thoughts (DECISIONS B30) ----------------
    The finished drawing appears as a ghost; the code arrives as shuffled tiles. The child
    orders them (and chooses indentation — the secret handshake as a decision). The check RUNS
@@ -996,6 +1168,7 @@ function drawGhost(cmds) {
 
 async function puzzleStart(it) {
   exitStep();
+  hideSaveBar();
   document.getElementById("thinkCard").style.display = "none";
   document.getElementById("editorCard").style.display = "none";
   document.getElementById("hintBox").style.display = "none";
@@ -1106,6 +1279,8 @@ async function puzzleCheck() {
     clearCanvas();
     await animate(cmds);
     renderStdoutPuz();
+    lastRun = { code, hadCmds: cmds.length > 0, firstOut: stdoutBuf.split("\n").find(s => s.trim()) || "" };
+    showSaveBar();
   } else {
     /* their attempt in color, the goal as ghost underneath — the difference teaches */
     drawGhost(puz.targetCmds);

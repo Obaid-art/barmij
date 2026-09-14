@@ -7,6 +7,11 @@ citations pending (NOT_YET_BUILT.md)._
   invented exactly for this: an "object-to-think-with" that makes abstract code physically
   visible. Our canvas turtle is Papert's turtle reborn in real Python.
 - Mechanic: every lesson ends in the child MAKING something of their own, not completing a form.
+- Mechanic (SHIPPED 2026-09-14, B31): 🖼️ My Gallery — a private portfolio. Any clean run can be
+  saved, named, and kept with an optional reflection ("What did you teach the computer?" —
+  portfolio practice + self-explanation). Device-only by design, no likes/feeds/comparison
+  (deliberate anti-features; social comparison undermines young learners' motivation), saving
+  never gated by passing a test. The artifact a child owns and revisits IS the learning.
 
 ## 2. Low floor, high ceiling, wide walls (Resnick / Scratch team)
 - Resnick, M. et al. (2009). "Scratch: Programming for All." *CACM* 52(11).

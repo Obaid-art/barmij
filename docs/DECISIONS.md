@@ -1,5 +1,18 @@
 # Decisions Log — Barmij
 
+- **2026-09-14 / B31 — 🖼️ My Gallery: the private portfolio.** After ANY clean run — pass or
+  fail, lesson or bank or puzzle — a save bar offers "💾 Save to My Gallery": name it, add one
+  optional reflection ("What did you teach the computer?"), kept with a thumbnail. Gallery page:
+  the child's creations with open-&-run, rename, gentle two-tap delete, and picture download
+  (show the family, offline). Criticism-proofing as design law: (a) device-only storage, stated
+  in the UI — "nothing is uploaded, ever" (privacy-by-design, no accounts, no COPPA surface);
+  (b) NO likes, feeds, counts, or sharing platform — social comparison is a documented
+  motivation killer for young learners, so it is an anti-feature here, permanently; (c) saving
+  is never gated by a test passing — ownership is not graded; (d) all child-entered text
+  rendered via textContent (injection-safe). Grounding: Papert's constructionism (the artifact
+  you own IS the learning), portfolio practice with reflection (Paulson & Paulson; Barrett),
+  self-explanation (Chi), SDT autonomy (Deci & Ryan). Storage-full handled gracefully (keeps
+  code, drops image).
 - **2026-09-14 / B30 — 🧩 Parsons puzzles with ghost targets.** Any eligible bank item (3-12
   lines, deterministic, no input) becomes a puzzle for free: the finished drawing appears as a
   pale ghost on the canvas; the code arrives as shuffled role-colored tiles; the child taps them

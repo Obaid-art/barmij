@@ -1,6 +1,6 @@
-# Code Bank Blueprint — why every one of the 500 exists (B26, 2026-09-14)
+# Code Bank Blueprint — why every item exists (B26, 2026-09-14; quota killed by B27)
 _The founder's demand: "not an initiative with good intentions that doesn't carry educational
-cornerstones." So the bank is not 500 nice programs — it is a coverage-engineered instrument.
+cornerstones." So the bank is not a pile of nice programs — it is a coverage-engineered instrument.
 Every item occupies a cell in the matrix below; the matrix is machine-checked by
 `tools/check_bank.py` (like the readability gate). No orphan items; no uncovered concepts._
 
@@ -15,9 +15,9 @@ Every teachable concept in Worlds 1-8, enumerated. Current inventory (~36 core c
 | 2 | input · string gluing (+) · int() conversion · if · elif/else ladders · comparisons (== > <) · random.randint · random.choice |
 | 3 | nested loops · bounded while · range(start, stop, step) · geometric patterns (angle math) |
 | 4 | def · parameters · return · composing functions |
-| 5 | lists (index/append/len) · strings as sequences · dictionaries · membership (in) |
+| 5 | lists (index/append/len) · strings as sequences · membership (in) · .find (dictionaries deferred to World 7 — B36) |
 | 6 | game state variables · the animation/event loop · collision logic |
-| 7 | reading files/CSV · matplotlib (line/bar/scatter) · data cleaning light |
+| 7 | dictionaries in the wild · raw-text records + split parsing · matplotlib (line/bar/scatter) · the labeling law |
 | 8 | search · sort · algorithmic thinking · ML taste (train/test idea) |
 
 ### Axis 2 — the learning ladder (what each item is FOR)

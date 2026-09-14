@@ -23,7 +23,7 @@ across courses.
 | Feedback | compare with solution video | **instant, per-run, friendly, misconception-aware** |
 | Pace | 100 days calendar | **mastery unlocks — a child is never "behind"** |
 | Visuals | slides & IDE | **every concept has a beautiful role-colored figure; code draws art** |
-| Language/soul | English, global | **bilingual Arabic soul, UAE identity** |
+| Language/soul | English, global | **English with an Arab soul (B29) — UAE identity in every example** |
 | Price | ~$15-200 | **free, forever, no ads, no data** |
 | Metric | completion | **joy — a kid who ASKS to continue** |
 

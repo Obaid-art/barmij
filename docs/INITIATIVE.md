@@ -38,9 +38,10 @@ Ministry of Education. Success metric: children who *make things*, not children 
    offered free. (Channels: MoE innovation programs, Coders HQ community, ADEK/KHDA pilots.)
 
 ## Soft power (revised 2026-09-12: B23 characters KILLED by founder — no mascots, ever)
-The export strategy stands without characters: Arabic + English bilingual → 400M Arabic
-speakers first → global. The product's Emirati soul lives in its content (falcons, zellij,
-Hope Probe, Eid), its bilingual voice, and its free-forever gift character — not in a mascot.
+The export strategy stands without characters: English-language product (B29) with an
+unmistakably Emirati soul → the Arab world first → global. That soul lives in its content
+(falcons, zellij, Hope Probe, Eid, صفر and al-Khwarizmi taught as OUR history), its warmth
+words, and its free-forever gift character — never in a mascot.
 
 ## What this is not — sealed (B24, 2026-09-14)
 Not a business, not ad-funded, not data-hungry. A child's attention is an amanah (أمانة).

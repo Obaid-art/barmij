@@ -18,7 +18,7 @@ needs them). Finish every lesson and the KHATAM ceremony crowns the journey.
 
 ## What's inside
 - `app/` — the lesson player: role-colored code editor, animated turtle canvas, friendly
-  bilingual-ready feedback, stars & progression (stored in the browser only — no accounts, no data)
+  feedback, stars & progression (stored in the browser only — no accounts, no data)
 - `docs/` — INITIATIVE (vision & ministry path), PEDAGOGY (the learning science, cited),
   CURRICULUM (Worlds 1-8 map), DECISIONS, SOURCES, NOT_YET_BUILT
 

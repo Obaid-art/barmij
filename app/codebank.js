@@ -833,7 +833,7 @@ const CODEBANK = [
   { id: "cb189", rank: "b", world: 8, emoji: "🔍", title: "Hunt with a receipt",
     caption: "Find the guest AND report the cost in steps.",
     remix: "Move Omar to the front. What happens to the receipt?",
-    code: `guests = ["Maryam", "Khalid", "Omar", "Sara"]\ntarget = "Omar"\n\nsteps = 0\nfor g in guests:\n    steps = steps + 1\n    if g == target:\n        print("Found " + target + " in " + str(steps) + " steps.")\n`, talks: true },
+    code: `guests = ["Maryam", "Khalid", "Omar", "Sara"]\ntarget = "Omar"\n\nsteps = 0\nfor g in guests:\n    steps = steps + 1\n    if g == target:\n        print("Found " + target + " - questions asked: " + str(steps))\n`, talks: true },
   { id: "cb190", rank: "r", world: 8, emoji: "👻", title: "Hunting a ghost",
     caption: "The absent guest costs the MOST — the honest worst case.",
     remix: "How many steps for a list of 100 ghosts? Predict, then build it.",

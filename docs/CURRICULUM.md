@@ -15,10 +15,11 @@ to the top. Typical ages below are a guide for parents/teachers only — the app
 Presentation comforts (bigger type, tap-to-insert tokens, compressed on-ramp for older
 beginners) are **opt-in settings**, never age locks.
 
-## The Code Bank (DECISIONS B17)
-A treasury of **500+ original, runnable, remixable programs** — browse → one click → it runs →
-remix hint invites you to break it and make it yours. Tagged by rank, world, and concept; grown
-in founder-reviewed batches under CONTENT_POLICY.md. First batch (~40) shipped 2026-09-09.
+## The Code Bank (DECISIONS B17; quota killed by B27 — quality bars, never padding)
+A coverage-engineered treasury of **original, runnable, remixable programs** (199 as of
+2026-09-14, every one engine-verified) — browse → one click → it runs → remix hint invites you
+to break it and make it yours. Tagged by rank, world, and concept; grown in founder-reviewed
+batches under CONTENT_POLICY.md, gated by tools/check_bank.py + check_progression.py.
 
 ## The Worlds
 | World | Name | Concepts | The "make" (all UAE-souled, all original) |
@@ -45,4 +46,5 @@ in founder-reviewed batches under CONTENT_POLICY.md. First batch (~40) shipped 2
 - Role colors never change meaning (blue Python-words / lavender your-names / amber values / rose effects).
 - Every concept gets one beautiful explanatory figure (founder's aesthetic).
 - PRIMM order inside lessons; "Watch, then try" on anchor lessons; a free "Make" closes every World.
-- Bilingual: Arabic as a first-class track once World-1 English is polished.
+- English-only product (B29, founder call); Latin warmth words (Ahlan, Yalla, Mumtaz) stay.
+  An Arabic track returns only if the founder reopens it.

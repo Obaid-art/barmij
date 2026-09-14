@@ -44,9 +44,9 @@ every World. "It has to be a grown-up initiative" — the founder. Companion to 
     ministries speak.
 15. **Self-pacing is sacred**: the child advances every beat, every stage, every lesson.
     Nothing auto-plays past them; nothing rushes them; nothing shames slowness.
-16. **Narration (planned, high priority)**: the turtle speaks each beat aloud — recorded human
-    voice, Arabic and English (Mayer: modality principle — the single biggest gift to the
-    8-year-old who reads slowly).
+16. **Narration (SHIPPED, B33)**: the turtle speaks each beat aloud — browser voice today,
+    the founder's recorded voice clip-by-clip tomorrow; English (B29) (Mayer: modality
+    principle — the single biggest gift to the 8-year-old who reads slowly).
 17. Failure is always gentle, specific, and followed by an invitation to retry (existing law:
     no red X, no buzzer — reaffirmed here as charter).
 

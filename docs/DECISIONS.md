@@ -1,5 +1,36 @@
 # Decisions Log — Barmij
 
+- **2026-09-14 / B43 — The angry-auditor pass (founder: "literally any mistake, however
+  small").** Caught and fixed:
+  1. THE SEARCH LESSON'S RECEIPT LIED (w8l2): with no break (untaught, deliberately), steps
+     always ended at len(guests) — "Sara found at slot 3 - in 5 steps" (4 questions found
+     her), and the task's own experiment ("move Sara to slot 0 — what happens to the steps?")
+     would answer NOTHING HAPPENS. The hunter now stops asking once found via a nested
+     if spot == -1 (fully taught): slot 3 → 4, slot 0 → 1, absent → 5, all verified live.
+     Bank twins audited: cb189/cb190/cb196 were already honest (they print at find time).
+  2. "in 1 steps" grammar (w8l2 receipt + cb189's move-to-front remix) → "questions asked: N",
+     which also literally answers the lesson's predict question.
+  3. input() INSIDE tick() fired a blocking native prompt ~30x/sec (and 90x during the silent
+     check) — now a kind refusal: "tick beats 30 times a second… Ask BEFORE the heartbeat."
+     Normal input() untouched (verified both).
+  4. Opening Challenges during a LIVE game left the game running on a hidden canvas with key
+     listeners armed (stopLive added); navigating to Gallery/Challenges/another lesson
+     mid-narration left the old clip talking (stopNarration added to all three).
+  5. STALE-DOC PURGE (log entries untouched — history stays): CURRICULUM still promised
+     "500+" and a bilingual track; NOT_YET_BUILT still listed Worlds 3-8, the Gallery and
+     demos as unbuilt and an "age question" B14 forbids (rewritten to current truth);
+     CONTENT_POLICY/BENCHMARK/DESIGN_CHARTER/INITIATIVE bilingual-era lines aligned with B29;
+     LICENSE.md "Characters/name/logo" → "name/logo" (B23); BANK_BLUEPRINT header "the 500" →
+     item-based, W5 row still claimed dictionaries (B36 moved them to W7), W7 row said
+     "reading files/CSV" (we teach split pipelines, not files); README "bilingual-ready"
+     dropped; check_bank/check_progression stale comments ("Worlds 1-3", "W3 peeks") fixed.
+  6. Launch Barmij.bat opened the browser BEFORE the server existed (first-visit race) and
+     died cryptically without Python — now: python check with a kind message, server first,
+     browser 2s later.
+  7. license.html stylesheet now version-pinned with the app (was uncached-forever).
+  Typo scan across all content: clean. 259/259 programs re-verified, gates PASS, narration
+  305 (unchanged). Assets v21.
+
 - **2026-09-14 / B42 — Third deep pass: adversarial checks, scale guards, MOBILE.** Findings:
   1. CHECK CRASH = SILENT DEATH: an accidentally INDENTED def tick() (isLive is line-anchored,
      the W6 checks' guards are not) sent live-shaped code down the normal path, where

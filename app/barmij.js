@@ -76,9 +76,12 @@ def key_pressed(name):
     except Exception:
         return False
 
+_in_tick = [False]
+
 def _live_tick():
     """One heartbeat: clear the frame, run the child's tick() (guarded), hand back the frame."""
     reset()
+    _in_tick[0] = True
     _cnt = [0]
     def _t(frame, event, arg):
         if frame.f_code.co_filename != "<run>":
@@ -93,6 +96,7 @@ def _live_tick():
         tick()
     finally:
         _sys.settrace(None)
+        _in_tick[0] = False
     return _dump()
 
 import sys as _sys
@@ -167,6 +171,8 @@ def _step_run(code):
 import builtins as _bi
 from js import window as _win
 def _input(msg=""):
+    if _in_tick[0]:
+        raise RuntimeError("INPUT_IN_TICK")
     ans = _win.prompt(str(msg))
     if ans is None:
         ans = ""
@@ -715,6 +721,7 @@ function openLesson(i, keepQuiet) {
   if (challengeMode) exitChallenge();
   document.getElementById("challengesPanel").style.display = "none";
   document.getElementById("challengesBtn").classList.remove("active");
+  stopNarration();
   stopLive();
   hideSaveBar();
   if (puz) puzzleExit();
@@ -948,6 +955,8 @@ function friendly(msg) {
   }
   if (/NameError: name 'tick'/.test(last))
     return "No tick() found — a living program needs its heartbeat: def tick(): with the world's moves inside.";
+  if (/INPUT_IN_TICK/.test(last))
+    return "input() can't live inside tick — tick beats 30 times a second, and a question every blink would freeze the world. Ask BEFORE the heartbeat, above def tick.";
   if (/ValueError: list\.remove/.test(last))
     return "remove looked for a treasure that isn't in the box — check what you're removing, exactly.";
   if (/KeyError: '(.+?)'/.test(last)) {
@@ -1436,6 +1445,7 @@ function openChallenges() {
   challengeMode = false; chState = null;
   galleryMode = false; bankMode = false; currentBankItem = null;
   if (puz) puzzleExit();
+  stopNarration(); stopLive();
   exitStep(); hideSaveBar();
   ["lessonPanel", "bankPanel", "galleryPanel", "demoCard", "taskText", "thinkCard", "hintBox", "nextWrap", "chGoalCard"]
     .forEach(id => document.getElementById(id).style.display = "none");
@@ -1643,6 +1653,7 @@ function showSaveForm() {
 
 function openGallery() {
   galleryMode = true; bankMode = false; currentBankItem = null;
+  stopNarration();
   if (challengeMode) exitChallenge();
   document.getElementById("challengesPanel").style.display = "none";
   document.getElementById("challengesBtn").classList.remove("active");

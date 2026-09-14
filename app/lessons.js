@@ -1472,7 +1472,7 @@ const WORLD8_LESSONS = [
       { t: "A recipe isn't just correct — it has a COST. Scientists measure it." },
     ],
     predict: "Sara hides at slot 3 of five guests — how many questions until she's found?",
-    starter: `guests = ["Maryam", "Khalid", "Omar", "Sara", "Alia"]\ntarget = "Sara"\n\nsteps = 0\nspot = -1\nfor i in range(len(guests)):\n    steps = steps + 1\n    if guests[i] == target:\n        spot = i\n\nif spot == -1:\n    print(target + " is not at this majlis.")\nelse:\n    print(target + " found at slot " + str(spot) + " - in " + str(steps) + " steps.")\n`,
+    starter: `guests = ["Maryam", "Khalid", "Omar", "Sara", "Alia"]\ntarget = "Sara"\n\nsteps = 0\nspot = -1\nfor i in range(len(guests)):\n    if spot == -1:\n        steps = steps + 1\n        if guests[i] == target:\n            spot = i\n\nif spot == -1:\n    print(target + " is not at this majlis.")\nelse:\n    print(target + " found at slot " + str(spot) + " - questions asked: " + str(steps))\n`,
     task: "Hunt Sara. Then hunt someone absent — what does the hunter report? Then move Sara to slot 0 — what happens to the steps?",
     hints: [
       "Absent guests cost the MOST steps — the hunter checks everyone before giving up.",

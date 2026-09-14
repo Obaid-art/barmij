@@ -17,7 +17,7 @@ Content, lessons, figures, and the code bank are licensed under
 - **SA** — adaptations must carry the same license (a teacher may adapt handouts; those
   handouts inherit free-forever).
 This is the closest standard instrument to the founder's rule: teachers free, sellers blocked,
-and the free-forever character is hereditary. Characters/name/logo (trademarks, when filed) are
+and the free-forever character is hereditary. The name/logo (trademarks, when filed) are
 NOT licensed — nobody else may publish under the Barmij identity.
 
 ## Where it appears

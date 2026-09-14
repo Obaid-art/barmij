@@ -11,7 +11,7 @@ from collections import defaultdict
 
 SRC = Path(__file__).resolve().parent.parent / "app" / "codebank.js"
 
-# concept -> detector over the code string (Worlds 1-2 inventory + W3 peeks)
+# concept -> detector over the code string (all eight worlds' inventory)
 DETECTORS = {
     "print": lambda c: "print(" in c,
     "turtle-motion": lambda c: "forward(" in c or "back(" in c,
@@ -59,7 +59,7 @@ FLOOR_EXEMPT = {"sklearn": 2}
 
 # minimum items per shipped-world concept (blueprint ladder = 10; interim floor while growing)
 MIN_PER_CONCEPT = 6
-SHIPPED = list(DETECTORS)  # Worlds 1-3 all shipped (W3: 2026-09-14)
+SHIPPED = list(DETECTORS)  # all eight worlds shipped (2026-09-14) — every concept is live
 
 
 def _nested_for(c):

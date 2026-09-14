@@ -32,8 +32,9 @@ Projects and examples come from the life our students actually live. Draw from:
 - Dark-pattern mechanics in ANY example (no simulated loot boxes, even as "just code").
 
 ## 4. Language & tone
-- English content first; Arabic greetings and words woven in naturally (Ahlan, ya sadiqi,
-  Mumtaz) — pride, not decoration. Full Arabic track: first-class, when built.
+- English content (B29 — founder call), with Arabic warmth words woven in naturally in Latin
+  script (Ahlan, ya sadiqi, Mumtaz) — pride, not decoration. An Arabic track returns only if
+  the founder reopens it.
 - Voice by tier: turtle-hero warmth for the young; maker/engineer respect for the old.
 - Girls and boys equally present in every example set (names: Maryam, Khalid, Sultan, Sara,
   Hessa, Omar…). Emirati and expat-Arab and non-Arab names all appear — the real classroom.

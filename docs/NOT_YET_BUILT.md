@@ -1,34 +1,41 @@
 # Not Yet Built — Barmij
+(Refreshed 2026-09-14 after the curriculum was completed — Worlds 1–8, 48 lessons, bank 199,
+puzzles, gallery, challenges, narration, Step mode, LIVE mode all SHIPPED. What remains:)
 
-## Code Bank growth (B17 — target 500+, batch by batch, founder-reviewed)
-- [x] Batch 1: 40 originals, all engine-verified (2026-09-09).
-- [ ] Batch 2-12: ~40/batch alongside each new World, themed to its concepts; every batch runs
-      the automated engine-check (all programs must execute clean) + founder content review.
-- [ ] Bank search box; "surprise me" button; link lessons → related bank items for practice variety.
-- [ ] "My remixes" — save a kid's modified version into their own gallery (localStorage first).
-
-## Prototype next steps
-- [ ] Build beats (B22) for the other construct-introducing lessons: w1l4 (size = 100),
+## Product polish
+- [ ] Build beats (B22) for the remaining construct-introducing lessons: w1l4 (size = 100),
       w1l5 (the for line), w2l1 (input), w2l2 (if/else) — same pattern as w1l1's print build.
-- [ ] Tier system in the app (B14): age question on first visit → Mustakshif/Bannaa/Ra'id
-      presentation (pacing, type size, voice, ceiling); Ra'id compressed Worlds 1-2 on-ramp.
-- [ ] Tap-to-insert token helper for Mustakshif tier (young typists; pairs with Watch-then-try).
-- [ ] Content-policy review pass over Worlds 1-2 text (already largely compliant; formal check).
-- [ ] Worlds 3-8 (Worlds 1-2 shipped: 12 lessons in app/).
 - [ ] Beautiful in-page input box to replace the native prompt dialog for input() (B12).
-- [ ] "Watch, then try" demos for the remaining 7 lessons (5 anchor lessons shipped, B13);
-      touch-screen support for hero typing (on-screen keys); optional gentle key-click sound.
-- [ ] Arabic content track + full RTL lesson text (UI labels toggle shipped).
-- [ ] Sounds (gentle success chime — off by default).
-- [ ] "My gallery": save & share your drawings (image export).
+- [ ] Bank search box; "surprise me" button; link lessons → related bank items directly
+      (the spaced-repetition warm-up already links by gate).
+- [ ] "My remixes" — save a kid's modified bank item into their gallery under the original's name.
+- [ ] Tap-to-insert token helper for young typists (pairs with Watch-then-try); touch-screen
+      hero typing (on-screen keys); optional gentle key-click sound.
+- [ ] Presentation comforts as OPT-IN settings (B14: never age locks, never an age question):
+      bigger type, compressed on-ramp for older beginners.
+- [ ] Interactive predict-step UI for PRIMM (predict boxes are text today; make them answerable).
+- [ ] Sounds (gentle success chime — off by default, B7).
+- [ ] Accessibility pass: screen-reader walkthrough; colorblind-simulation screenshots for the
+      ministry pack (palette is already Okabe-Ito, B20/B21).
+
+## Deployment & schools
+- [ ] GitHub Pages deploy — waiting ONLY on the founder's GitHub account (repo is ready).
+- [ ] Self-hosted/offline Pyodide + matplotlib + scikit-learn bundle (schools with weak
+      internet; removes the CDN dependency).
 - [ ] Teacher view: class progress at a glance (needed for school pilots).
-- [ ] Self-hosted/offline Pyodide bundle (schools with weak internet; remove CDN dependency).
-- [ ] Tablet/touch polish and on-screen coding helpers.
-- [ ] Predict-step UI for PRIMM (currently woven into lesson text; make it interactive).
-- [ ] Accessibility pass (screen readers, color-blind-safe check of role palette).
 
 ## Initiative
-- [ ] Pilot with 3-5 real kids from the family network; observe silently; iterate.
-- [ ] Ministry pitch pack: working demo + pilot evidence + PEDAGOGY.md + Worlds↔official-outcomes map.
-- [ ] Decide final name (Barmij vs Sifr), check domain/trademark.
+- [ ] Pilot with 3-5 real kids (think-aloud protocol, observe silently, iterate).
+- [ ] Founder records the narration clips (docs/NARRATION_SCRIPT.md, 305 clips) →
+      app/audio/<ID>.mp3 + audio_manifest.js.
+- [ ] Ministry pitch pack: working demo + pilot evidence + PEDAGOGY.md + Worlds↔official-
+      outcomes map.
+- [x] Final name: **Barmij** (locked by founder). Domain/trademark check still open.
+- [ ] Legal read of the license text (CC BY-NC-SA choice is set, B25).
 - [ ] Verification debt in SOURCES.md.
+
+## Closed unless the founder reopens
+- Arabic content track / RTL lesson text (B29: English-only product; the language toggle was
+  removed. Latin warmth words stay).
+- Mascots / guide characters (B23: killed — "no mascots, ever").
+- Bank quota (B27: the 500 target is dead; quality bars and coverage gates only).

@@ -1,6 +1,7 @@
 """Progression gate (BANK_BLUEPRINT + founder's 'second nature' demand, 2026-09-14):
 1. PREREQUISITE DISCIPLINE — every bank item may use only concepts introduced at or before
-   its gate lesson; nothing jumps the queue. W3 peek concepts allowed at rank r ONLY.
+   its gate lesson; nothing jumps the queue. (PEEK is empty now the curriculum is complete;
+   the rank-r-only rule stays for any future peek.)
 2. GRADIENT — every shipped lesson should unlock >= 3 practice items, with a gentle entry
    (at least one m or b at each gate).
 3. SPIRAL QUOTA — later items must keep older skills warm: report the % of W2-gated items

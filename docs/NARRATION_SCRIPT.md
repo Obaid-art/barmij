@@ -1,0 +1,143 @@
+# Narration Recording Script
+_One line per clip. Record as `app/audio/<ID>.mp3`, then map the ID in
+`app/audio_manifest.js`. Warm, unhurried, like reading to one child. (B33)_
+**110 clips total.**
+
+
+## Lesson w1l1
+- **w1l1-b0** — Computers do exactly what you tell them.
+- **w1l1-b1** — You tell them with instructions — one per line.
+- **w1l1-b2** — Watch your first instruction build itself:
+- **w1l1-b3** — The colors never lie: Python's word your words what happens .
+- **w1l1-d0** — Watch my fingers. First, Python's magic word — see it turn blue:
+- **w1l1-d1** — Now open the doors — the parentheses:
+- **w1l1-d2** — Your words live inside quotes — watch them turn amber:
+- **w1l1-d3** — Close the quote's twin… and close the door.
+- **w1l1-bl0** — print — Python's word. It means: say something.
+- **w1l1-bl1** — The doors open…
+- **w1l1-bl2** — Between the doors: YOUR words, inside quotes.
+- **w1l1-bl3** — …and the doors close.
+
+## Lesson w1l2
+- **w1l2-b0** — Meet the turtle — it walks, and its pen draws.
+- **w1l2-b1** — It only understands code. Read the arrows:
+- **w1l2-b2** — Code runs top to bottom . Nothing skipped, nothing guessed.
+- **w1l2-d0** — The walking word:
+- **w1l2-d1** — Doors open — how many steps? — doors closed:
+- **w1l2-d2** — Press Enter — every instruction gets its own line. Now, a turn:
+
+## Lesson w1l3
+- **w1l3-b0** — Two new magic words: color ( "gold" ) and width ( 8 ).
+- **w1l3-b1** — They style whatever the pen draws next .
+- **w1l3-b2** — It knows 100+ colors: "red" "teal" "hotpink" "royalblue" "orchid" …
+- **w1l3-b3** — Change color between lines every side different.
+- **w1l3-b4** — Bonus pen tricks: penup() lifts the pen jump(x, y) teleports dot() stamps.
+
+## Lesson w1l4
+- **w1l4-b0** — A superpower: invent a name, give it a value.
+- **w1l4-b1** — Follow the arrow — the value goes into a jar:
+- **w1l4-b2** — Write the name anywhere Python fetches what's inside.
+- **w1l4-b3** — Change the jar once the whole drawing changes with it.
+- **w1l4-d0** — Invent a name — this jar is YOURS. See it turn lavender:
+- **w1l4-d1** — The filling sign — one =, meaning 'put this inside':
+- **w1l4-d2** — What goes in the jar:
+- **w1l4-d3** — Now USE the jar — write its name and Python fetches what's inside:
+
+## Lesson w1l5
+- **w1l5-b0** — Never copy-paste the same lines. Command repetition itself:
+- **w1l5-b1** — The indent (4 spaces) means: I belong to the loop .
+- **w1l5-b2** — i is a jar the loop fills: 0, 1, 2, 3…
+- **w1l5-b3** — Use i inside forward ( i * 4 ) every step grows
+- **w1l5-d0** — The repeat spell. Watch the whole first line — ending with its special ':' —
+- **w1l5-d1** — Enter, then FOUR spaces — the secret handshake that says 'I belong to the loop':
+- **w1l5-d2** — Same handshake, next instruction:
+
+## Lesson w1l6
+- **w1l6-b0** — Your first solo make: a five-pointed star
+- **w1l6-b1** — You know everything needed: 5 equal lines, turning 144 ° after each.
+- **w1l6-b2** — (A square turned 90. A star folds sharper.)
+- **w1l6-b3** — Loop or no loop — your call. Mastery means your way .
+
+## Lesson w2l1
+- **w2l1-b0** — Your programs can speak. Now they learn to listen .
+- **w2l1-b1** — input asks a question — then waits . Follow the arrows:
+- **w2l1-b2** — The answer lands in your jar, ready to use.
+- **w2l1-b3** — Glue words with +: print ( "Ahlan, " + name )
+- **w2l1-d0** — First a jar, ready and waiting for the answer:
+- **w2l1-d1** — The listening word:
+- **w2l1-d2** — Your question goes inside — quotes and all:
+
+## Lesson w2l2
+- **w2l2-b0** — Now — code that decides .
+- **w2l2-b1** — if opens two roads. Python takes exactly one:
+- **w2l2-b2** — The twins: = fills a jar. == asks "equal?". Not the same!
+- **w2l2-b3** — Indented lines belong to their road.
+
+## Lesson w2l3
+- **w2l3-b0** — import random — a toolbox of chance.
+- **w2l3-b1** — One tool throws dice:
+- **w2l3-b2** — Another picks from a list: random . choice ([ "gold" , "pink" ])
+- **w2l3-b3** — Same code. Different result. Every run.
+
+## Lesson w2l4
+- **w2l4-b0** — Two powers, one machine: input + random .
+- **w2l4-b1** — A question from a human. An answer from chance.
+- **w2l4-b2** — This is how real apps are born.
+
+## Lesson w2l5
+- **w2l5-b0** — input gives words — even "7" is a word.
+- **w2l5-b1** — int (...) turns words into real numbers. Now &gt; and &lt; work.
+- **w2l5-b2** — Between if and else lives elif : "else, if…"
+- **w2l5-b3** — That's everything a guessing game needs.
+
+## Lesson w2l6
+- **w2l6-b0** — Final make: a machine that answers feelings with art .
+- **w2l6-b1** — Ingredients: input to ask if / elif / else to choose 3 moods minimum.
+- **w2l6-b2** — Happy golden sun? Sleepy blue waves? Excited pink firework?
+- **w2l6-b3** — You are artist AND engineer. There is no wrong machine.
+
+## Guided thinking (Code Bank)
+- **cb001-t0** — What do I want? A square — four equal sides.
+- **cb001-t1** — What repeats? Walk, then turn. Four times exactly.
+- **cb001-t2** — When something repeats, I never copy-paste — I command repetition: for i in range(4):
+- **cb001-t3** — How much to turn? A square's corner is 90 °.
+- **cb001-t4** — Before running, I picture it: walk-turn, walk-turn, walk-turn, walk-turn… closed. Now I check my guess.
+- **cb002-t0** — I want a spiral — a shape that GROWS as it turns.
+- **cb002-t1** — Growth means: each line a little longer than the one before.
+- **cb002-t2** — Who counts for me? The loop already does — i goes 0, 1, 2, 3…
+- **cb002-t3** — So the length should USE the counter: forward ( i * 3 ).
+- **cb002-t4** — Keep the turn at 90 and the square twists outward. My prediction: a whirlpool. Run and check me.
+- **cb045-t0** — Goal: a different reply for different scores. 'Different for different' smells like a decision.
+- **cb045-t1** — More than two roads? That's a ladder: if , then elif , then else .
+- **cb045-t2** — Python checks from the TOP down and takes the FIRST true road — so I put the biggest test first: >= 90.
+- **cb045-t3** — If I tested >= 70 first, a 95 would stop there. Order is part of the logic — I always check my order.
+- **cb045-t4** — else catches everyone left — and I make sure even that road is kind. Run.
+- **cb055-t0** — I want surprise — a different staircase every run.
+- **cb055-t1** — Surprise means a number I refuse to choose myself: random . randint ( 3 , 9 ).
+- **cb055-t2** — I store it in a jar — steps — because I'll need it twice: to announce, and to loop.
+- **cb055-t3** — The loop doesn't care WHERE the number came from. range(steps) just obeys the jar.
+- **cb055-t4** — One run is one staircase. To trust randomness, I run at least three times. Go.
+- **cb067-t0** — Goal: a card — a golden frame, with THEIR name inside the message.
+- **cb067-t1** — Two jobs: ask the name, draw the frame. I break big goals into small jobs — always.
+- **cb067-t2** — The name I cannot know in advance. So the program must ask: input ().
+- **cb067-t3** — The frame is a square — I already own that skill. Old skills are bricks; I reuse them.
+- **cb067-t4** — The message glues my words to theirs: quotes + + + jar. Run — and read the card.
+- **cb074-t0** — I want two lines exactly the same length.
+- **cb074-t1** — Same value, used twice? I refuse to write 80 twice — numbers repeated by hand drift apart one day.
+- **cb074-t2** — So: one jar — size = 80 — and both lines READ the jar.
+- **cb074-t3** — Now changing my mind costs ONE edit. That is the real reason programmers love variables.
+- **cb074-t4** — Run it — then change the jar once and feel the power.
+
+## Challenges
+- **ch01-goal** — The Corner. Walk 100 steps, turn right, walk 100 more. Two lines, one corner.
+- **ch02-goal** — The Long L. A tall line of 120, then a short foot of 60 to the right.
+- **ch03-goal** — Sunset Dots. A gold dot of size 40 at the start point, and a darkorange dot of size 24 straight above it at height 80.
+- **ch04-goal** — Crimson Corner. The Corner again — but drawn in crimson. (Any pen width you like.)
+- **ch05-goal** — The Square. A teal square with sides of 120.
+- **ch06-goal** — The Triangle. A seagreen triangle with sides of 140.
+- **ch07-goal** — The Star. A gold five-pointed star with sides of 150.
+- **ch08-goal** — The Burst. Twelve crimson rays of 80, out and back, spinning 30 degrees between rays.
+- **ch09-goal** — The Spiral. A purple spiral: 50 laps, each lap walking i × 3, turning 91 after each.
+- **ch10-goal** — Twin Squares. Two darkcyan squares from the same corner: one with sides 60, one with sides 120.
+- **ch11-goal** — The Honey Cell. A goldenrod hexagon with sides of 70.
+- **ch12-goal** — The Compass. Four steelblue arms of 100 — north, east, south, west — out and back from the center.

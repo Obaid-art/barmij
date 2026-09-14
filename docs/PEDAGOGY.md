@@ -89,7 +89,9 @@ citations pending (NOT_YET_BUILT.md)._
   **coherence** (cut every non-essential word), **segmenting** (learner-paced small pieces —
   our "beats"), **spatial contiguity** (labels ON the thing, with arrows — never paragraphs
   about the thing), **signaling** (highlight what matters), **personalization** (conversational
-  voice), **modality** (planned: spoken narration beats printed text for young readers),
+  voice), **modality** (SHIPPED 2026-09-14, B33: 🔊 read-aloud — every beat, caption, thought
+  and goal speaks; browser voice as placeholder, founder's recordings override clip-by-clip
+  via a 110-line generated script; off by default, one tap on),
   **pre-training** (name the parts before the process — our role colors do this).
 
 ## 9. Universal Design for Learning (CAST UDL Guidelines)

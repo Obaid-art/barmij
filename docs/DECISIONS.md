@@ -1,5 +1,19 @@
 # Decisions Log — Barmij
 
+- **2026-09-14 / B38 — World 7 shipped: Real Data — and REAL matplotlib in the browser.**
+  Pedagogical order deliberate: hand-built bars FIRST ("a chart is just drawing driven by
+  data" — build the tool before receiving it), then dictionaries (the W5 promise kept, with
+  real Dubai temps marked approximate per honesty rules), then matplotlib as "the professional's
+  pen" (lazy-loaded with an honest one-time-download notice; loaded in ~4 s; Agg → PNG →
+  our canvas, so thumbnails/Gallery/Picture all still work), then the labeling law — title,
+  xlabel, ylabel enforced by the lesson check: "an unlabeled chart is a rumor" — then split
+  parsing pipelines (raw text → twin boxes → labeled chart), and the Make: chart a REAL week
+  of your life + print one honest sentence of analysis (data storytelling). Engine findings:
+  the runaway guard was counting LIBRARY lines — matplotlib tripped it; fixed on principle
+  (only the child's <run> lines count; libraries neither counted nor traced — also faster);
+  kind KeyError message added for dicts. 16-item W7 batch (bank = 186, 16/16 clean after the
+  fix); gates PASS; narration → 274 clips. pandas-light deferred honestly (split covers the
+  level; noted in curriculum).
 - **2026-09-14 / B37 — World 6 shipped: Living Programs — and LIVE MODE, a new engine organ.**
   def tick() makes a program ALIVE: ~30 fps, real arrow-key input (key_pressed), game.* jars
   remembered between blinks (no `global` wall for kids), distance() collision, write() HUD —

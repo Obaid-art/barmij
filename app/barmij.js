@@ -79,6 +79,8 @@ def _live_tick():
     reset()
     _cnt = [0]
     def _t(frame, event, arg):
+        if frame.f_code.co_filename != "<run>":
+            return None
         if event == "line":
             _cnt[0] += 1
             if _cnt[0] > 8000:
@@ -94,9 +96,12 @@ def _live_tick():
 import sys as _sys
 
 def _run_guarded(code):
-    """Normal Run, but a runaway loop is caught kindly instead of freezing the browser."""
+    """Normal Run, but a runaway loop is caught kindly instead of freezing the browser.
+    Only the CHILD's lines count — libraries (matplotlib etc.) are neither counted nor traced."""
     _cnt = [0]
     def _t(frame, event, arg):
+        if frame.f_code.co_filename != "<run>":
+            return None
         if event == "line":
             _cnt[0] += 1
             if _cnt[0] > 20000:
@@ -317,6 +322,9 @@ function computeGate(code) {
   add(/def\s+tick\s*\(|game\.\w+/.test(code), 6, 1);
   add(/key_pressed\(/.test(code), 6, 2);
   add(/(?<![\w])distance\(|(?<![\w])write\(/.test(code), 6, 4);
+  add(/\{[^{}\n]*:/.test(code), 7, 2);
+  add(/matplotlib|plt\./.test(code), 7, 3);
+  add(/\.split\(/.test(code), 7, 5);
   const g = gates.length ? Math.max(...gates) : 11;
   return { g, peek: false, label: `after W${Math.floor(g / 10)}·L${g % 10}` };
 }
@@ -729,7 +737,19 @@ async function run() {
   stdoutBuf = "";
   const code = editor.getValue();
   let cmds = [];
+  chartShownThisRun = false;
   const isLive = /(^|\n)def\s+tick\s*\(/.test(code);
+  if (/matplotlib|plt\./.test(code) && !mplReady) {
+    const fb0 = document.getElementById("feedback");
+    fb0.className = "feedback ok";
+    fb0.textContent = "📦 Fetching the professional's toolbox (matplotlib) — a one-time download, hold on…";
+    try { await ensureMpl(); } catch (e) {
+      fb0.className = "feedback err";
+      fb0.textContent = "The toolbox couldn't download — check the internet connection and Run again.";
+      return;
+    }
+    fb0.className = "feedback";
+  }
   try {
     pyodide.runPython("reset()");
     pyodide.runPython("_fresh_game()");
@@ -801,7 +821,7 @@ async function run() {
     if (currentBankItem && dueReviewGate() === currentBankItem.g) completeReview(currentBankItem.g);
     return;
   }
-  const verdict = LESSONS[current].check({ cmds, lines, code, stdout: stdoutBuf });
+  const verdict = LESSONS[current].check({ cmds, lines, code, stdout: stdoutBuf, chart: chartShownThisRun });
   if (verdict.pass) {
     const YAY = ["Mumtaz! 🌟", "Ya salam! ✨", "Wallah, beautiful! 🎨", "Genius! 🧠", "Masha'Allah! 🌙", "Yalla, look at that! 🚀"];
     fb.className = "feedback ok";
@@ -859,6 +879,12 @@ function friendly(msg) {
   }
   if (/NameError: name 'tick'/.test(last))
     return "No tick() found — a living program needs its heartbeat: def tick(): with the world's moves inside.";
+  if (/KeyError: '(.+?)'/.test(last)) {
+    const km = last.match(/KeyError: '(.+?)'/);
+    return `The dictionary has no entry called "${km[1]}" — check the spelling of the key, exactly as it was packed.`;
+  }
+  if (/ModuleNotFoundError.*matplotlib/.test(last))
+    return "The chart toolbox isn't loaded yet — Run again and let the download finish.";
   if (/IndexError/.test(last))
     return "You asked for a slot that doesn't exist! Boxes count from 0 — a box of 3 things has slots 0, 1 and 2.";
   if (/TypeError: can only concatenate str|TypeError: unsupported operand.*str/.test(last))
@@ -925,6 +951,48 @@ function drawAll(segs) {
     else if (s.t === "text") { ctx.fillStyle = s.c; ctx.font = "800 18px 'JetBrains Mono', monospace"; ctx.fillText(s.m, s.x, -s.y); }
     else drawSeg(ctx, s, 1);
   }
+}
+
+/* ---------------- 📊 matplotlib — the professional's pen (DECISIONS B38) ----------------
+   Loaded lazily (big one-time download, said honestly). Agg backend; plt.show() hands the
+   PNG to our canvas, so thumbnails, Gallery saves and Picture downloads all keep working. */
+let mplReady = false, chartShownThisRun = false;
+const MPL_SETUP = `
+import matplotlib
+matplotlib.use("Agg")
+import matplotlib.pyplot as plt
+import io as _io, base64 as _b64
+def _plt_show():
+    _f = plt.gcf()
+    _f.set_size_inches(6.2, 4.4)
+    _buf = _io.BytesIO()
+    _f.savefig(_buf, format="png", dpi=96, bbox_inches="tight")
+    plt.close("all")
+    from js import _barmijChart
+    _barmijChart(_b64.b64encode(_buf.getvalue()).decode())
+plt.show = _plt_show
+`;
+window._barmijChart = (b64) => {
+  chartShownThisRun = true;
+  const img = new Image();
+  img.onload = () => {
+    const ctx = setupCanvas();
+    ctx.save(); ctx.setTransform(1, 0, 0, 1, 0, 0);
+    const c = cv();
+    const scale = Math.min(c.width / img.width, c.height / img.height) * 0.97;
+    const w = img.width * scale, h = img.height * scale;
+    ctx.fillStyle = "#ffffff"; ctx.fillRect(0, 0, c.width, c.height);
+    ctx.drawImage(img, (c.width - w) / 2, (c.height - h) / 2, w, h);
+    ctx.restore();
+  };
+  img.src = "data:image/png;base64," + b64;
+};
+async function ensureMpl() {
+  if (mplReady) return;
+  if (!window._mplPromise)
+    window._mplPromise = pyodide.loadPackage(["matplotlib"]).then(() => pyodide.runPython(MPL_SETUP));
+  await window._mplPromise;
+  mplReady = true;
 }
 
 /* ---------------- 🔴 LIVE mode — programs that never finish (DECISIONS B37) ----------------
@@ -1559,7 +1627,7 @@ let puz = null;
 
 CODEBANK.forEach(it => {
   const n = it.code.split("\n").filter(l => l.trim()).length;
-  it.puzzle = !it.talks && !/random|input\(|def\s+tick/.test(it.code) && n >= 3 && n <= 12;
+  it.puzzle = !it.talks && !/random|input\(|def\s+tick|plt\.|matplotlib/.test(it.code) && n >= 3 && n <= 12;
 });
 
 function drawGhost(cmds) {

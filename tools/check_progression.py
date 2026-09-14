@@ -33,8 +33,9 @@ INTRO = {
     "append": (5, 3), "len": (5, 3), "find": (5, 5),
     "tick": (6, 1), "game-state": (6, 1), "key-pressed": (6, 2),
     "distance": (6, 4), "write": (6, 4),
+    "dict": (7, 2), "matplotlib": (7, 3), "split": (7, 5),
 }
-PEEK = set()  # Worlds 1-6 shipped; next peeks arrive with World 7 (files / matplotlib)
+PEEK = set()  # Worlds 1-7 shipped; the final peeks arrive with World 8 (algorithms / ML taste)
 
 EXTRA_DETECTORS = {"str-conv": lambda c: "str(" in c}
 

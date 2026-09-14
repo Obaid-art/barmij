@@ -1,7 +1,7 @@
 # Narration Recording Script
 _One line per clip. Record as `app/audio/<ID>.mp3`, then map the ID in
 `app/audio_manifest.js`. Warm, unhurried, like reading to one child. (B33)_
-**245 clips total.**
+**274 clips total.**
 
 
 ## Lesson w1l1
@@ -278,6 +278,47 @@ _One line per clip. Record as `app/audio/<ID>.mp3`, then map the ID in
 - **w6l6-b1** — An idea if you want one: the dhow dodge — steer a dhow, dodge what falls.
 - **w6l6-b2** — The laws: a heartbeat, keys, a judge, a score on the sky.
 - **w6l6-b3** — Or ignore the idea entirely. Living worlds obey their makers.
+
+## Lesson w7l1
+- **w7l1-b0** — A secret before the fancy tools: a chart is just drawing driven by data .
+- **w7l1-b1** — A bar is a line whose LENGTH is a number from your box.
+- **w7l1-b2** — Build one by hand once — and no chart will ever be magic again.
+
+## Lesson w7l2
+- **w7l2-b0** — Lists number their slots. A dictionary NAMES them.
+- **w7l2-b1** — Watch real data being packed:
+- **w7l2-b2** — Numbers approximate — real data is honest about that.
+- **w7l2-bl0** — Curly braces — the naming box opens.
+- **w7l2-bl1** — Each entry: a NAME, a colon, its value.
+- **w7l2-bl2** — Dubai's real average highs — data with meaning.
+- **w7l2-bl3** — Ask by NAME, not by number: July, please.
+
+## Lesson w7l3
+- **w7l3-b0** — You built charts by hand. Now meet the pen the world's scientists use.
+- **w7l3-b1** — One honest note: it downloads ONCE, and it's big. Patience, then power.
+- **w7l3-b2** — Watch the four sacred lines:
+- **w7l3-bl0** — Fetch the toolbox — 'as plt' gives it a short nickname.
+- **w7l3-bl1** — plot — a line through your data points.
+- **w7l3-bl2** — Name your chart. Always.
+- **w7l3-bl3** — …and show it to the world.
+
+## Lesson w7l4
+- **w7l4-b0** — The scientist's law: an unlabeled chart is a rumor .
+- **w7l4-b1** — Three duties, every chart, forever: title xlabel ylabel.
+- **w7l4-b2** — plt.bar makes bars; the labels make them TRUE.
+
+## Lesson w7l5
+- **w7l5-b0** — Real data arrives MESSY — lines of text, commas between values.
+- **w7l5-b1** — Watch the taming tool:
+- **w7l5-bl0** — split at every line-break — one row per record.
+- **w7l5-bl1** — split a row at the comma — name and number, separated.
+- **w7l5-bl2** — The name goes to one box…
+- **w7l5-bl3** — …the number (int-ed!) to its twin.
+
+## Lesson w7l6
+- **w7l6-b0** — The final make: chart something TRUE about your own life.
+- **w7l6-b1** — Screen hours? Goals? Quran pages? Laps? — collect a real week.
+- **w7l6-b2** — Then the scientist's finish: print ONE honest sentence about what the chart says.
 
 ## Guided thinking (Code Bank)
 - **cb001-t0** — What do I want? A square — four equal sides.

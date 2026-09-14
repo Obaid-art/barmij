@@ -47,6 +47,9 @@ DETECTORS = {
     "key-pressed": lambda c: "key_pressed(" in c,
     "distance": lambda c: re.search(r"(?<![\w])distance\(", c) is not None,
     "write": lambda c: re.search(r"(?<![\w])write\(", c) is not None,
+    "dict": lambda c: re.search(r"\{[^{}\n]*:", c) is not None,
+    "matplotlib": lambda c: re.search(r"matplotlib|plt\.", c) is not None,
+    "split": lambda c: ".split(" in c,
 }
 
 # minimum items per shipped-world concept (blueprint ladder = 10; interim floor while growing)

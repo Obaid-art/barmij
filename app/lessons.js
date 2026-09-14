@@ -1257,6 +1257,182 @@ const WORLD6_LESSONS = [
   },
 ];
 
+/* ================= World 7 — Real Data ================= */
+
+const WORLD7_LESSONS = [
+  {
+    id: "w7l1",
+    title: "Data becomes bars",
+    subtitle: "A chart is just drawing, driven by numbers",
+    beats: [
+      { t: "A secret before the fancy tools: <b>a chart is just drawing driven by data</b>." },
+      { t: "A bar is a line whose LENGTH is a number from your box." },
+      { t: "Build one by hand once — and no chart will ever be magic again." },
+    ],
+    predict: "Goals per week: 3, 1, 4, 2, 5 — which bar will tower, which will shrink?",
+    starter: `goals = [3, 1, 4, 2, 5]\n\nx = -140\npenup()\nfor g in goals:\n    jump(x, -100)\n    color("seagreen")\n    width(18)\n    pendown()\n    forward(g * 35)\n    penup()\n    color("dimgray")\n    write(x - 8, -128, str(g))\n    x = x + 70\n`,
+    task: "Chart your own week: replace the goals with YOUR numbers (goals, books, laps — your data). Add a title with write.",
+    hints: [
+      "A title is one write at the top: write(-120, 200, \"My week in goals\").",
+      "Taller chart: change the * 35 scale. Data unchanged, view changed — that's a scientist's choice.",
+    ],
+    check: (ctx) => {
+      if (!/\[[^\]\n]*,[^\]\n]*\]/.test(ctx.code)) return { pass: false, msg: "The data lives in a box: a list of numbers." };
+      if (!/for\s+\w+\s+in\s+/.test(ctx.code)) return { pass: false, msg: "One loop, one bar per number — visit the box." };
+      if (ctx.lines.length < 4) return { pass: false, msg: "Draw the bars — at least 4 of them." };
+      if (!(ctx.cmds || []).some(c => c.t === "text")) return { pass: false, msg: "Label it — numbers under bars, or a title. Unlabeled charts are rumors." };
+      return { pass: true, msg: "You built a chart from raw numbers, by hand. Now you've EARNED the professional tools." };
+    },
+  },
+  {
+    id: "w7l2",
+    title: "The dictionary",
+    subtitle: "Data with NAMES — the promised box",
+    beats: [
+      { t: "Lists number their slots. A <b>dictionary</b> NAMES them." },
+      { t: "Watch real data being packed:",
+        build: {
+          steps: [
+            { text: "temps = {", say: "Curly braces — the naming box opens." },
+            { text: "\"Jan\": 24, \"Apr\": 34,", say: "Each entry: a NAME, a colon, its value." },
+            { text: " \"Jul\": 41, \"Oct\": 35}", say: "Dubai's real average highs — data with meaning." },
+            { text: "\n\nprint(temps[\"Jul\"])", say: "Ask by NAME, not by number: July, please." },
+          ],
+          effect: "temps[\"Jul\"] → 41",
+          done: "And the visiting loop walks the names: for month in temps:",
+        } },
+      { t: "Numbers approximate — real data is honest about that." },
+    ],
+    predict: "Four months, four bars from the dictionary — which month towers?",
+    starter: `temps = {"Jan": 24, "Apr": 34, "Jul": 41, "Oct": 35}\n\nx = -150\npenup()\nfor month in temps:\n    t = temps[month]\n    jump(x, -100)\n    color("darkorange")\n    width(16)\n    pendown()\n    forward(t * 4)\n    penup()\n    color("dimgray")\n    write(x - 14, -128, month)\n    write(x - 10, t * 4 - 92, str(t))\n    x = x + 90\n`,
+    task: "Run Dubai's year in four bars. Then pack YOUR dictionary — favorite foods and their scores, and chart them.",
+    hints: [
+      "Your turn: votes = {\"machboos\": 9, \"luqaimat\": 10, …} — same loop, your names.",
+      "Inside the loop: the name is month, the value is temps[month]. Name asks, value answers.",
+    ],
+    check: (ctx) => {
+      if (!/\{[^{}\n]*:/.test(ctx.code)) return { pass: false, msg: "Pack a dictionary: {\"name\": value, …} — braces and colons." };
+      if (!/\w+\[\s*\w+\s*\]|\w+\[\s*"/.test(ctx.code)) return { pass: false, msg: "Ask it by name: temps[month]." };
+      if (ctx.lines.length < 4) return { pass: false, msg: "Chart it — a bar per entry." };
+      return { pass: true, msg: "Named data — the shape of every real dataset on Earth. The promise from World 5, kept." };
+    },
+  },
+  {
+    id: "w7l3",
+    title: "The professional's pen",
+    subtitle: "matplotlib — the tool scientists actually use",
+    beats: [
+      { t: "You built charts by hand. Now meet the pen the world's scientists use." },
+      { t: "One honest note: it downloads ONCE, and it's big. Patience, then power." },
+      { t: "Watch the four sacred lines:",
+        build: {
+          steps: [
+            { text: "import matplotlib.pyplot as plt", say: "Fetch the toolbox — 'as plt' gives it a short nickname." },
+            { text: "\n\nplt.plot(months, temps)", say: "plot — a line through your data points." },
+            { text: "\nplt.title(\"Dubai, month by month\")", say: "Name your chart. Always." },
+            { text: "\nplt.show()", say: "…and show it to the world." },
+          ],
+          effect: "a real scientific chart",
+          done: "The same pen used in research papers — now in your hand.",
+        } },
+    ],
+    predict: "Twelve months of Dubai heat as a LINE — where will it peak?",
+    starter: `import matplotlib.pyplot as plt\n\nmonths = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]\ntemps = [24, 26, 29, 34, 38, 40, 41, 41, 39, 35, 30, 26]\n\nplt.plot(months, temps)\nplt.title("Dubai average high, month by month (approx.)")\nplt.show()\n`,
+    task: "Run the year (first run downloads the toolbox — wait it out). Then plot a SECOND line: night temps, your guesses — two lines, one chart.",
+    hints: [
+      "A second line is a second plt.plot(months, other_list) BEFORE plt.show().",
+      "Make it readable later — next lesson makes labels law.",
+    ],
+    check: (ctx) => {
+      if (!/import\s+matplotlib/.test(ctx.code)) return { pass: false, msg: "Fetch the professional's toolbox: import matplotlib.pyplot as plt" };
+      if (!/plt\.plot\(/.test(ctx.code)) return { pass: false, msg: "Draw the line: plt.plot(months, temps)." };
+      if (!/plt\.show\(\)/.test(ctx.code)) return { pass: false, msg: "Charts must be shown: plt.show() at the end." };
+      if (!ctx.chart) return { pass: false, msg: "No chart appeared — is plt.show() the last line?" };
+      return { pass: true, msg: "That's a real research-grade chart. The turtle is proud of what you've grown into." };
+    },
+  },
+  {
+    id: "w7l4",
+    title: "Label everything",
+    subtitle: "An unlabeled chart is a rumor",
+    beats: [
+      { t: "The scientist's law: <b>an unlabeled chart is a rumor</b>." },
+      { t: "Three duties, every chart, forever: title · xlabel · ylabel." },
+      { t: "plt.bar makes bars; the labels make them TRUE." },
+    ],
+    predict: "Dubai's rain, month by month — how many bars will barely exist?",
+    starter: `import matplotlib.pyplot as plt\n\nmonths = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]\nrain = [11, 25, 14, 7, 1, 0, 0, 0, 0, 1, 3, 15]\n\nplt.bar(months, rain)\nplt.title("Dubai rainfall by month (approx. mm)")\nplt.xlabel("Month")\nplt.ylabel("Rain (mm)")\nplt.show()\n`,
+    task: "Run the rain. Then chart YOUR data as labeled bars — and never ship a rumor again.",
+    hints: [
+      "Swap in any dataset you love — game scores, pages read — but keep all three labels.",
+      "plt.bar for comparing categories; plt.plot for change over time. Choose like a scientist.",
+    ],
+    check: (ctx) => {
+      if (!/plt\.bar\(/.test(ctx.code)) return { pass: false, msg: "This lesson's tool is bars: plt.bar(names, values)." };
+      if (!/plt\.title\(/.test(ctx.code) || !/plt\.xlabel\(/.test(ctx.code) || !/plt\.ylabel\(/.test(ctx.code))
+        return { pass: false, msg: "The law: title, xlabel AND ylabel. An unlabeled chart is a rumor." };
+      if (!ctx.chart) return { pass: false, msg: "Show it: plt.show()." };
+      return { pass: true, msg: "Titled, labeled, honest. This chart could walk into a lab meeting." };
+    },
+  },
+  {
+    id: "w7l5",
+    title: "Raw data, tamed",
+    subtitle: "split — reading real records",
+    beats: [
+      { t: "Real data arrives MESSY — lines of text, commas between values." },
+      { t: "Watch the taming tool:",
+        build: {
+          steps: [
+            { text: "rows = data.split(\"\\n\")", say: "split at every line-break — one row per record." },
+            { text: "\nparts = rows[0].split(\",\")", say: "split a row at the comma — name and number, separated." },
+            { text: "\ncities.append(parts[0])", say: "The name goes to one box…" },
+            { text: "\ntemps.append(int(parts[1]))", say: "…the number (int-ed!) to its twin." },
+          ],
+          effect: "\"Dubai,41\" → [\"Dubai\", 41]",
+          done: "This is data cleaning — half of every scientist's real day.",
+        } },
+    ],
+    starter: `import matplotlib.pyplot as plt\n\ndata = "Abu Dhabi,42\\nDubai,41\\nSharjah,41\\nAl Ain,43\\nFujairah,36"\n\ncities = []\ntemps = []\nfor row in data.split("\\n"):\n    parts = row.split(",")\n    cities.append(parts[0])\n    temps.append(int(parts[1]))\n\nplt.bar(cities, temps)\nplt.title("Summer high by city (approx.)")\nplt.xlabel("City")\nplt.ylabel("Temp (C)")\nplt.show()\n`,
+    task: "Tame the five cities. Then ADD two more to the raw text — the parser and the chart follow without one more edit. Feel why.",
+    hints: [
+      "New records join the string: \\nRas Al Khaimah,40 — the split loop does the rest.",
+      "parts[0] is the name, parts[1] the number. Twins by position — like your quiz machine.",
+    ],
+    check: (ctx) => {
+      if (!/\.split\(/.test(ctx.code)) return { pass: false, msg: "Tame the text with split — rows first, then commas." };
+      if (!/\.append\(/.test(ctx.code)) return { pass: false, msg: "Collect into twin boxes as you parse: append." };
+      if (!ctx.chart) return { pass: false, msg: "Finish the pipeline: raw text → boxes → labeled chart → plt.show()." };
+      return { pass: true, msg: "Raw text walked in; a labeled chart walked out. That pipeline IS data science." };
+    },
+  },
+  {
+    id: "w7l6",
+    title: "Challenge: chart your life",
+    subtitle: "Make — your data, your chart, your sentence",
+    beats: [
+      { t: "The final make: chart something TRUE about your own life." },
+      { t: "Screen hours? Goals? Quran pages? Laps? — collect a real week." },
+      { t: "Then the scientist's finish: print ONE honest sentence about what the chart says." },
+    ],
+    starter: `import matplotlib.pyplot as plt\n\n# Your real week. Your real numbers.\ndays = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"]\n\n`,
+    task: "Chart a real week of your life — labeled fully — and print one honest sentence of what the data says.",
+    hints: [
+      "Bars for a week of counts; a line if it's a trend. Scientist's choice.",
+      "The sentence is analysis: print(\"My screen time doubles on weekends.\") — say what the SHAPE says.",
+      "Honesty rule: real numbers, even if unflattering. Data serves truth.",
+    ],
+    check: (ctx) => {
+      if (!/plt\.(bar|plot)\(/.test(ctx.code)) return { pass: false, msg: "Chart it with the professional's pen: plt.bar or plt.plot." };
+      if (!/plt\.title\(/.test(ctx.code) || !/plt\.xlabel\(/.test(ctx.code) || !/plt\.ylabel\(/.test(ctx.code))
+        return { pass: false, msg: "Full labels — your life deserves no rumors." };
+      if (!ctx.chart) return { pass: false, msg: "Show the chart: plt.show()." };
+      if (!ctx.stdout.trim()) return { pass: false, msg: "The scientist's finish: print one sentence of what the data SAYS." };
+      return { pass: true, msg: "📊 Data collected, charted, labeled, and READ. World 7 complete — you think in evidence now." };
+    },
+  },
+];
+
 /* ---------------- worlds & flat index ---------------- */
 const WORLDS = [
   { id: "w1", title: "World 1 — First Lines",
@@ -1277,5 +1453,8 @@ const WORLDS = [
   { id: "w6", title: "World 6 — Living Programs",
     sub: "Programs that never finish — the falcon hunts at thirty blinks a second.",
     lessons: WORLD6_LESSONS },
+  { id: "w7", title: "World 7 — Real Data",
+    sub: "Numbers from the real world — charted, labeled, and read like a scientist.",
+    lessons: WORLD7_LESSONS },
 ];
 const LESSONS = WORLDS.flatMap(w => w.lessons);

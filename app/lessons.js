@@ -637,7 +637,7 @@ const WORLD3_LESSONS = [
     check: (ctx) => {
       if (!/^\s*while\b/m.test(ctx.code))
         return { pass: false, msg: "This lesson's power is while — use it instead of for." };
-      if (!/\bn\s*=\s*n\s*[+\-]|[+\-]=\s*\d/.test(ctx.code))
+      if (!/\b(\w+)\s*=\s*\1\s*[+\-]|[+\-]=/.test(ctx.code))
         return { pass: false, msg: "Where is the promise? The counter must change inside the loop." };
       if (ctx.lines.length < 10) return { pass: false, msg: "Let it bloom — at least 10 drawn lines." };
       return { pass: true, msg: "You made a loop that knows when to stop. That's engineering wisdom." };

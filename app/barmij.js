@@ -214,6 +214,12 @@ window.addEventListener("DOMContentLoaded", async () => {
     mode: "python", theme: "barmij", lineNumbers: true, indentUnit: 4,
     autofocus: false, viewportMargin: Infinity,
   });
+  /* typed work survives even a closed tab: stash shortly after every pause in typing */
+  let stashTimer = null;
+  editor.on("change", () => {
+    if (stashTimer) clearTimeout(stashTimer);
+    stashTimer = setTimeout(stashEditor, 800);
+  });
   document.getElementById("runBtn").addEventListener("click", () => { exitStep(); run(); });
   document.getElementById("stepBtn").addEventListener("click", stepRun);
   document.getElementById("stepPrev").addEventListener("click", () => stepMove(-1));
@@ -1002,6 +1008,8 @@ function friendly(msg) {
     return "You asked for a slot that doesn't exist! Boxes count from 0 — a box of 3 things has slots 0, 1 and 2.";
   if (/TypeError: can only concatenate str|TypeError: unsupported operand.*str/.test(last))
     return "You tried to glue words with a NUMBER. Wrap it first: str(number) — then + works.";
+  if (/ValueError: invalid literal for int/.test(last))
+    return "int() needs digits — like 7 — but it got words (or nothing, if Cancel was pressed). Run again and type a number when the question pops up.";
   if (/RecursionError/.test(last))
     return "Your word calls ITSELF, forever! A word may use other words — but a word that says itself needs an exit door. (That's advanced magic — for now, call a different word.)";
   if (/ZeroDivisionError/.test(last))

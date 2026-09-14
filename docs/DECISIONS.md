@@ -1,5 +1,31 @@
 # Decisions Log — Barmij
 
+- **2026-09-14 / B45 — The family-on-the-line pass (founder: an auditor who "would lose his
+  family" if anything slipped — crashes, ugly, nonsensical, jumps).** Sixth and final audit:
+  1. NONSENSE REJECTION (the embarrassment class): w3l4's promise-check demanded the counter
+     be literally named n — a child who renamed it to count had a PERFECT 12-petal flower
+     rejected with "Where is the promise?". Proven live, fixed with a backreference
+     (any \\w+ = itself ± …); the honest rename now passes. All other name-checks audited:
+     the W6/W8 ones test starter-provided names their own builds teach — kept as convention.
+  2. CANCEL CRASHED UNKINDLY: pressing Cancel (or typing words) on the guessing game's popup
+     fed int("") a ValueError with only the generic fallback. Now a kind translation:
+     "int() needs digits — like 7 — … Run again and type a number."
+  3. LAST DATA-LOSS HOLE: B44 stashed typed code on Run and navigation — but typing then
+     CLOSING THE TAB still lost it. An 800ms debounced stash on every editor change closes
+     it; verified on disk with no Run and no navigation.
+  4. THE REAL-UI CHILD JOURNEY, finally driven as a child drives it — actual button clicks,
+     actual keydown events: beats tapped one by one → build renders → predict → Yalla →
+     demo → hero mode typed print("Ahlan!") key by REAL key → 🎉 → mission auto-reveals →
+     canvas correctly absent (text lesson) → real Run click → warm verdict → Next click →
+     Lesson 2. ZERO uncaught errors end to end.
+  5. UGLY FIXED: the story-stage footer no longer floats mid-void (body is a column, footer
+     rests at the bottom). A11y touch: the canvas now carries role=img + a warm aria-label.
+  259/259 programs re-verified, all gates PASS. Assets v23. SIX passes on 2026-09-14
+  (B40–B45): overlays, races, fresh-run law, reveal order, dead canvas, concept bags, check
+  crashes, mobile clipping, scale guards, honest receipts, storage armor, editor persistence,
+  real-UI journey. The auditors found less each round; this one had to invent a renamed
+  variable to draw blood. Frozen pending the founder: GitHub deploy, pilot kids, his voice.
+
 - **2026-09-14 / B44 — The job-on-the-line pass (founder: an auditor "who would lose his job
   entirely if he did not catch bugs").** Attacked surfaces no pass had touched:
   1. A CORRUPTED STORAGE KEY BRICKED THE APP — PERMANENTLY. Top-level JSON.parse of any

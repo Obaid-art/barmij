@@ -1,0 +1,107 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Barmij برمج — learn real Python</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700;800;900&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/codemirror.min.css">
+<link rel="stylesheet" href="barmij.css">
+</head>
+<body>
+
+<header>
+  <div class="logo"><span class="en">Barmij</span><span class="ar">برمج</span></div>
+  <span class="spacer"></span>
+  <button class="langbtn" id="journeyBtn">🗺️ Journey</button>
+  <span class="rank-chip" id="rankChip"></span>
+  <button class="langbtn" id="langBtn">عربي</button>
+</header>
+
+<div id="drawerOverlay"></div>
+<div class="layout">
+
+  <aside class="side">
+    <div id="lessonList"></div>
+    <div class="lesson-item" id="bankBtn" style="margin-top:14px; border-top:1px solid var(--line); padding-top:14px">
+      <span class="num">📚</span><span><b>Code Bank</b></span>
+      <span class="stars" id="bankCount"></span>
+    </div>
+    <div class="legend">
+      <span style="background:var(--blue-soft);color:var(--blue-text);border:1.5px solid var(--blue)">Python's words</span>
+      <span style="background:var(--lav-soft);color:var(--lav-text);border:1.5px dotted var(--lav)">names you invent</span>
+      <span style="background:var(--amber-soft);color:var(--amber-text);border:1.5px dashed var(--amber)">values</span>
+      <span style="background:var(--rose-soft);color:var(--rose-text);border:3px double var(--rose)">what happens</span>
+    </div>
+  </aside>
+
+  <section class="lesson">
+    <div id="lessonPanel">
+      <div class="crumb" id="crumb"></div>
+      <h1 id="lessonTitle"></h1>
+      <div class="sub" id="lessonSub"></div>
+      <div id="lessonBody"></div>
+      <div class="predict" id="predictBox" style="display:none"></div>
+      <p style="margin-top:18px"><button class="btn demo-primary" id="storyGoBtn">Yalla — continue ▸</button></p>
+    </div>
+    <div id="bankPanel" style="display:none"></div>
+  </section>
+
+  <section class="bench">
+    <div class="demo-card" id="demoCard" style="display:none">
+      <div class="demo-head">
+        <span class="demo-title" id="demoTitle">🐢 Watch, then try</span>
+      </div>
+      <pre class="demo-code" id="demoCode" tabindex="0"></pre>
+      <div class="demo-caption"><span class="who">🐢</span><span id="demoSay"></span></div>
+      <div class="demo-btns">
+        <button class="btn demo-primary" id="demoWatchBtn">▶ Watch me first</button>
+        <button class="btn demo-primary" id="demoHeroBtn" style="display:none">✍️ Your turn, hero!</button>
+        <button class="btn ghost" id="demoAgainBtn" style="display:none">🔁 Watch again</button>
+        <button class="btn ghost" id="demoTakeBtn" style="display:none">📥 Put it in my editor</button>
+        <button class="btn ghost" id="demoSkipBtn" style="display:none">Skip to the mission ▸</button>
+      </div>
+    </div>
+    <div class="task" id="taskText"></div>
+
+    <div class="editor-card" id="editorCard">
+      <div class="editor-head">
+        <span class="title" id="editorTitle">Your code</span>
+        <span class="spacer" style="flex:1"></span>
+        <button class="btn ghost" id="hintBtn">💡 Hint</button>
+        <button class="btn ghost" id="resetBtn">Reset code</button>
+        <button class="btn run" id="runBtn" disabled>▶ Run</button>
+      </div>
+      <textarea id="code"></textarea>
+    </div>
+
+    <div class="hintbox" id="hintBox"></div>
+
+    <div class="canvas-card" id="canvasCard">
+      <canvas id="world" height="460"></canvas>
+      <div id="loading">Waking Python up… (first time takes a moment)</div>
+    </div>
+
+    <div class="outputs" id="outputs"></div>
+    <div class="feedback" id="feedback"></div>
+    <div class="nextbar" id="nextWrap"><button class="btn" id="nextBtn">Next lesson →</button></div>
+  </section>
+
+</div>
+
+<footer style="text-align:center; padding:26px 20px 34px; color:var(--muted); font-size:13px; font-weight:700">
+  Barmij برمج is free for every learner and teacher, forever — and not for sale, by anyone.
+  <a href="license.html" style="color:var(--blue-text)">CC BY-NC-SA 4.0</a>
+</footer>
+
+<canvas id="confetti"></canvas>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/codemirror.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/mode/python/python.min.js"></script>
+<script src="https://cdn.jsdelivr.net/pyodide/v0.26.2/full/pyodide.js"></script>
+<script src="lessons.js"></script>
+<script src="codebank.js"></script>
+<script src="barmij.js"></script>
+</body>
+</html>

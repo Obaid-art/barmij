@@ -1,5 +1,17 @@
 # Decisions Log — Barmij
 
+- **2026-09-14 / B26 — Bank Blueprint adopted + batch 2 shipped.** The 500 is engineered, not
+  vibes: 36 concepts × worked/tweak/independent/transfer ladder (+100 interleaved spirals, +40
+  capstones) = ~500, machine-checked by tools/check_bank.py (auto-detects concepts from code —
+  coverage cannot drift). Batch 2: 60 items targeting the checker's exposed gaps (decision
+  cluster, loop-var, randint, Mustakshif floor). **Bank = 100/500, all engine-verified, coverage
+  PASS.** Cadence: ~60-item batch ships with each World.
+- **2026-09-14 / B25 — Public license: CC BY-NC-SA 4.0.** Founder's rule in plain words on the
+  site footer + license.html: "free for every learner and teacher, forever — and not for sale,
+  by anyone." Teachers/schools may use and adapt (share-alike inherits free-forever); all
+  commercial use banned; Barmij name/characters excluded from the license. The founder's
+  intention stays private — public text is legal and warm, never preachy. Legal review before
+  launch logged.
 - **2026-09-14 / B24 — FREE FOREVER, SEALED (founder's word, final).** After weighing charging
   (AED 20 lifetime was considered), the founder decided: "I will stick for the sake of Allah,
   and I will not take profit — not for this one. Allah will reward me with better things."
@@ -12,7 +24,10 @@
   3. The founder's income needs are served by his separate ventures (Hisab — live;
      Itqan — parked, revenue-designed), never by this initiative.
   This decision is not revisited by future sessions; it is the initiative's identity.
-- **2026-09-09 / B23 — The guides: Emirati characters as soft power** (founder vision).
+- **2026-09-12 / B23 KILLED by founder** ("lame idea") — no guide characters, no mascots, in
+  Barmij or any spin-off. characters.html removed from the repo 2026-09-14. The turtle remains
+  the only voice. Original entry kept below for the record:
+- ~~**2026-09-09 / B23 — The guides: Emirati characters as soft power** (founder vision).~~
   A boy and a girl in Emirati dress become the speaking guides (child chooses; turtle becomes
   their pet). Strategy + precedents in INITIATIVE.md; concept board with 2 style directions +
   in-context mock + name candidates (Rashid/Salem/Hamdan · Moza/Alia/Maitha) at

@@ -37,16 +37,10 @@ Ministry of Education. Success metric: children who *make things*, not children 
 3. Approach MoE with a working product + pilot data + a scientist's name on the pedagogy —
    offered free. (Channels: MoE innovation programs, Coders HQ community, ADEK/KHDA pilots.)
 
-## Soft power — the characters ARE the export (added 2026-09-09, DECISIONS B23)
-A young Emirati boy (white kandura, gahfiya) and girl (mukhawar, braids) are the guides of
-Barmij — the child chooses theirs; the turtle becomes their drawing pet. Precedents: Doraemon
-(Japan's official anime ambassador, 2008), Iftah Ya Simsim (the Gulf raised a region on a
-character in 1979), Freej (Emirati characters travel). The strategy: Arabic + English bilingual
-→ 400M Arabic speakers first → global editions in which the guides stay fully Emirati — that is
-the point; Doraemon never stopped being Japanese. "The Emirati kids who taught a million
-children to code" upgrades the ministry pitch from courseware to national cultural asset.
-Concept board: app/characters.html. Final art requires a professional character illustrator and
-a trademark filing before public launch; dress details verified by Emirati family eyes.
+## Soft power (revised 2026-09-12: B23 characters KILLED by founder — no mascots, ever)
+The export strategy stands without characters: Arabic + English bilingual → 400M Arabic
+speakers first → global. The product's Emirati soul lives in its content (falcons, zellij,
+Hope Probe, Eid), its bilingual voice, and its free-forever gift character — not in a mascot.
 
 ## What this is not — sealed (B24, 2026-09-14)
 Not a business, not ad-funded, not data-hungry. A child's attention is an amanah (أمانة).

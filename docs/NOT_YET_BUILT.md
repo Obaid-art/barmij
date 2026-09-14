@@ -27,13 +27,6 @@
 - [ ] Predict-step UI for PRIMM (currently woven into lesson text; make it interactive).
 - [ ] Accessibility pass (screen readers, color-blind-safe check of role palette).
 
-## The guides (B23 — after founder picks direction & names)
-- [ ] Guide picker (first visit: choose your guide; stored locally like everything else).
-- [ ] Guide face replaces 🐢 in build beats, demo captions, and feedback.
-- [ ] Professional character illustrator engagement + trademark filing (before any public launch).
-- [ ] Cultural dress review by Emirati family eyes (gahfiya, mukhawar, braid details).
-- [ ] Character voice recording (Arabic + English) = the narration plan's voice.
-
 ## Initiative
 - [ ] Pilot with 3-5 real kids from the family network; observe silently; iterate.
 - [ ] Ministry pitch pack: working demo + pilot evidence + PEDAGOGY.md + Worlds↔official-outcomes map.

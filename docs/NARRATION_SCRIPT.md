@@ -1,7 +1,7 @@
 # Narration Recording Script
 _One line per clip. Record as `app/audio/<ID>.mp3`, then map the ID in
 `app/audio_manifest.js`. Warm, unhurried, like reading to one child. (B33)_
-**303 clips total.**
+**305 clips total.**
 
 
 ## Lesson w1l1
@@ -76,8 +76,9 @@ _One line per clip. Record as `app/audio/<ID>.mp3`, then map the ID in
 ## Lesson w2l3
 - **w2l3-b0** — import random — a toolbox of chance.
 - **w2l3-b1** — One tool throws dice:
-- **w2l3-b2** — Another picks from a list: random . choice ([ "gold" , "pink" ])
-- **w2l3-b3** — Same code. Different result. Every run.
+- **w2l3-b2** — See [ ... ] ? A bag of options. Python grabs ONE — eyes closed.
+- **w2l3-b3** — The grabbing tool: random . choice ([ "gold" , "pink" ])
+- **w2l3-b4** — Same code. Different result. Every run.
 
 ## Lesson w2l4
 - **w2l4-b0** — Two powers, one machine: input + random .
@@ -87,8 +88,9 @@ _One line per clip. Record as `app/audio/<ID>.mp3`, then map the ID in
 ## Lesson w2l5
 - **w2l5-b0** — input gives words — even "7" is a word.
 - **w2l5-b1** — int (...) turns words into real numbers. Now &gt; and &lt; work.
-- **w2l5-b2** — Between if and else lives elif : "else, if…"
-- **w2l5-b3** — That's everything a guessing game needs.
+- **w2l5-b2** — str (...) is the twin, reversed — numbers back into words, ready for +.
+- **w2l5-b3** — Between if and else lives elif : "else, if…"
+- **w2l5-b4** — That's everything a guessing game needs.
 
 ## Lesson w2l6
 - **w2l6-b0** — Final make: a machine that answers feelings with art .
@@ -194,7 +196,7 @@ _One line per clip. Record as `app/audio/<ID>.mp3`, then map the ID in
 - **w4l6-b3** — Every card it makes is different. Every card is yours.
 
 ## Lesson w5l1
-- **w5l1-b0** — One jar holds one thing. A list holds many.
+- **w5l1-b0** — One jar, one thing. A list holds many — the dice's bag, finally named.
 - **w5l1-b1** — Watch a treasure box being packed:
 - **w5l1-b2** — The trap everyone falls in once: the first slot is 0, not 1 .
 - **w5l1-bl0** — Square brackets — the box opens.

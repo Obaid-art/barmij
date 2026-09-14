@@ -436,6 +436,7 @@ function openBank() {
   document.getElementById("bankPanel").style.display = "block";
   document.getElementById("demoCard").style.display = "none";
   setCodeStage(true); /* the bank IS the doing stage */
+  showCanvas(false); /* appears the moment something draws */
   document.getElementById("taskText").style.display = "none";
   document.getElementById("thinkCard").style.display = "none";
   galleryMode = false;
@@ -513,7 +514,8 @@ async function playBuild(container, build, instant) {
   build.steps.forEach((s, si) => {
     tokenizeRoles(s.text).forEach(c => chars.push({ ...c, step: si }));
   });
-  instant = instant || REDUCED_MOTION || window._demoFast;
+  /* first meeting is letter-by-letter (B22); a REVISIT of a passed lesson replays instantly */
+  instant = instant || REDUCED_MOTION || window._demoFast || (progress[LESSONS[current].id] || 0) > 0;
   let lastStep = -1;
   for (let i = 0; i <= chars.length; i++) {
     if (buildSession !== mySession) return;
@@ -602,6 +604,16 @@ function revealBeat(upto, instant) {
   };
   const b = beats[upto];
   const ls = LESSONS[current];
+  if (instant) {
+    /* "show everything" must not skip a build — every one plays, instantly */
+    for (let i = 0; i <= upto; i++) {
+      const bd = (ls.beats || [])[i];
+      if (bd && bd.build && !beats[i].dataset.played) {
+        beats[i].dataset.played = "1";
+        playBuild(beats[i], bd.build, true);
+      }
+    }
+  }
   const beatDef = (ls.beats || [])[upto];
   if (beatDef && beatDef.build && !b.dataset.played) {
     b.dataset.played = "1";
@@ -631,6 +643,7 @@ let lessonStage = 0; /* 0 story · 1 demo · 2 code */
 
 function setCodeStage(visible) {
   CODE_STAGE_IDS.forEach(id => { document.getElementById(id).style.display = visible ? "" : "none"; });
+  if (visible) showCanvas(canvasWanted); /* the canvas keeps its earned visibility */
 }
 function revealCodeStage(scroll) {
   lessonStage = 2;
@@ -730,6 +743,7 @@ function openLesson(i, keepQuiet) {
   document.getElementById("feedback").className = "feedback";
   document.getElementById("nextWrap").style.display = "none";
   clearOutputs(); clearCanvas();
+  showCanvas(DRAWY.test(ls.starter) || DRAWY.test(ls.hints.join(" ")));
   renderSidebar();
   if (!keepQuiet) window.scrollTo({ top: 0, behavior: "smooth" });
 }
@@ -810,6 +824,7 @@ async function run() {
     } catch (err) { if (runSeq === myRun) showError(err); return; }
     if (runSeq !== myRun) return;
     renderStdout();
+    showCanvas(true);
     if (frames[60]) drawAll(frames[60]);
     lastRun = { code, hadCmds: (frames[60] || []).length > 0, firstOut: stdoutBuf.split("\n").find(s => s.trim()) || "" };
     showSaveBar();
@@ -842,6 +857,7 @@ async function run() {
     return;
   }
   renderStdout();
+  showCanvas(cmds.length > 0 || chartShownThisRun);
   await animate(cmds);
   if (runSeq !== myRun) return;
   const lines = cmds.filter(c => c.t === "line");
@@ -971,6 +987,13 @@ function clearCanvas() {
   animSession++;
   setupCanvas();
 }
+/* the canvas earns its place: hidden for text-only work, present the moment anything draws */
+let canvasWanted = true;
+function showCanvas(v) {
+  canvasWanted = v;
+  document.getElementById("canvasCard").style.display = v ? "" : "none";
+}
+const DRAWY = /forward\(|back\(|right\(|left\(|dot\(|jump\(|plt\.|def\s+tick|write\(/;
 /* logical coords: y up, origin center → canvas: (x, -y) */
 function drawSeg(ctx, s, t) { /* t in [0,1] */
   const x2 = s.x1 + (s.x2 - s.x1) * t, y2 = s.y1 + (s.y2 - s.y1) * t;
@@ -1393,6 +1416,7 @@ function openChallenges() {
     .forEach(id => document.getElementById(id).style.display = "none");
   document.getElementById("challengesPanel").style.display = "block";
   setCodeStage(true);
+  showCanvas(false);
   document.getElementById("taskText").style.display = "none";
   document.getElementById("feedback").className = "feedback";
   document.getElementById("bankBtn").classList.remove("active");
@@ -1436,6 +1460,7 @@ async function startChallenge(c) {
   pyodide.runPython("reset()");
   await pyodide.runPythonAsync(c.code);
   chState = { def: c, targetCmds: JSON.parse(pyodide.runPython("_dump()")) };
+  showCanvas(true);
   editor.setValue("# Summon the ghost. Your code, your way.\n\n");
   drawGhost(chState.targetCmds);
   narrate(`${c.id}-goal`, c.title + ". " + c.goal);
@@ -1604,6 +1629,7 @@ function openGallery() {
   document.getElementById("galleryPanel").style.display = "block";
   document.getElementById("demoCard").style.display = "none";
   setCodeStage(true);
+  showCanvas(false);
   document.getElementById("taskText").style.display = "none";
   document.getElementById("thinkCard").style.display = "none";
   document.getElementById("hintBox").style.display = "none";
@@ -1721,6 +1747,7 @@ async function puzzleStart(it) {
   }
   if (tray.join("\n") === lines.map(l => l.trim()).join("\n")) tray.reverse();
   puz = { item: it, tray, placed: [], targetCmds, targetOut };
+  showCanvas(targetCmds.length > 0);
   document.getElementById("puzzleGoal").textContent =
     `${it.emoji} ${it.title} — the ghost below is the goal. Order the pieces to draw it.`;
   document.getElementById("puzzlePanel").style.display = "block";
@@ -1876,6 +1903,7 @@ function stepRun() {
     return 0;
   });
   stepState = { ...data, idx: 0, passMap, lines };
+  showCanvas(data.cmds.length > 0);
   document.getElementById("stepBar").style.display = "flex";
   renderStep();
 }

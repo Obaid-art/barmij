@@ -406,14 +406,15 @@ const WORLD2_LESSONS = [
     beats: [
       { t: "<code class=\"k\">import</code> <code class=\"v\">random</code> — a toolbox of chance." },
       { t: "One tool throws dice:", fig: "dice" },
-      { t: "Another picks from a list: <code class=\"v\">random</code>.<code class=\"k\">choice</code>([<code class=\"a\">\"gold\"</code>, <code class=\"a\">\"pink\"</code>])" },
+      { t: "See <code>[ ... ]</code>? A <b>bag</b> of options. Python grabs ONE — eyes closed." },
+      { t: "The grabbing tool: <code class=\"v\">random</code>.<code class=\"k\">choice</code>([<code class=\"a\">\"gold\"</code>, <code class=\"a\">\"pink\"</code>])" },
       { t: "Same code. Different result. <b>Every run.</b>" },
     ],
     predict: "Run the same code twice. Will the two stars be identical?",
     starter: `import random\n\nsize = random.randint(40, 140)\ncolor(random.choice(["gold", "royalblue", "hotpink", "seagreen"]))\nwidth(6)\n\nfor i in range(5):\n    forward(size)\n    right(144)\n`,
     task: "Run it at least 3 times and watch the star change. Then add two more colors you love to the list.",
     hints: [
-      "The list lives inside [ ] — add a color like \"orchid\" or \"teal\", with quotes and a comma.",
+      "The bag lives inside [ ] — add a color like \"orchid\" or \"teal\", with quotes and a comma.",
       "Make the surprise bigger: randint(20, 200), or a random width(random.randint(2, 12)).",
     ],
     check: (ctx) => {
@@ -456,6 +457,7 @@ const WORLD2_LESSONS = [
     beats: [
       { t: "<code class=\"k\">input</code> gives <b>words</b> — even \"7\" is a word." },
       { t: "<code class=\"k\">int</code>(...) turns words into real numbers. Now &gt; and &lt; work." },
+      { t: "<code class=\"k\">str</code>(...) is the twin, reversed — numbers back into words, ready for +." },
       { t: "Between if and else lives <code class=\"k\">elif</code>: \"else, if…\"" },
       { t: "That's everything a guessing game needs. 🎯" },
     ],
@@ -890,7 +892,7 @@ const WORLD5_LESSONS = [
     title: "The treasure box",
     subtitle: "Lists — many things, one name",
     beats: [
-      { t: "One jar holds one thing. A <b>list</b> holds many." },
+      { t: "One jar, one thing. A <b>list</b> holds many — the dice's bag, finally named." },
       { t: "Watch a treasure box being packed:",
         build: {
           steps: [

@@ -1,5 +1,29 @@
 # Decisions Log — Barmij
 
+- **2026-09-14 / B41 — Deep flow & pedagogy audit (founder: reveal order, flow killers,
+  ugliness, "are we jumping concepts / expecting too much?").** Findings and fixes:
+  1. "SHOW EVERYTHING" LEFT BUILDS BLANK: revealBeat played only the LAST beat's build, so a
+     child who tapped "show everything" got empty build boxes — the lesson's core code never
+     appeared (and on a last-beat build, it appeared fully formed with its effect at once —
+     the "already there" sight). Now every unplayed build plays (instantly in that mode).
+  2. REVISIT TEDIUM: builds replayed letter-by-letter on every return. B22 is a FIRST-meeting
+     law — a passed lesson's builds now replay instantly; first meetings unchanged.
+  3. DEAD CANVAS KILLED THE TEXT LESSONS' FLOW: print-only work (w1l1! the fortune teller,
+     the search lessons) showed a 460px empty dotted canvas between editor and output — the
+     child's first-ever result hid below a meaningless box. The canvas now earns its place:
+     hidden for text-only lessons/runs, appearing the moment anything draws (drawing runs,
+     charts, LIVE, ghosts, Step-with-drawing all verified showing it).
+  4. CONCEPT JUMPS, found by a mechanical lesson audit (starter/demo/build code vs INTRO
+     gates): w2l3/w2l4/w3l5 used [ ] list literals three worlds before W5 teaches lists,
+     with the notation never taught. Fix honors "use before formalize": w2l3 now TEACHES the
+     bag reading ("[ ... ]? A bag of options — Python grabs ONE"), hints say "bag", and
+     w5l1's opening names it back ("the dice's bag, finally named"). w2l5 used str() with no
+     teaching beat (it IS the str lesson) — a beat now teaches it as int's reversed twin.
+  5. Audit also verified: no beat carries fig+build (no spoiled reveals); watch/build typing
+     payloads all under ~31s; W1–W8 lesson-by-lesson read found the ladder sound — every
+     check enforceable from taught material, tasks within reach of what came before.
+  Narration 305 clips (beat indices shifted). All gates PASS. Assets v19.
+
 - **2026-09-14 / B40 — Post-completion hardening audit (founder: "flag anything slowing down
   or breaking — fix right away").** Four engine defects found by review, each proven live
   before and after the fix:

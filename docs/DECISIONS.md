@@ -1,5 +1,18 @@
 # Decisions Log — Barmij
 
+- **2026-09-14 / B37 — World 6 shipped: Living Programs — and LIVE MODE, a new engine organ.**
+  def tick() makes a program ALIVE: ~30 fps, real arrow-key input (key_pressed), game.* jars
+  remembered between blinks (no `global` wall for kids), distance() collision, write() HUD —
+  every frame under the runaway guard (8k steps/frame), Esc/⏹ stops, kind errors for unborn
+  game jars and missing tick. Lesson checks run 90 SIMULATED heartbeats and assert motion,
+  stillness-without-keys, fall+respawn, and HUD presence — living programs verified headlessly.
+  Six lessons grow ONE game: the heartbeat → keys → the falling houbara → the catch
+  (distance/score/write) → game feel as three laws (EDGES, CHALLENGE, MERCY — a miss costs
+  nothing, per the joy charter) → Make: your own living world (dhow dodge suggested, freedom
+  granted). Verified end-to-end incl. the falcon actually flying under a held key. 14-item W6
+  batch of living toys (bank = 170, all clean); gates PASS after catching one 16-word beat and
+  two thin unlock points; narration → 245 clips. Step mode note: living programs are watched,
+  not stepped (setup still steppable).
 - **2026-09-14 / B36 — World 5 shipped: Collections** — six lessons: the treasure box (lists,
   with the count-from-zero trap staged in the build: "the zero is our gift to mathematics") ·
   the visiting loop (for-in, no range) · the majlis guest list (append/len/in — the door keeper

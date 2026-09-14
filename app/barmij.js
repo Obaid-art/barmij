@@ -54,6 +54,43 @@ def dot(r=8):
     _cmds.append({"t":"dot","x":_state["x"],"y":_state["y"],"r":float(r),"c":_state["color"]})
 def _dump(): return json.dumps(_cmds)
 
+class _GameBox:
+    pass
+game = _GameBox()
+
+def _fresh_game():
+    game.__dict__.clear()
+
+def distance(x1, y1, x2, y2):
+    return math.hypot(x2 - x1, y2 - y1)
+
+def write(x, y, msg):
+    _cmds.append({"t": "text", "x": float(x), "y": float(y), "m": str(msg), "c": _state["color"]})
+
+def key_pressed(name):
+    try:
+        from js import _barmijKeys
+        return bool(getattr(_barmijKeys, str(name), 0))
+    except Exception:
+        return False
+
+def _live_tick():
+    """One heartbeat: clear the frame, run the child's tick() (guarded), hand back the frame."""
+    reset()
+    _cnt = [0]
+    def _t(frame, event, arg):
+        if event == "line":
+            _cnt[0] += 1
+            if _cnt[0] > 8000:
+                raise RuntimeError("LOOP_LIMIT")
+        return _t
+    _sys.settrace(_t)
+    try:
+        tick()
+    finally:
+        _sys.settrace(None)
+    return _dump()
+
 import sys as _sys
 
 def _run_guarded(code):
@@ -137,6 +174,7 @@ window.addEventListener("DOMContentLoaded", async () => {
   document.getElementById("stepPrev").addEventListener("click", () => stepMove(-1));
   document.getElementById("stepNext").addEventListener("click", () => stepMove(1));
   document.getElementById("stepExit").addEventListener("click", exitStep);
+  document.getElementById("liveStopBtn").addEventListener("click", stopLive);
   document.getElementById("puzzleExit").addEventListener("click", puzzleExit);
   document.getElementById("puzzleCheck").addEventListener("click", puzzleCheck);
   document.getElementById("resetBtn").addEventListener("click", () => {
@@ -276,6 +314,9 @@ function computeGate(code) {
   add(/for\s+\w+\s+in\s+(?!range\b)[\w\["']/.test(code), 5, 2);
   add(/\.append\(|(?<![\w])len\(/.test(code), 5, 3);
   add(/\.find\(/.test(code), 5, 5);
+  add(/def\s+tick\s*\(|game\.\w+/.test(code), 6, 1);
+  add(/key_pressed\(/.test(code), 6, 2);
+  add(/(?<![\w])distance\(|(?<![\w])write\(/.test(code), 6, 4);
   const g = gates.length ? Math.max(...gates) : 11;
   return { g, peek: false, label: `after W${Math.floor(g / 10)}·L${g % 10}` };
 }
@@ -379,6 +420,7 @@ function openBank() {
   document.getElementById("challengesPanel").style.display = "none";
   document.getElementById("challengesBtn").classList.remove("active");
   stopNarration();
+  stopLive();
   hideSaveBar();
   if (puz) puzzleExit();
   exitStep();
@@ -633,6 +675,7 @@ function openLesson(i, keepQuiet) {
   if (challengeMode) exitChallenge();
   document.getElementById("challengesPanel").style.display = "none";
   document.getElementById("challengesBtn").classList.remove("active");
+  stopLive();
   hideSaveBar();
   if (puz) puzzleExit();
   exitStep();
@@ -679,19 +722,69 @@ function showHint() {
 async function run() {
   if (!pyReady) return;
   runsThisLesson++;
+  stopLive();
   hideSaveBar();
   clearOutputs(); clearCanvas();
   document.getElementById("feedback").className = "feedback";
   stdoutBuf = "";
   const code = editor.getValue();
   let cmds = [];
+  const isLive = /(^|\n)def\s+tick\s*\(/.test(code);
   try {
     pyodide.runPython("reset()");
+    pyodide.runPython("_fresh_game()");
     pyodide.globals.set("_usercode", code);
     await pyodide.runPythonAsync("_run_guarded(_usercode)");
     cmds = JSON.parse(pyodide.runPython("_dump()"));
   } catch (err) {
     showError(err);
+    return;
+  }
+  if (isLive) {
+    /* a living program: simulate 90 silent heartbeats for the check, then hand it to the child */
+    window._barmijKeys = { left: 0, right: 0, up: 0, down: 0, space: 0 };
+    let frames = [];
+    try {
+      for (let f = 0; f < 90; f++) frames.push(JSON.parse(pyodide.runPython("_live_tick()")));
+    } catch (err) { showError(err); return; }
+    /* restart fresh so the child's game begins at the beginning */
+    clearOutputs();
+    try {
+      pyodide.runPython("reset()");
+      pyodide.runPython("_fresh_game()");
+      stdoutBuf = "";
+      await pyodide.runPythonAsync("_run_guarded(_usercode)");
+    } catch (err) { showError(err); return; }
+    renderStdout();
+    if (frames[60]) drawAll(frames[60]);
+    lastRun = { code, hadCmds: (frames[60] || []).length > 0, firstOut: stdoutBuf.split("\n").find(s => s.trim()) || "" };
+    showSaveBar();
+    const fb = document.getElementById("feedback");
+    if (bankMode || galleryMode || challengeMode) {
+      fb.className = "feedback ok";
+      fb.textContent = "🔴 It's ALIVE — arrows to play, Esc or ⏹ to stop." + (currentBankItem ? " Remix: " + currentBankItem.remix : "");
+      if (currentBankItem && dueReviewGate() === currentBankItem.g) completeReview(currentBankItem.g);
+    } else {
+      const verdict = LESSONS[current].check({ cmds, lines: [], code, stdout: stdoutBuf, frames });
+      if (verdict.pass) {
+        fb.className = "feedback ok";
+        fb.textContent = "✅ " + verdict.msg + " (Playing now — Esc stops.)";
+        narrate("live", verdict.msg);
+        const stars = hintsUsed === 0 ? (runsThisLesson <= 2 ? 3 : 2) : 1;
+        if (stars > (progress[LESSONS[current].id] || 0)) {
+          progress[LESSONS[current].id] = stars;
+          localStorage.setItem(PROG_KEY, JSON.stringify(progress));
+        }
+        renderSidebar(); renderRank();
+        scheduleReview(lessonGateOf(current));
+        confetti();
+        if (current + 1 < LESSONS.length) document.getElementById("nextWrap").style.display = "block";
+      } else {
+        fb.className = "feedback err";
+        fb.textContent = "🧭 " + verdict.msg + " (It still runs — play, observe, adjust.)";
+      }
+    }
+    enterLive();
     return;
   }
   renderStdout();
@@ -760,6 +853,12 @@ function friendly(msg) {
     return "Your loop never found its way out — it ran 20,000 steps! A while needs its promise to come true (like n = n + 1 inside the loop).";
   if (/DRAW_LIMIT/.test(last))
     return "Over 3,000 drawn lines — the turtle is exhausted! Try smaller numbers in range().";
+  if (/AttributeError: '_GameBox'|AttributeError: .*_GameBox/.test(last)) {
+    const m2 = last.match(/attribute '(\w+)'/);
+    return `game.${m2 ? m2[1] : "…"} doesn't exist yet! Give it a starting value at the TOP, before tick begins: game.${m2 ? m2[1] : "x"} = 0`;
+  }
+  if (/NameError: name 'tick'/.test(last))
+    return "No tick() found — a living program needs its heartbeat: def tick(): with the world's moves inside.";
   if (/IndexError/.test(last))
     return "You asked for a slot that doesn't exist! Boxes count from 0 — a box of 3 things has slots 0, 1 and 2.";
   if (/TypeError: can only concatenate str|TypeError: unsupported operand.*str/.test(last))
@@ -823,8 +922,59 @@ function drawAll(segs) {
   const ctx = setupCanvas();
   for (const s of segs) {
     if (s.t === "dot") { ctx.fillStyle = s.c; ctx.beginPath(); ctx.arc(s.x, -s.y, s.r, 0, 7); ctx.fill(); }
+    else if (s.t === "text") { ctx.fillStyle = s.c; ctx.font = "800 18px 'JetBrains Mono', monospace"; ctx.fillText(s.m, s.x, -s.y); }
     else drawSeg(ctx, s, 1);
   }
+}
+
+/* ---------------- 🔴 LIVE mode — programs that never finish (DECISIONS B37) ----------------
+   def tick(): makes a program ALIVE: ~30 times a second Python wakes, reads the keys, moves
+   the game's jars, draws a frame. Every frame runs under the runaway guard. */
+let liveMode = false, liveRaf = null, liveLast = 0;
+const KEYMAP = { ArrowLeft: "left", ArrowRight: "right", ArrowUp: "up", ArrowDown: "down", " ": "space" };
+
+function liveKeyDown(e) {
+  const k = KEYMAP[e.key];
+  if (k) { window._barmijKeys[k] = 1; e.preventDefault(); }
+  if (e.key === "Escape") stopLive();
+}
+function liveKeyUp(e) {
+  const k = KEYMAP[e.key];
+  if (k) { window._barmijKeys[k] = 0; e.preventDefault(); }
+}
+
+function enterLive() {
+  liveMode = true;
+  window._barmijKeys = { left: 0, right: 0, up: 0, down: 0, space: 0 };
+  window.addEventListener("keydown", liveKeyDown);
+  window.addEventListener("keyup", liveKeyUp);
+  document.getElementById("liveBar").style.display = "flex";
+  document.getElementById("canvasCard").scrollIntoView({ behavior: REDUCED_MOTION ? "auto" : "smooth", block: "center" });
+  liveLast = 0;
+  const frame = (now) => {
+    if (!liveMode) return;
+    if (now - liveLast >= 32) { /* ~30 fps */
+      liveLast = now;
+      try {
+        drawAll(JSON.parse(pyodide.runPython("_live_tick()")));
+      } catch (err) {
+        stopLive();
+        showError(err);
+        return;
+      }
+    }
+    liveRaf = requestAnimationFrame(frame);
+  };
+  liveRaf = requestAnimationFrame(frame);
+}
+
+function stopLive() {
+  if (!liveMode) return;
+  liveMode = false;
+  if (liveRaf) cancelAnimationFrame(liveRaf);
+  window.removeEventListener("keydown", liveKeyDown);
+  window.removeEventListener("keyup", liveKeyUp);
+  document.getElementById("liveBar").style.display = "none";
 }
 function animate(cmds) {
   return new Promise((resolve) => {
@@ -1328,6 +1478,7 @@ function openGallery() {
   document.getElementById("challengesBtn").classList.remove("active");
   if (puz) puzzleExit();
   exitStep();
+  stopLive();
   hideSaveBar();
   document.getElementById("lessonPanel").style.display = "none";
   document.getElementById("bankPanel").style.display = "none";
@@ -1408,7 +1559,7 @@ let puz = null;
 
 CODEBANK.forEach(it => {
   const n = it.code.split("\n").filter(l => l.trim()).length;
-  it.puzzle = !it.talks && !/random|input\(/.test(it.code) && n >= 3 && n <= 12;
+  it.puzzle = !it.talks && !/random|input\(|def\s+tick/.test(it.code) && n >= 3 && n <= 12;
 });
 
 function drawGhost(cmds) {
@@ -1418,6 +1569,9 @@ function drawGhost(cmds) {
     if (s.t === "dot") {
       ctx.fillStyle = "#d7dde6";
       ctx.beginPath(); ctx.arc(s.x, -s.y, s.r, 0, 7); ctx.fill();
+    } else if (s.t === "text") {
+      ctx.fillStyle = "#d7dde6"; ctx.font = "800 18px 'JetBrains Mono', monospace";
+      ctx.fillText(s.m, s.x, -s.y);
     } else {
       ctx.strokeStyle = "#d7dde6"; ctx.lineWidth = s.w;
       ctx.beginPath(); ctx.moveTo(s.x1, -s.y1); ctx.lineTo(s.x2, -s.y2); ctx.stroke();

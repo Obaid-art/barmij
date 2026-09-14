@@ -42,6 +42,11 @@ DETECTORS = {
     "append": lambda c: ".append(" in c,
     "len": lambda c: re.search(r"(?<![\w])len\(", c) is not None,
     "find": lambda c: ".find(" in c,
+    "tick": lambda c: re.search(r"def\s+tick\s*\(", c) is not None,
+    "game-state": lambda c: re.search(r"game\.\w+", c) is not None,
+    "key-pressed": lambda c: "key_pressed(" in c,
+    "distance": lambda c: re.search(r"(?<![\w])distance\(", c) is not None,
+    "write": lambda c: re.search(r"(?<![\w])write\(", c) is not None,
 }
 
 # minimum items per shipped-world concept (blueprint ladder = 10; interim floor while growing)

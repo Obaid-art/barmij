@@ -1,7 +1,7 @@
 # Narration Recording Script
 _One line per clip. Record as `app/audio/<ID>.mp3`, then map the ID in
 `app/audio_manifest.js`. Warm, unhurried, like reading to one child. (B33)_
-**217 clips total.**
+**245 clips total.**
 
 
 ## Lesson w1l1
@@ -238,6 +238,46 @@ _One line per clip. Record as `app/audio/<ID>.mp3`, then map the ID in
 - **w5l6-b0** — The final make: a quiz machine — questions in one box, answers in another.
 - **w5l6-b1** — Slot i of questions matches slot i of answers. Twins by number.
 - **w5l6-b2** — Ask, compare, count the score. Then judge — kindly.
+
+## Lesson w6l1
+- **w6l1-b0** — Every program so far ran, finished, showed its work. Games never finish — they live .
+- **w6l1-b1** — Watch a heartbeat being born:
+- **w6l1-b2** — The frame is wiped every blink — whatever tick draws IS the world.
+- **w6l1-bl0** — game. — the game's own jars, remembered between blinks.
+- **w6l1-bl1** — tick — Python calls this word THIRTY times a second.
+- **w6l1-bl2** — Each blink: slide a little. Tiny moves, thirty a second — that IS motion.
+- **w6l1-bl3** — …and draw the world as it is THIS blink.
+
+## Lesson w6l2
+- **w6l2-b0** — A living game listens: key_pressed ( "left" ) asks — held right now?
+- **w6l2-b1** — Ask every blink. Move only while the answer is yes.
+- **w6l2-b2** — Now the falcon obeys not the code — but the CHILD at the keys.
+
+## Lesson w6l3
+- **w6l3-b0** — Enter the houbara — the falcon's legendary quarry — falling from the sky.
+- **w6l3-b1** — It needs its OWN jars: game.prey_x, game.prey_y.
+- **w6l3-b2** — Past the ground? Respawn at the top — at a random x. The sky never empties.
+
+## Lesson w6l4
+- **w6l4-b0** — The hunt needs a judge: distance (x1, y1, x2, y2) — how far apart, in steps?
+- **w6l4-b1** — Watch the judging line:
+- **w6l4-b2** — No buzzers for misses — in OUR games, only the catches count.
+- **w6l4-bl0** — Closer than 30? That's a CATCH.
+- **w6l4-bl1** — The score jar grows —
+- **w6l4-bl2** — — and a new houbara takes the sky.
+- **w6l4-bl3** — write paints words ONTO the world, every blink.
+
+## Lesson w6l5
+- **w6l5-b0** — A finished game respects three laws.
+- **w6l5-b1** — EDGES: the falcon may not leave the world — clamp it at both walls.
+- **w6l5-b2** — CHALLENGE: every catch, the sky falls a little faster. Mastery earns storm.
+- **w6l5-b3** — MERCY: a miss costs nothing. The hunt simply continues.
+
+## Lesson w6l6
+- **w6l6-b0** — The final make: a living world that is entirely yours.
+- **w6l6-b1** — An idea if you want one: the dhow dodge — steer a dhow, dodge what falls.
+- **w6l6-b2** — The laws: a heartbeat, keys, a judge, a score on the sky.
+- **w6l6-b3** — Or ignore the idea entirely. Living worlds obey their makers.
 
 ## Guided thinking (Code Bank)
 - **cb001-t0** — What do I want? A square — four equal sides.

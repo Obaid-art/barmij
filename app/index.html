@@ -7,7 +7,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700;800;900&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/codemirror.min.css">
-<link rel="stylesheet" href="barmij.css?v=14">
+<link rel="stylesheet" href="barmij.css?v=15">
 </head>
 <body>
 
@@ -142,6 +142,12 @@
       <div id="loading">Waking Python up… (first time takes a moment)</div>
     </div>
 
+    <div class="livebar" id="liveBar" style="display:none">
+      <span class="live-dot"></span><b>LIVE</b> — arrow keys play · Esc stops
+      <span class="spacer" style="flex:1"></span>
+      <button class="btn ghost" id="liveStopBtn">⏹ Stop</button>
+    </div>
+
     <div class="savebar" id="saveBar" style="display:none"></div>
 
     <div class="outputs" id="outputs"></div>
@@ -161,10 +167,10 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/codemirror.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/mode/python/python.min.js"></script>
 <script src="https://cdn.jsdelivr.net/pyodide/v0.26.2/full/pyodide.js"></script>
-<script src="lessons.js?v=14"></script>
-<script src="codebank.js?v=14"></script>
-<script src="challenges.js?v=14"></script>
-<script src="audio_manifest.js?v=14"></script>
-<script src="barmij.js?v=14"></script>
+<script src="lessons.js?v=15"></script>
+<script src="codebank.js?v=15"></script>
+<script src="challenges.js?v=15"></script>
+<script src="audio_manifest.js?v=15"></script>
+<script src="barmij.js?v=15"></script>
 </body>
 </html>

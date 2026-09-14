@@ -1075,6 +1075,188 @@ const WORLD5_LESSONS = [
   },
 ];
 
+/* ================= World 6 — Living Programs ================= */
+
+const WORLD6_LESSONS = [
+  {
+    id: "w6l1",
+    title: "The heartbeat",
+    subtitle: "tick — a program that never finishes",
+    beats: [
+      { t: "Every program so far ran, finished, showed its work. Games never finish — they <b>live</b>." },
+      { t: "Watch a heartbeat being born:",
+        build: {
+          steps: [
+            { text: "game.x = -200", say: "game. — the game's own jars, remembered between blinks." },
+            { text: "\n\ndef tick():", say: "tick — Python calls this word THIRTY times a second." },
+            { text: "\n    game.x = game.x + 3", say: "Each blink: slide a little. Tiny moves, thirty a second — that IS motion." },
+            { text: "\n    penup()\n    jump(game.x, -130)\n    dot(16)", say: "…and draw the world as it is THIS blink." },
+          ],
+          effect: "a falcon gliding across the sky",
+          done: "Run doesn't finish anymore. Run begins a LIFE. Esc ends it.",
+        } },
+      { t: "The frame is wiped every blink — whatever tick draws IS the world." },
+    ],
+    predict: "x grows 3 per blink and wraps at the edge — describe the motion before you see it.",
+    starter: `game.x = -200\n\ndef tick():\n    game.x = game.x + 3\n    if game.x > 220:\n        game.x = -220\n    color("peru")\n    penup()\n    jump(game.x, -130)\n    dot(16)\n    color("saddlebrown")\n    jump(game.x + 11, -123)\n    dot(5)\n`,
+    task: "Run — your falcon glides, forever. Then: make it faster, and make it glide the OTHER way (watch the wrap!).",
+    hints: [
+      "Speed lives in the + 3. Direction lives in its sign.",
+      "Going left means wrapping on the LEFT edge: if game.x < -220: game.x = 220.",
+    ],
+    check: (ctx) => {
+      if (!/def\s+tick\s*\(/.test(ctx.code)) return { pass: false, msg: "A living program needs its heartbeat: def tick():" };
+      if (!/game\.\w+/.test(ctx.code)) return { pass: false, msg: "The world's memory lives in game jars: game.x = …" };
+      const d0 = (ctx.frames[5] || []).find(c => c.t === "dot");
+      const d1 = (ctx.frames[40] || []).find(c => c.t === "dot");
+      if (!d0 || !d1 || (Math.abs(d0.x - d1.x) < 2 && Math.abs(d0.y - d1.y) < 2))
+        return { pass: false, msg: "Nothing moved between blinks — change a game jar inside tick." };
+      return { pass: true, msg: "It LIVES. Thirty blinks a second, and your code is the pulse." };
+    },
+  },
+  {
+    id: "w6l2",
+    title: "Listening to keys",
+    subtitle: "The player enters the world",
+    beats: [
+      { t: "A living game listens: <code class=\"k\">key_pressed</code>(<code class=\"a\">\"left\"</code>) asks — held right now?" },
+      { t: "Ask every blink. Move only while the answer is yes." },
+      { t: "Now the falcon obeys not the code — but the CHILD at the keys." },
+    ],
+    predict: "No key held → what does the falcon do? (Hint: what SHOULD a waiting falcon do?)",
+    starter: `game.x = 0\n\ndef tick():\n    if key_pressed("left"):\n        game.x = game.x - 6\n    if key_pressed("right"):\n        game.x = game.x + 6\n    color("peru")\n    penup()\n    jump(game.x, -130)\n    dot(16)\n    color("saddlebrown")\n    jump(game.x + 11, -123)\n    dot(5)\n`,
+    task: "Run, then FLY it with the arrow keys. Then give it a vertical life too: up and down arrows.",
+    hints: [
+      "Up/down are two more ifs: key_pressed(\"up\") changes a game.y jar — and jump uses it.",
+      "Faster falcon? The 6 is its wingspeed.",
+    ],
+    check: (ctx) => {
+      if (!/key_pressed\(\s*"left"\s*\)/.test(ctx.code) || !/key_pressed\(\s*"right"\s*\)/.test(ctx.code))
+        return { pass: false, msg: "Listen to both wings: key_pressed(\"left\") and key_pressed(\"right\")." };
+      const d0 = (ctx.frames[5] || []).find(c => c.t === "dot");
+      const d1 = (ctx.frames[60] || []).find(c => c.t === "dot");
+      if (!d0 || !d1) return { pass: false, msg: "Where is the falcon? Draw it each tick." };
+      if (Math.abs(d0.x - d1.x) > 2 || Math.abs(d0.y - d1.y) > 2)
+        return { pass: false, msg: "With no key held, a good falcon WAITS — it should move only while a key is pressed." };
+      return { pass: true, msg: "The player is inside the world now. That's the line between a film and a game." };
+    },
+  },
+  {
+    id: "w6l3",
+    title: "The falling prey",
+    subtitle: "A second life in the sky",
+    beats: [
+      { t: "Enter the houbara — the falcon's legendary quarry — falling from the sky." },
+      { t: "It needs its OWN jars: game.prey_x, game.prey_y." },
+      { t: "Past the ground? Respawn at the top — at a random x. The sky never empties." },
+    ],
+    predict: "The prey falls 6 per blink from 240 — roughly how many blinks to cross the sky?",
+    starter: `import random\n\ngame.x = 0\ngame.prey_x = 60\ngame.prey_y = 240\n\ndef tick():\n    if key_pressed("left"):\n        game.x = game.x - 6\n    if key_pressed("right"):\n        game.x = game.x + 6\n    game.prey_y = game.prey_y - 6\n    if game.prey_y < -240:\n        game.prey_y = 240\n        game.prey_x = random.randint(-200, 200)\n    color("slategray")\n    penup()\n    jump(game.prey_x, game.prey_y)\n    dot(10)\n    color("peru")\n    jump(game.x, -130)\n    dot(16)\n`,
+    task: "Run — chase the falling houbara (you can't catch it YET). Then make the sky busier: a faster fall, or a second prey with its own jars.",
+    hints: [
+      "A second prey = game.prey2_x / game.prey2_y, its own fall, its own respawn, its own dot.",
+      "random.randint on respawn is what makes every fall a new story.",
+    ],
+    check: (ctx) => {
+      if (!/random\./.test(ctx.code)) return { pass: false, msg: "Respawn somewhere NEW each time — random.randint for the x." };
+      const ys = ctx.frames.map(f => { const d = f.find(c => c.t === "dot"); return d ? d.y : null; }).filter(y => y !== null);
+      let falls = false, respawns = false;
+      for (let i = 1; i < ys.length; i++) {
+        if (ys[i] < ys[i - 1] - 2) falls = true;
+        if (ys[i] > ys[i - 1] + 100) respawns = true;
+      }
+      if (!falls) return { pass: false, msg: "The prey should FALL — shrink its y jar every tick." };
+      if (!respawns) return { pass: false, msg: "Past the ground it must respawn at the top — the if that refills the sky." };
+      return { pass: true, msg: "Two lives in one sky, each with its own jars. Worlds are built exactly like this." };
+    },
+  },
+  {
+    id: "w6l4",
+    title: "The catch",
+    subtitle: "distance, score, and the writing on the sky",
+    beats: [
+      { t: "The hunt needs a judge: <code class=\"k\">distance</code>(x1, y1, x2, y2) — how far apart, in steps?" },
+      { t: "Watch the judging line:",
+        build: {
+          steps: [
+            { text: "if distance(game.x, -130, game.prey_x, game.prey_y) < 30:", say: "Closer than 30? That's a CATCH." },
+            { text: "\n    game.score = game.score + 1", say: "The score jar grows —" },
+            { text: "\n    game.prey_y = 240", say: "— and a new houbara takes the sky." },
+            { text: "\n\nwrite(-230, 200, \"Score: \" + str(game.score))", say: "write paints words ONTO the world, every blink." },
+          ],
+          effect: "Score: 1",
+          done: "Distance judges. Score remembers. write announces. The game is whole.",
+        } },
+      { t: "No buzzers for misses — in OUR games, only the catches count." },
+    ],
+    starter: `import random\n\ngame.x = 0\ngame.prey_x = 60\ngame.prey_y = 240\ngame.score = 0\n\ndef tick():\n    if key_pressed("left"):\n        game.x = game.x - 6\n    if key_pressed("right"):\n        game.x = game.x + 6\n    game.prey_y = game.prey_y - 6\n    if game.prey_y < -240:\n        game.prey_y = 240\n        game.prey_x = random.randint(-200, 200)\n    if distance(game.x, -130, game.prey_x, game.prey_y) < 30:\n        game.score = game.score + 1\n        game.prey_y = 240\n        game.prey_x = random.randint(-200, 200)\n    color("slategray")\n    penup()\n    jump(game.prey_x, game.prey_y)\n    dot(10)\n    color("peru")\n    jump(game.x, -130)\n    dot(16)\n    color("darkslateblue")\n    write(-230, 200, "Score: " + str(game.score))\n`,
+    task: "HUNT! Catch three houbara. Then tune the talons: is < 30 too generous? Too cruel? You decide the game's justice.",
+    hints: [
+      "A bigger catch-circle (< 45) is kinder for younger players. Game design is empathy.",
+      "Show more on the sky: write the falcon's x, or a hunter's title after 5 catches.",
+    ],
+    check: (ctx) => {
+      if (!/(?<![\w])distance\(/.test(ctx.code)) return { pass: false, msg: "Appoint the judge: distance(...) < something means a catch." };
+      if (!/game\.score/.test(ctx.code)) return { pass: false, msg: "The hunt needs memory: a game.score jar that grows." };
+      if (!/(?<![\w])write\(/.test(ctx.code)) return { pass: false, msg: "Announce it on the sky: write(-230, 200, \"Score: \" + str(game.score))." };
+      const hasText = (ctx.frames[10] || []).some(c => c.t === "text");
+      if (!hasText) return { pass: false, msg: "The score should be visible on the world itself — write it every tick." };
+      return { pass: true, msg: "Judge, memory, announcement — the game is WHOLE. Now go hunt." };
+    },
+  },
+  {
+    id: "w6l5",
+    title: "Game feel",
+    subtitle: "Edges, difficulty, mercy",
+    beats: [
+      { t: "A finished game respects three laws." },
+      { t: "EDGES: the falcon may not leave the world — clamp it at both walls." },
+      { t: "CHALLENGE: every catch, the sky falls a little faster. Mastery earns storm." },
+      { t: "MERCY: a miss costs nothing. The hunt simply continues." },
+    ],
+    predict: "Speed starts at 5 and grows by 1 per catch — what does catch number 8 feel like?",
+    starter: `import random\n\ngame.x = 0\ngame.prey_x = 60\ngame.prey_y = 240\ngame.score = 0\ngame.speed = 5\n\ndef tick():\n    if key_pressed("left"):\n        game.x = game.x - 7\n    if key_pressed("right"):\n        game.x = game.x + 7\n    if game.x < -220:\n        game.x = -220\n    if game.x > 220:\n        game.x = 220\n    game.prey_y = game.prey_y - game.speed\n    if game.prey_y < -240:\n        game.prey_y = 240\n        game.prey_x = random.randint(-200, 200)\n    if distance(game.x, -130, game.prey_x, game.prey_y) < 34:\n        game.score = game.score + 1\n        game.speed = game.speed + 1\n        if game.speed > 14:\n            game.speed = 14\n        game.prey_y = 240\n        game.prey_x = random.randint(-200, 200)\n    color("slategray")\n    penup()\n    jump(game.prey_x, game.prey_y)\n    dot(10)\n    color("peru")\n    jump(game.x, -130)\n    dot(16)\n    color("saddlebrown")\n    jump(game.x + 11, -123)\n    dot(5)\n    color("darkslateblue")\n    write(-230, 200, "Score: " + str(game.score))\n    write(-230, 175, "Speed: " + str(game.speed))\n`,
+    task: "Play to score 5 — feel the storm build. Then tune YOUR game: wingspeed, catch-circle, the speed cap. Sign it in the Gallery.",
+    hints: [
+      "The speed cap (14) is mercy for the hands. Raise it only if your hands agree.",
+      "Champions' mode: start speed 8, catch-circle 26. Sign it with write(0, 200, \"by YOURNAME\").",
+    ],
+    check: (ctx) => {
+      if (!/game\.x\s*[<>]/.test(ctx.code)) return { pass: false, msg: "Law of EDGES: clamp the falcon at both walls with two ifs." };
+      if (!/game\.speed/.test(ctx.code)) return { pass: false, msg: "Law of CHALLENGE: a game.speed jar that grows with the score." };
+      if (!/(?<![\w])write\(/.test(ctx.code) || !/(?<![\w])distance\(/.test(ctx.code))
+        return { pass: false, msg: "Keep the judge and the sky-writing — a whole game stays whole." };
+      return { pass: true, msg: "Edges, challenge, mercy — you didn't just build a game. You designed one. 🦅" };
+    },
+  },
+  {
+    id: "w6l6",
+    title: "Challenge: your own living world",
+    subtitle: "Make — dhow dodge, or something no one imagined",
+    beats: [
+      { t: "The final make: a living world that is entirely yours." },
+      { t: "An idea if you want one: the dhow dodge — steer a dhow, dodge what falls." },
+      { t: "The laws: a heartbeat, keys, a judge, a score on the sky." },
+      { t: "Or ignore the idea entirely. Living worlds obey their makers." },
+    ],
+    starter: `# Your living world.\n# Needs: game jars · def tick() · key_pressed · distance · write\n\nimport random\n\n`,
+    task: "Build a living game of your own: tick, keys, a distance judge, a written score — and at least one rule nobody taught you.",
+    hints: [
+      "Dodge games flip the catch: if distance(...) < 30 means you were HIT — maybe lose speed, never shame.",
+      "Two falling things? Two sets of jars. You've done this since the houbara.",
+      "The falcon-catch code is yours to remix — open it from Lesson 5 anytime.",
+    ],
+    check: (ctx) => {
+      if (!/def\s+tick\s*\(/.test(ctx.code)) return { pass: false, msg: "A living world needs its heartbeat: def tick():" };
+      if (!/key_pressed\(/.test(ctx.code)) return { pass: false, msg: "Let the player in: key_pressed(...)." };
+      if (!/(?<![\w])distance\(/.test(ctx.code)) return { pass: false, msg: "Every game needs its judge: distance(...)." };
+      if (!/(?<![\w])write\(/.test(ctx.code)) return { pass: false, msg: "Write something onto the world — a score, a title, a taunt." };
+      if (!(ctx.frames[10] || []).length) return { pass: false, msg: "The world looks empty — draw its life inside tick." };
+      return { pass: true, msg: "🌊 A world that lives because you commanded it to. World 6 complete — game maker, officially." };
+    },
+  },
+];
+
 /* ---------------- worlds & flat index ---------------- */
 const WORLDS = [
   { id: "w1", title: "World 1 — First Lines",
@@ -1092,5 +1274,8 @@ const WORLDS = [
   { id: "w5", title: "World 5 — Collections",
     sub: "Boxes of treasures, words made of letters — and the cipher named by our zero.",
     lessons: WORLD5_LESSONS },
+  { id: "w6", title: "World 6 — Living Programs",
+    sub: "Programs that never finish — the falcon hunts at thirty blinks a second.",
+    lessons: WORLD6_LESSONS },
 ];
 const LESSONS = WORLDS.flatMap(w => w.lessons);

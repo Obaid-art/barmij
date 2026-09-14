@@ -54,6 +54,48 @@ def jump(x, y):
 def dot(r=8):
     _cmds.append({"t":"dot","x":_state["x"],"y":_state["y"],"r":float(r),"c":_state["color"]})
 def _dump(): return json.dumps(_cmds)
+
+import sys as _sys
+_BASELINE = None  # snapshot of pristine globals, taken after preamble loads
+
+def _step_run(code):
+    """Run user code under a line tracer; return the full time-line for replay:
+    per executed line -> (line no, user variables, drawing length, print count)."""
+    global _BASELINE
+    if _BASELINE is None:
+        _BASELINE = set(globals().keys()) | {"_BASELINE"}
+    for _k in list(globals().keys()):
+        if _k not in _BASELINE and not _k.startswith("_"):
+            del globals()[_k]
+    reset()
+    _outs = []
+    _tr = []
+    _bi2 = __import__("builtins")
+    _orig_print = _bi2.print
+    def _p(*a, **k):
+        _outs.append(" ".join(str(x) for x in a))
+    _bi2.print = _p
+    def _tracer(frame, event, arg):
+        if event == "line" and frame.f_code.co_filename == "<step>":
+            if len(_tr) >= 500:
+                raise RuntimeError("STEP_LIMIT")
+            vs = {}
+            for k, v in frame.f_globals.items():
+                if k not in _BASELINE and not k.startswith("_") and isinstance(v, (bool, int, float, str)):
+                    vs[k] = repr(v)[:32]
+            _tr.append({"line": frame.f_lineno, "vars": vs, "nc": len(_cmds), "no": len(_outs)})
+        return _tracer
+    err = None
+    try:
+        _compiled = compile(code, "<step>", "exec")
+        _sys.settrace(_tracer)
+        exec(_compiled, globals())
+    except BaseException as e:
+        err = type(e).__name__ + ": " + str(e)
+    finally:
+        _sys.settrace(None)
+        _bi2.print = _orig_print
+    return json.dumps({"trace": _tr, "outs": _outs, "cmds": json.loads(_dump()), "error": err})
 import builtins as _bi
 from js import window as _win
 def _input(msg=""):
@@ -72,7 +114,11 @@ window.addEventListener("DOMContentLoaded", async () => {
     mode: "python", theme: "barmij", lineNumbers: true, indentUnit: 4,
     autofocus: false, viewportMargin: Infinity,
   });
-  document.getElementById("runBtn").addEventListener("click", run);
+  document.getElementById("runBtn").addEventListener("click", () => { exitStep(); run(); });
+  document.getElementById("stepBtn").addEventListener("click", stepRun);
+  document.getElementById("stepPrev").addEventListener("click", () => stepMove(-1));
+  document.getElementById("stepNext").addEventListener("click", () => stepMove(1));
+  document.getElementById("stepExit").addEventListener("click", exitStep);
   document.getElementById("resetBtn").addEventListener("click", () => {
     editor.setValue(LESSONS[current].starter);
   });
@@ -109,6 +155,7 @@ window.addEventListener("DOMContentLoaded", async () => {
     pyReady = true;
     document.getElementById("loading").style.display = "none";
     document.getElementById("runBtn").disabled = false;
+    document.getElementById("stepBtn").disabled = false;
   } catch (e) {
     document.getElementById("loading").textContent =
       "Python couldn't load — check the internet connection and refresh.";
@@ -280,6 +327,7 @@ function openBank() {
   setCodeStage(true); /* the bank IS the doing stage */
   document.getElementById("taskText").style.display = "none";
   document.getElementById("thinkCard").style.display = "none";
+  exitStep();
   document.getElementById("hintBox").style.display = "none";
   document.getElementById("nextWrap").style.display = "none";
   document.getElementById("feedback").className = "feedback";
@@ -513,6 +561,7 @@ function openLesson(i, keepQuiet) {
   document.getElementById("bankPanel").style.display = "none";
   document.getElementById("taskText").style.display = "";
   document.getElementById("thinkCard").style.display = "none";
+  exitStep();
   document.getElementById("bankBtn").classList.remove("active");
   document.body.classList.remove("drawer-open");
   current = i;
@@ -913,6 +962,95 @@ function demoTake() {
   editor.replaceRange(demo.heroText + "\n", { line: 0, ch: 0 });
   $d("demoSay").textContent = "It's in your editor — now press ▶ Run and make it yours!";
   editor.focus();
+}
+
+/* ---------------- 👣 Step mode — the notional machine, visible (DECISIONS B28) ----------
+   Runs the code once under a real Python tracer, then replays it line by line: current line
+   glowing, variables as jar chips, the canvas drawn only up to this moment, loop headers
+   counted as passes. Forward AND backward through time — mental simulation, trained. */
+let stepState = null, stepMarkedLine = null;
+const escH = (t) => { const d = document.createElement("div"); d.textContent = t; return d.innerHTML; };
+
+function stepRun() {
+  if (!pyReady) return;
+  exitStep();
+  clearOutputs(); clearCanvas();
+  document.getElementById("feedback").className = "feedback";
+  const code = editor.getValue();
+  let data;
+  try {
+    pyodide.runPython("reset()");
+    pyodide.globals.set("_usercode", code);
+    data = JSON.parse(pyodide.runPython("_step_run(_usercode)"));
+  } catch (err) { showError(err); return; }
+  if (data.error && !data.trace.length) { showError({ message: data.error }); return; }
+  const lines = code.split("\n");
+  const counters = {};
+  const passMap = data.trace.map(t => {
+    const src = (lines[t.line - 1] || "").trim();
+    if (/^(for|while)\b/.test(src)) { counters[t.line] = (counters[t.line] || 0) + 1; return counters[t.line]; }
+    return 0;
+  });
+  stepState = { ...data, idx: 0, passMap, lines };
+  document.getElementById("stepBar").style.display = "flex";
+  renderStep();
+}
+
+function renderStep() {
+  const s = stepState; if (!s) return;
+  const t = s.trace[s.idx];
+  if (stepMarkedLine !== null) editor.removeLineClass(stepMarkedLine, "background", "step-line");
+  stepMarkedLine = t.line - 1;
+  editor.addLineClass(stepMarkedLine, "background", "step-line");
+  const shown = s.cmds.slice(0, t.nc);
+  drawAll(shown);
+  const lastSeg = [...shown].reverse().find(c => c.t === "line" || c.t === "dot");
+  if (lastSeg) {
+    const ctx = cv().getContext("2d");
+    if (lastSeg.t === "line") drawTurtle(ctx, lastSeg.x2, lastSeg.y2, lastSeg.h);
+    else drawTurtle(ctx, lastSeg.x, lastSeg.y, 0);
+  }
+  const out = document.getElementById("outputs");
+  out.innerHTML = "";
+  s.outs.slice(0, t.no).forEach(line => {
+    const b = document.createElement("div"); b.className = "bubble"; b.textContent = line; out.appendChild(b);
+  });
+  const pass = s.passMap[s.idx];
+  let cap = `<b>Step ${s.idx + 1} of ${s.trace.length}</b> · line ${t.line}`;
+  if (pass) cap += ` · <b>🔁 pass ${pass}</b>`;
+  const vars = Object.entries(t.vars).slice(0, 4)
+    .map(([k, v]) => `<code class="v">${escH(k)}</code> = <code class="a">${escH(v)}</code>`).join("  ");
+  if (vars) cap += ` &nbsp; ${vars}`;
+  if (s.error && s.idx === s.trace.length - 1) {
+    cap += s.error.includes("STEP_LIMIT")
+      ? " · ⚠ paused after 500 steps — an endless loop, maybe?"
+      : ` · ⚠ stops here: ${escH(s.error)}`;
+  }
+  document.getElementById("stepInfo").innerHTML = cap;
+  document.getElementById("stepSrc").textContent = (s.lines[t.line - 1] || "").trim();
+  document.getElementById("stepPrev").disabled = s.idx === 0;
+  document.getElementById("stepNext").textContent = s.idx < s.trace.length - 1 ? "Next ▶" : "⏭ Finish";
+}
+
+function stepMove(d) {
+  const s = stepState; if (!s) return;
+  if (d > 0 && s.idx >= s.trace.length - 1) {
+    const cmds = s.cmds, outs = s.outs;
+    exitStep();
+    drawAll(cmds);
+    const out = document.getElementById("outputs");
+    out.innerHTML = "";
+    outs.forEach(line => { const b = document.createElement("div"); b.className = "bubble"; b.textContent = line; out.appendChild(b); });
+    return;
+  }
+  s.idx = Math.max(0, Math.min(s.trace.length - 1, s.idx + d));
+  renderStep();
+}
+
+function exitStep() {
+  if (stepMarkedLine !== null) { editor.removeLineClass(stepMarkedLine, "background", "step-line"); stepMarkedLine = null; }
+  stepState = null;
+  document.getElementById("stepBar").style.display = "none";
 }
 
 /* ---------------- feedback helpers & confetti ---------------- */

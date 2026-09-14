@@ -36,6 +36,10 @@ citations pending (NOT_YET_BUILT.md)._
 - Mechanic: error messages are translated into kid-readable hints that name the misconception,
   with the real Python error kept visible underneath (honesty, and gradual induction into real
   tooling).
+- Mechanic (SHIPPED 2026-09-14, B28 — cf. Guo's Python Tutor): 👣 Step mode replays any program
+  line by line under the child's control — current line highlighted, variables visible as they
+  change, the drawing shown only up to this moment, loop passes counted. The notional machine
+  stops being notional; "think two steps ahead" gets trained by walking time forward and back.
 
 ## 6. Immediate, visual feedback (Hattie & Timperley 2007)
 - Mechanic: Run is one keystroke; the drawing animates instantly; errors are friendly and

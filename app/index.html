@@ -7,7 +7,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700;800;900&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/codemirror.min.css">
-<link rel="stylesheet" href="barmij.css?v=5">
+<link rel="stylesheet" href="barmij.css?v=6">
 </head>
 <body>
 
@@ -84,9 +84,20 @@
         <span class="spacer" style="flex:1"></span>
         <button class="btn ghost" id="hintBtn">💡 Hint</button>
         <button class="btn ghost" id="resetBtn">Reset code</button>
+        <button class="btn ghost" id="stepBtn" disabled>👣 Step</button>
         <button class="btn run" id="runBtn" disabled>▶ Run</button>
       </div>
       <textarea id="code"></textarea>
+    </div>
+
+    <div class="step-bar" id="stepBar" style="display:none">
+      <button class="btn ghost" id="stepPrev">◀ Back</button>
+      <button class="btn demo-primary" id="stepNext">Next ▶</button>
+      <div class="step-meta">
+        <div id="stepInfo"></div>
+        <div class="step-src" id="stepSrc"></div>
+      </div>
+      <button class="btn ghost" id="stepExit">✕</button>
     </div>
 
     <div class="hintbox" id="hintBox"></div>
@@ -113,8 +124,8 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/codemirror.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/mode/python/python.min.js"></script>
 <script src="https://cdn.jsdelivr.net/pyodide/v0.26.2/full/pyodide.js"></script>
-<script src="lessons.js?v=5"></script>
-<script src="codebank.js?v=5"></script>
-<script src="barmij.js?v=5"></script>
+<script src="lessons.js?v=6"></script>
+<script src="codebank.js?v=6"></script>
+<script src="barmij.js?v=6"></script>
 </body>
 </html>

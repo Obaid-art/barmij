@@ -1,5 +1,14 @@
 # Decisions Log — Barmij
 
+- **2026-09-14 / B28 — 👣 Step mode: the notional machine, visible** (founder: "in this pass we
+  get this, in another pass we get that — writing code while seeing a window showing what's
+  happening"). A Step button beside Run: the code runs once under a real Python line-tracer,
+  then replays under the child's control — current line glowing in the editor, variables shown
+  as jar chips (i = 1), the canvas drawn only up to this moment with the turtle at its true
+  position, loop headers counted as 🔁 passes, print bubbles appearing in time. Forward AND
+  backward through time. Bonus: an endless loop pauses safely at 500 steps with a gentle
+  question instead of freezing the browser. Grounding: Sorva's notional machine; Guo's Python
+  Tutor (the canonical evidence that stepping visualization works, ~millions of learners).
 - **2026-09-14 / B27 — Quota killed, thinking shipped, spacing shipped.** (a) The "500" target
   is DEAD (founder: "no padding") — the bank holds what mastery requires, gated by quality bars
   only (BANK_BLUEPRINT revised). (b) **Guided think-alouds**: bank items can carry a thinking

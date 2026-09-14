@@ -10,8 +10,11 @@ Double-click **`Launch Barmij.bat`**, or:
 python -m http.server 5025 --directory app
 ```
 
-then open http://localhost:5025 — World 1 ("First Lines"), six lessons, real Python running in
-the browser (Pyodide; needs internet on first load to fetch Python itself).
+then open http://localhost:5025 — **all eight worlds are built**: from `print("Ahlan!")` (World 1,
+First Lines) to a real machine-learning model told dates from olives (World 8, Thinking
+Machines) — 48 lessons, real Python running in the browser (Pyodide; needs internet on first
+load to fetch Python itself; matplotlib and scikit-learn download lazily when a lesson first
+needs them). Finish every lesson and the KHATAM ceremony crowns the journey.
 
 ## What's inside
 - `app/` — the lesson player: role-colored code editor, animated turtle canvas, friendly

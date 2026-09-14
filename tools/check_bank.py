@@ -50,7 +50,12 @@ DETECTORS = {
     "dict": lambda c: re.search(r"\{[^{}\n]*:", c) is not None,
     "matplotlib": lambda c: re.search(r"matplotlib|plt\.", c) is not None,
     "split": lambda c: ".split(" in c,
+    "remove": lambda c: ".remove(" in c,
+    "sklearn": lambda c: "sklearn" in c,
 }
+
+# B16: sklearn is ONE honest capstone taste, not a ladder — a lower floor by design.
+FLOOR_EXEMPT = {"sklearn": 2}
 
 # minimum items per shipped-world concept (blueprint ladder = 10; interim floor while growing)
 MIN_PER_CONCEPT = 6
@@ -108,7 +113,8 @@ def main():
         row = matrix[concept]
         tot = sum(row.values())
         if concept in SHIPPED:
-            ok = tot >= MIN_PER_CONCEPT and row.get("m", 0) + row.get("b", 0) >= 2
+            floor = FLOOR_EXEMPT.get(concept, MIN_PER_CONCEPT)
+            ok = tot >= floor and (concept in FLOOR_EXEMPT or row.get("m", 0) + row.get("b", 0) >= 2)
             if not ok:
                 gaps.append(concept)
             status = "ok" if ok else f"GAP (need >= {MIN_PER_CONCEPT}, >=2 at m/b)"

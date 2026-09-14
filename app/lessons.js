@@ -1433,6 +1433,185 @@ const WORLD7_LESSONS = [
   },
 ];
 
+/* ================= World 8 — Thinking Machines (the final world) ================= */
+
+const WORLD8_LESSONS = [
+  {
+    id: "w8l1",
+    title: "The word is a name",
+    subtitle: "Algorithm — الخوارزمي, and the champion pattern",
+    beats: [
+      { t: "The word ALGORITHM is a NAME: <b>الخوارزمي — al-Khwarizmi</b>, mathematician of Baghdad." },
+      { t: "Our civilization named the cipher (صفر) — and the algorithm too. We end at our giants." },
+      { t: "An algorithm: a recipe so precise, even a machine can follow it." },
+      { t: "Your first classic — the CHAMPION pattern: keep the best seen so far." },
+    ],
+    predict: "The champion starts as slot 0 and fights every number — who survives [38, 12, 45, 7, 29]?",
+    starter: `numbers = [38, 12, 45, 7, 29]\n\nchampion = numbers[0]\nfor n in numbers:\n    if n > champion:\n        champion = n\n\nprint("The champion: " + str(champion))\n\nx = -140\npenup()\nfor n in numbers:\n    jump(x, -100)\n    if n == champion:\n        color("gold")\n    else:\n        color("steelblue")\n    width(16)\n    pendown()\n    forward(n * 3)\n    penup()\n    x = x + 60\n`,
+    task: "Crown the champion — the gold bar. Then flip the recipe: find the SMALLEST. One character changes. Which?",
+    hints: [
+      "The smallest survives if the fight flips: if n < champion.",
+      "This exact pattern finds the top scorer, the hottest month, the nearest star. Patterns travel.",
+    ],
+    check: (ctx) => {
+      if (!/\w+\s*=\s*\w+\[0\]/.test(ctx.code)) return { pass: false, msg: "Start the champion at slot 0 — someone must hold the title first." };
+      if (!/if\s+\w+\s*[<>]\s*\w+\s*:/.test(ctx.code)) return { pass: false, msg: "The fight: if n beats the champion, the title changes hands." };
+      if (!ctx.stdout.trim()) return { pass: false, msg: "Announce the winner with print." };
+      return { pass: true, msg: "Your first named algorithm — al-Khwarizmi's heirs write recipes machines can follow." };
+    },
+  },
+  {
+    id: "w8l2",
+    title: "The patient hunter",
+    subtitle: "Linear search — and counting its steps",
+    beats: [
+      { t: "Searching is walking the box, asking each slot: is it you?" },
+      { t: "The new habit of this world: <b>COUNT the steps</b>." },
+      { t: "A recipe isn't just correct — it has a COST. Scientists measure it." },
+    ],
+    predict: "Sara hides at slot 3 of five guests — how many questions until she's found?",
+    starter: `guests = ["Maryam", "Khalid", "Omar", "Sara", "Alia"]\ntarget = "Sara"\n\nsteps = 0\nspot = -1\nfor i in range(len(guests)):\n    steps = steps + 1\n    if guests[i] == target:\n        spot = i\n\nif spot == -1:\n    print(target + " is not at this majlis.")\nelse:\n    print(target + " found at slot " + str(spot) + " - in " + str(steps) + " steps.")\n`,
+    task: "Hunt Sara. Then hunt someone absent — what does the hunter report? Then move Sara to slot 0 — what happens to the steps?",
+    hints: [
+      "Absent guests cost the MOST steps — the hunter checks everyone before giving up.",
+      "steps counts every question asked. Position changes luck; the recipe stays honest.",
+    ],
+    check: (ctx) => {
+      if (!/steps\s*=\s*steps\s*\+\s*1|steps\s*\+=/.test(ctx.code))
+        return { pass: false, msg: "Count every question: steps = steps + 1 inside the hunt." };
+      if (!/==\s*target|target\s*==/.test(ctx.code)) return { pass: false, msg: "Ask each slot: is it the target?" };
+      if (!/-1/.test(ctx.code)) return { pass: false, msg: "Honest hunters admit absence — the -1 'not found' path." };
+      if (!ctx.stdout.trim()) return { pass: false, msg: "Report the hunt: where, and in how many steps." };
+      return { pass: true, msg: "Found, counted, honestly reported — search is a recipe with a receipt." };
+    },
+  },
+  {
+    id: "w8l3",
+    title: "Order from chaos",
+    subtitle: "Selection sort — the champion, repeated",
+    beats: [
+      { t: "Sorting is the champion pattern, REPEATED: pull the smallest, again, again." },
+      { t: "Watch the heart of the sorter:",
+        build: {
+          steps: [
+            { text: "while len(numbers) > 0:", say: "As long as chaos remains…" },
+            { text: "\n    smallest = numbers[0]\n    for n in numbers:\n        if n < smallest:\n            smallest = n", say: "…crown the smallest champion still in the box…" },
+            { text: "\n    sorted_list.append(smallest)", say: "…move it to the ordered line…" },
+            { text: "\n    numbers.remove(smallest)", say: "remove — take the treasure OUT of the chaos box." },
+          ],
+          effect: "[38, 12, 45, 7, 29] → [7, 12, 29, 38, 45]",
+          done: "Chaos shrinks, order grows. Every sort in the world is a cousin of this.",
+        } },
+      { t: "The staircase below is the PROOF — bars that only ever rise." },
+    ],
+    predict: "Five chaotic bars enter the sorter — what shape must come out, always?",
+    starter: `numbers = [38, 12, 45, 7, 29]\nsorted_list = []\n\nwhile len(numbers) > 0:\n    smallest = numbers[0]\n    for n in numbers:\n        if n < smallest:\n            smallest = n\n    sorted_list.append(smallest)\n    numbers.remove(smallest)\n\nprint(sorted_list)\n\nx = -140\npenup()\nfor v in sorted_list:\n    jump(x, -100)\n    color("seagreen")\n    width(16)\n    pendown()\n    forward(v * 3)\n    penup()\n    x = x + 60\n`,
+    task: "Sort the chaos — watch the staircase. Then feed it YOUR numbers, and then: sort biggest-first. One character.",
+    hints: [
+      "Biggest-first: hunt the LARGEST each round — if n > smallest (rename the jar if it bothers you: it should!).",
+      "Names sort too: try a list of friends. Python compares words alphabetically.",
+    ],
+    check: (ctx) => {
+      if (!/^\s*while\b/m.test(ctx.code)) return { pass: false, msg: "The sorter's engine is while — as long as chaos remains." };
+      if (!/\.remove\(/.test(ctx.code)) return { pass: false, msg: "Pull the champion OUT of the chaos: numbers.remove(...)." };
+      if (!/\.append\(/.test(ctx.code)) return { pass: false, msg: "Build the ordered line: sorted_list.append(...)." };
+      const bars = ctx.lines.map(l => Math.hypot(l.x2 - l.x1, l.y2 - l.y1));
+      for (let i = 1; i < bars.length; i++)
+        if (bars[i] < bars[i - 1] - 1) return { pass: false, msg: "The staircase betrays you — the bars must only ever rise (or only ever fall). Check the sort." };
+      if (bars.length < 4) return { pass: false, msg: "Draw the proof — the sorted bars." };
+      return { pass: true, msg: "Order from chaos, by your own hand. This algorithm has run a trillion times today — now once more, yours." };
+    },
+  },
+  {
+    id: "w8l4",
+    title: "Judging recipes",
+    subtitle: "Steps vs size — complexity, felt",
+    beats: [
+      { t: "Same recipe, bigger box — what happens to the COST?" },
+      { t: "Measure it like a scientist: hunt in 5, in 10, in 20. Chart the steps." },
+      { t: "Double the names, double the hunt. A straight line. Recipes have SHAPES." },
+      { t: "Honesty: cleverer recipes exist — university will hand them to you. Today you learned to MEASURE." },
+    ],
+    predict: "Worst case — the target hides LAST. Before charting: what will the three bars look like?",
+    starter: `import matplotlib.pyplot as plt\n\nsizes = [5, 10, 20]\nsteps_taken = []\n\nfor size in sizes:\n    names = []\n    for i in range(size):\n        names.append("guest" + str(i))\n    target = "guest" + str(size - 1)\n    steps = 0\n    for name in names:\n        steps = steps + 1\n        if name == target:\n            print("Box of " + str(size) + ": found in " + str(steps) + " steps")\n    steps_taken.append(steps)\n\nplt.bar(["5 names", "10 names", "20 names"], steps_taken)\nplt.title("The patient hunter: cost vs box size (worst case)")\nplt.xlabel("Box size")\nplt.ylabel("Steps")\nplt.show()\n`,
+    task: "Run the measurement. Then add a box of 40 — predict its bar BEFORE running. Were you right?",
+    hints: [
+      "Adding a size: one number in sizes, one label in the bar list. The experiment scales itself.",
+      "Prediction before measurement — that's the entire scientific method, in miniature.",
+    ],
+    check: (ctx) => {
+      if (!/steps\s*=\s*steps\s*\+\s*1|steps\s*\+=/.test(ctx.code)) return { pass: false, msg: "The measurement IS the steps counter — keep it." };
+      if (!/plt\.bar\(|plt\.plot\(/.test(ctx.code)) return { pass: false, msg: "Chart the cost — bars or a line, labeled." };
+      if (!ctx.chart) return { pass: false, msg: "Show the evidence: plt.show()." };
+      if (!ctx.stdout.trim()) return { pass: false, msg: "Print each hunt's receipt too — numbers before pictures." };
+      return { pass: true, msg: "You just measured an algorithm's cost. Half of computer science is exactly this question." };
+    },
+  },
+  {
+    id: "w8l5",
+    title: "Teach the machine",
+    subtitle: "The honest taste of machine learning",
+    beats: [
+      { t: "The finale's promise, kept: teach a machine to tell <b>dates from olives</b>." },
+      { t: "Honesty first: the machine won't UNDERSTAND. It will find a PATTERN in your examples." },
+      { t: "Watch the two sacred verbs:",
+        build: {
+          steps: [
+            { text: "brain = DecisionTreeClassifier()", say: "An empty brain — a pattern-finder, nothing more." },
+            { text: "\nbrain.fit(features, labels)", say: "fit — STUDY my examples: measurements, and what each one truly was." },
+            { text: "\n\nbrain.predict([[39, 8]])", say: "predict — now judge a fruit you never saw." },
+          ],
+          effect: "[39mm, 8g] → 'date'",
+          done: "Examples in, pattern out. Every AI you have ever met grew from this seed.",
+        } },
+      { t: "One-time download, the biggest of the journey. The last door. Patience." },
+    ],
+    predict: "Mystery fruit [21mm, 5g] — date or olive? Judge it yourself before the machine does.",
+    starter: `from sklearn.tree import DecisionTreeClassifier\nimport matplotlib.pyplot as plt\n\ndate_lengths = [35, 40, 38, 42, 36]\ndate_weights = [7, 9, 8, 10, 7]\nolive_lengths = [18, 22, 20, 24, 19]\nolive_weights = [4, 6, 5, 7, 4]\n\nfeatures = []\nlabels = []\nfor i in range(len(date_lengths)):\n    features.append([date_lengths[i], date_weights[i]])\n    labels.append("date")\nfor i in range(len(olive_lengths)):\n    features.append([olive_lengths[i], olive_weights[i]])\n    labels.append("olive")\n\nbrain = DecisionTreeClassifier()\nbrain.fit(features, labels)\n\nmystery = [[39, 8], [21, 5], [30, 6]]\nguesses = brain.predict(mystery)\nfor i in range(len(mystery)):\n    print("Fruit " + str(mystery[i]) + " -> the machine says: " + guesses[i])\n\nplt.scatter(date_lengths, date_weights)\nplt.scatter(olive_lengths, olive_weights)\nplt.title("Dates vs olives - what the machine studied")\nplt.xlabel("Length (mm)")\nplt.ylabel("Weight (g)")\nplt.show()\n`,
+    task: "Teach it, test it. The [30, 6] fruit sits BETWEEN the clouds — did the machine hesitate? It can't. Discuss with yourself: should it have?",
+    hints: [
+      "Add your own examples — more measurements make a wiser (never a knowing) machine.",
+      "Try a mystery fruit of [60, 20]. The machine still answers confidently. THAT is the lesson about AI.",
+    ],
+    check: (ctx) => {
+      if (!/\.fit\(/.test(ctx.code)) return { pass: false, msg: "The machine must study first: brain.fit(features, labels)." };
+      if (!/\.predict\(/.test(ctx.code)) return { pass: false, msg: "Now test it on fruit it never saw: brain.predict(...)." };
+      if (!ctx.stdout.trim()) return { pass: false, msg: "Print the machine's judgments — see them with your eyes." };
+      if (!ctx.chart) return { pass: false, msg: "Scatter what it studied — the two clouds tell the whole story." };
+      return { pass: true, msg: "You taught a machine. And you know EXACTLY what that does and doesn't mean — which puts you ahead of most adults." };
+    },
+  },
+  {
+    id: "w8l6",
+    title: "The Capstone",
+    subtitle: "Make — the thing only you can build",
+    beats: [
+      { t: "Eight worlds live in your hands: speak, decide, pattern, extend, collect, animate, measure, teach." },
+      { t: "The capstone: build something REAL that mixes at least three of them." },
+      { t: "A quiz that charts scores. A game with a champion board. A cipher with statistics." },
+      { t: "Sign it. Universities call this a <b>portfolio piece</b>. We call it yours." },
+    ],
+    starter: `# THE CAPSTONE\n# Mix at least three worlds. Build the thing only you can build.\n# Ideas: quiz + chart of scores - game + champion pattern - cipher + letter statistics\n\nimport matplotlib.pyplot as plt\nimport random\n\n`,
+    task: "Build your capstone: at least two of your own def words, powers from three worlds, and your signature printed at the end.",
+    hints: [
+      "Start from a thing you already love — your quiz, your game, your cipher — and make it BIGGER with another world's power.",
+      "The signature: print(\"Built by NAME — Barmij, Worlds 1 to 8.\") — earn the line.",
+      "Stuck? The champion pattern + your quiz scores + plt.bar = a personal report card machine.",
+    ],
+    check: (ctx) => {
+      const defs = [...ctx.code.matchAll(/def\s+(\w+)\s*\(/g)].length;
+      if (defs < 2) return { pass: false, msg: "A capstone carries your own vocabulary — at least 2 def words." };
+      const powers = [/plt\./, /input\(/, /def\s+tick/, /\{[^{}\n]*:/, /\.split\(/, /random\./, /\.fit\(/]
+        .filter(rx => rx.test(ctx.code)).length;
+      if (powers < 2) return { pass: false, msg: "Mix more worlds — bring at least two big powers together (charts, input, tick, dicts, split, random, ML)." };
+      if (!ctx.stdout.trim() && !(ctx.cmds || []).length && !ctx.chart)
+        return { pass: false, msg: "The capstone must DO something visible — speak, draw, or chart." };
+      if (!/print\(|write\(/.test(ctx.code)) return { pass: false, msg: "Sign your work — a printed signature line. You earned it." };
+      return { pass: true, msg: "🏆 THE CAPSTONE STANDS. Eight worlds, one maker. Whatever you build next — university, career, life — started here. Mabrook, ya ra'id." };
+    },
+  },
+];
+
 /* ---------------- worlds & flat index ---------------- */
 const WORLDS = [
   { id: "w1", title: "World 1 — First Lines",
@@ -1456,5 +1635,8 @@ const WORLDS = [
   { id: "w7", title: "World 7 — Real Data",
     sub: "Numbers from the real world — charted, labeled, and read like a scientist.",
     lessons: WORLD7_LESSONS },
+  { id: "w8", title: "World 8 — Thinking Machines",
+    sub: "Algorithms bear our giants' names — search, sort, measure, and teach the machine.",
+    lessons: WORLD8_LESSONS },
 ];
 const LESSONS = WORLDS.flatMap(w => w.lessons);

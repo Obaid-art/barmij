@@ -268,6 +268,15 @@ function renderRank() {
   const r = computeRank();
   const chip = document.getElementById("rankChip");
   chip.textContent = RANKS[r].icon + " " + RANKS[r].label;
+  /* KHATAM — the whole journey, complete */
+  if (LESSONS.every(l => (progress[l.id] || 0) > 0)) {
+    chip.textContent = "🏆 " + RANKS[2].icon + " Ra'id ✦";
+    if (!localStorage.getItem("barmij_khatam")) {
+      localStorage.setItem("barmij_khatam", "1");
+      confetti();
+      flashFeedback("ok", "🏆 KHATAM — all eight worlds! From print to thinking machines. The journey is complete, and it is YOURS.");
+    }
+  }
   const prev = parseInt(localStorage.getItem("barmij_rank") || "0");
   if (r > prev) {
     localStorage.setItem("barmij_rank", String(r));
@@ -325,6 +334,8 @@ function computeGate(code) {
   add(/\{[^{}\n]*:/.test(code), 7, 2);
   add(/matplotlib|plt\./.test(code), 7, 3);
   add(/\.split\(/.test(code), 7, 5);
+  add(/\.remove\(/.test(code), 8, 3);
+  add(/sklearn/.test(code), 8, 5);
   const g = gates.length ? Math.max(...gates) : 11;
   return { g, peek: false, label: `after W${Math.floor(g / 10)}·L${g % 10}` };
 }
@@ -750,6 +761,17 @@ async function run() {
     }
     fb0.className = "feedback";
   }
+  if (/sklearn/.test(code) && !skReady) {
+    const fb1 = document.getElementById("feedback");
+    fb1.className = "feedback ok";
+    fb1.textContent = "🧠 Fetching the learning machine (scikit-learn) — the biggest one-time download of the journey. Worth it.";
+    try { await ensureSklearn(); } catch (e) {
+      fb1.className = "feedback err";
+      fb1.textContent = "The learning machine couldn't download — check the internet and Run again.";
+      return;
+    }
+    fb1.className = "feedback";
+  }
   try {
     pyodide.runPython("reset()");
     pyodide.runPython("_fresh_game()");
@@ -879,6 +901,8 @@ function friendly(msg) {
   }
   if (/NameError: name 'tick'/.test(last))
     return "No tick() found — a living program needs its heartbeat: def tick(): with the world's moves inside.";
+  if (/ValueError: list\.remove/.test(last))
+    return "remove looked for a treasure that isn't in the box — check what you're removing, exactly.";
   if (/KeyError: '(.+?)'/.test(last)) {
     const km = last.match(/KeyError: '(.+?)'/);
     return `The dictionary has no entry called "${km[1]}" — check the spelling of the key, exactly as it was packed.`;
@@ -993,6 +1017,15 @@ async function ensureMpl() {
     window._mplPromise = pyodide.loadPackage(["matplotlib"]).then(() => pyodide.runPython(MPL_SETUP));
   await window._mplPromise;
   mplReady = true;
+}
+
+/* scikit-learn — the single honest ML taste (B16): loaded once, only when World 8 asks */
+let skReady = false;
+async function ensureSklearn() {
+  if (skReady) return;
+  if (!window._skPromise) window._skPromise = pyodide.loadPackage(["scikit-learn"]);
+  await window._skPromise;
+  skReady = true;
 }
 
 /* ---------------- 🔴 LIVE mode — programs that never finish (DECISIONS B37) ----------------

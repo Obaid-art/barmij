@@ -1,7 +1,7 @@
 # Narration Recording Script
 _One line per clip. Record as `app/audio/<ID>.mp3`, then map the ID in
 `app/audio_manifest.js`. Warm, unhurried, like reading to one child. (B33)_
-**274 clips total.**
+**303 clips total.**
 
 
 ## Lesson w1l1
@@ -319,6 +319,47 @@ _One line per clip. Record as `app/audio/<ID>.mp3`, then map the ID in
 - **w7l6-b0** — The final make: chart something TRUE about your own life.
 - **w7l6-b1** — Screen hours? Goals? Quran pages? Laps? — collect a real week.
 - **w7l6-b2** — Then the scientist's finish: print ONE honest sentence about what the chart says.
+
+## Lesson w8l1
+- **w8l1-b0** — The word ALGORITHM is a NAME: الخوارزمي — al-Khwarizmi , mathematician of Baghdad.
+- **w8l1-b1** — Our civilization named the cipher (صفر) — and the algorithm too. We end at our giants.
+- **w8l1-b2** — An algorithm: a recipe so precise, even a machine can follow it.
+- **w8l1-b3** — Your first classic — the CHAMPION pattern: keep the best seen so far.
+
+## Lesson w8l2
+- **w8l2-b0** — Searching is walking the box, asking each slot: is it you?
+- **w8l2-b1** — The new habit of this world: COUNT the steps .
+- **w8l2-b2** — A recipe isn't just correct — it has a COST. Scientists measure it.
+
+## Lesson w8l3
+- **w8l3-b0** — Sorting is the champion pattern, REPEATED: pull the smallest, again, again.
+- **w8l3-b1** — Watch the heart of the sorter:
+- **w8l3-b2** — The staircase below is the PROOF — bars that only ever rise.
+- **w8l3-bl0** — As long as chaos remains…
+- **w8l3-bl1** — …crown the smallest champion still in the box…
+- **w8l3-bl2** — …move it to the ordered line…
+- **w8l3-bl3** — remove — take the treasure OUT of the chaos box.
+
+## Lesson w8l4
+- **w8l4-b0** — Same recipe, bigger box — what happens to the COST?
+- **w8l4-b1** — Measure it like a scientist: hunt in 5, in 10, in 20. Chart the steps.
+- **w8l4-b2** — Double the names, double the hunt. A straight line. Recipes have SHAPES.
+- **w8l4-b3** — Honesty: cleverer recipes exist — university will hand them to you. Today you learned to MEASURE.
+
+## Lesson w8l5
+- **w8l5-b0** — The finale's promise, kept: teach a machine to tell dates from olives .
+- **w8l5-b1** — Honesty first: the machine won't UNDERSTAND. It will find a PATTERN in your examples.
+- **w8l5-b2** — Watch the two sacred verbs:
+- **w8l5-b3** — One-time download, the biggest of the journey. The last door. Patience.
+- **w8l5-bl0** — An empty brain — a pattern-finder, nothing more.
+- **w8l5-bl1** — fit — STUDY my examples: measurements, and what each one truly was.
+- **w8l5-bl2** — predict — now judge a fruit you never saw.
+
+## Lesson w8l6
+- **w8l6-b0** — Eight worlds live in your hands: speak, decide, pattern, extend, collect, animate, measure, teach.
+- **w8l6-b1** — The capstone: build something REAL that mixes at least three of them.
+- **w8l6-b2** — A quiz that charts scores. A game with a champion board. A cipher with statistics.
+- **w8l6-b3** — Sign it. Universities call this a portfolio piece . We call it yours.
 
 ## Guided thinking (Code Bank)
 - **cb001-t0** — What do I want? A square — four equal sides.

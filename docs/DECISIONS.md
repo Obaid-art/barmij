@@ -1,5 +1,24 @@
 # Decisions Log — Barmij
 
+- **2026-09-14 / B39 — World 8 shipped: Thinking Machines. THE CURRICULUM IS COMPLETE.**
+  Six lessons closing the arc that صفر opened in W5: al-Khwarizmi named the algorithm, and the
+  world's story ends with the child WRITING one. Ladder: champion pattern (max by hand, no
+  built-in magic) → linear search with a printed steps receipt (the notional machine made
+  visible) → selection sort (build-beat letter by letter; the check verifies the rising
+  staircase BEHAVIORALLY, not by string-matching) → measuring work (count steps, chart the
+  cost curve with matplotlib — W7 skills warm, Rohrer interleaving) → scikit-learn as ONE
+  honest taste: KNN telling dates from olives, framed as "patterns, not understanding"
+  (honest-ML law, no anthropomorphizing) → the signed capstone (>= 2 defs, >= 2 world-powers,
+  a signature line — Ericsson's deliberate-practice summit).
+  Engine: ensureSklearn() lazy loader (~4.5 s, honest download notice, cached promise);
+  kind list.remove ValueError translation; KHATAM ceremony — when every lesson in all eight
+  worlds is complete, the rank chip crowns (🏆 Ra'id ✦), confetti fires once, and the toast
+  says the journey is theirs. Gates: .remove→(8,3) and sklearn→(8,5) in INTRO/detectors;
+  FLOOR_EXEMPT sklearn:2 and GATE_EXEMPT (8,5) — one capstone taste is B16 scope discipline,
+  and padding it out is banned by B27. Bank 186→199 (cb187–cb199). Narration 303 clips.
+  All machine gates PASS; every lesson verified end-to-end in the live engine, KHATAM fired.
+  Worlds 1–8, 48 lessons, 199 bank items: from print("Ahlan!") to a machine that learns.
+
 - **2026-09-14 / B38 — World 7 shipped: Real Data — and REAL matplotlib in the browser.**
   Pedagogical order deliberate: hand-built bars FIRST ("a chart is just drawing driven by
   data" — build the tool before receiving it), then dictionaries (the W5 promise kept, with

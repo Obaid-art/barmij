@@ -34,8 +34,9 @@ INTRO = {
     "tick": (6, 1), "game-state": (6, 1), "key-pressed": (6, 2),
     "distance": (6, 4), "write": (6, 4),
     "dict": (7, 2), "matplotlib": (7, 3), "split": (7, 5),
+    "remove": (8, 3), "sklearn": (8, 5),
 }
-PEEK = set()  # Worlds 1-7 shipped; the final peeks arrive with World 8 (algorithms / ML taste)
+PEEK = set()  # ALL EIGHT WORLDS SHIPPED (2026-09-14). The curriculum is complete.
 
 EXTRA_DETECTORS = {"str-conv": lambda c: "str(" in c}
 
@@ -65,9 +66,14 @@ def main():
                 w2_with_w1 += 1
     print(f"items: {len(items)}\n")
     print(f"{'gate':8} {'items':>5}  ranks (m/b/r)   gradient")
+    # (8,5): sklearn is ONE honest capstone taste, Ra'id-only by B16 — padding banned by B27.
+    GATE_EXEMPT = {(8, 5)}
     for gate in sorted(per_gate):
         g = per_gate[gate]
         ranks = {r: sum(1 for x in g if x['rank'] == r) for r in 'mbr'}
+        if gate in GATE_EXEMPT:
+            print(f"W{gate[0]}·L{gate[1]:<4} {len(g):>5}  {ranks['m']}/{ranks['b']}/{ranks['r']}          ok (capstone-taste exemption, B16)")
+            continue
         gentle = ranks['m'] + ranks['b'] > 0
         thin = len(g) < 3
         note = ("THIN (<3 items)" if thin else "ok") + ("" if gentle else " · NO GENTLE ENTRY")

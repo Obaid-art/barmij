@@ -1,5 +1,25 @@
 # Decisions Log — Barmij
 
+- **2026-09-14 / B49 — The ADHD audit (founder: "ADHD check bro").** The founding law (one
+  calm column, one idea at a time — B18/B19/B22) audited with instruments, not vibes:
+  1. TEXT LOAD, machine-scanned beyond the beat gate: every task ≤30 words, every hint ≤26,
+     every check message ≤24, every build/demo caption ≤16 — ZERO flags across all 48
+     lessons. The discipline held even where no gate was watching.
+  2. ATTENTION MECHANICS, measured live: 0 infinite/looping animations at idle (nothing
+     pulses at a child uninvited — the live-dot pulses only DURING a game, the cursor only
+     during typing practice); story stage holds exactly 2 calls-to-action (tap ▸ + show
+     everything); demo stage max 3; one scroll per action, never competing scrolls.
+  3. THE GAP, fixed — INTERRUPTION RECOVERY: a build beat could not be replayed. An ADHD
+     child who glances away mid-build lost the explanation with no way back (the demo had
+     "Watch again"; builds did not). Every completed build now offers "↺ watch it build
+     again" — full letter-by-letter replay, any number of times, also on revisits (where
+     builds are instant by default, the button IS the slow path back). Verified live:
+     replays, effect returns, button returns.
+  4. Judged and kept by design: the warm-up banner (one line, snoozable, spaced-repetition
+     duty); the pass-moment cluster (confetti + verdict + save + next = THE reward moment);
+     the 4-button editor toolbar (tools, not competing calls).
+  Assets v26.
+
 - **2026-09-14 / B48 — Captions get reading time; narration REMOVED (founder: "too fast,
   the sentences below + no need for voice no more").**
   1. PACING: build and demo captions held a flat 1.1s regardless of length — too fast to

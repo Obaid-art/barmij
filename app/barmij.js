@@ -575,6 +575,18 @@ async function playBuild(container, build, instant) {
   if (buildSession !== mySession) return;
   eff.style.display = "flex";
   cap.textContent = "🐢 " + (build.done || "…and that is what happens.");
+  /* ADHD recovery: a glance away must never cost the explanation — builds replay on demand */
+  if (!container.querySelector(".build-again")) {
+    const again = document.createElement("button");
+    again.className = "puz-mini build-again";
+    again.textContent = "↺ watch it build again";
+    again.onclick = () => {
+      again.remove();
+      eff.style.display = "none";
+      playBuild(container, build, false);
+    };
+    container.querySelector(".build").appendChild(again);
+  }
   if (!instant) await sleep(500);
 }
 

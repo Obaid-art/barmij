@@ -218,6 +218,7 @@ code.r { background: var(--rose-soft); color: var(--rose-text); border: 3px doub
   border-radius: 12px; padding: 6px 18px; font-family: "JetBrains Mono", monospace;
   font-size: 19px; font-weight: 700; animation: pop .25s ease-out;
 }
+.build-again { margin-top: 12px; font-family: "Nunito", sans-serif; }
 .beat.on { display: block; opacity: 0; transform: translateY(10px);
   transition: opacity .35s ease, transform .35s ease; }
 .beat.on.in { opacity: 1; transform: none; }

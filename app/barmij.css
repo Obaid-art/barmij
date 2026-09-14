@@ -104,6 +104,8 @@ body.drawer-open #drawerOverlay { display: block; }
 code.k, code.v, code.a, code.r {
   padding: 1px 7px; border-radius: 7px; font-family: "JetBrains Mono", Consolas, monospace;
   font-size: 14px; font-weight: 700;
+  display: inline-block; white-space: nowrap; /* a chip never breaks in half across lines */
+  margin: 2px 1px; vertical-align: baseline;
 }
 /* role chips: color + border style (redundant channel, charter §III.8) */
 code.k { background: var(--blue-soft); color: var(--blue-text); border: 1.5px solid var(--blue); }

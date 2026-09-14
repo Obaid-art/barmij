@@ -29,8 +29,10 @@ INTRO = {
     "int-conv": (2, 5), "elif": (2, 5), "str-conv": (2, 5),
     "nested-loops": (3, 1), "step-range": (3, 3), "while": (3, 4),
     "def": (4, 1), "def-params": (4, 2), "return": (4, 4),
+    "list": (5, 1), "indexing": (5, 1), "for-in": (5, 2),
+    "append": (5, 3), "len": (5, 3), "find": (5, 5),
 }
-PEEK = set()  # Worlds 1-4 shipped; next peeks arrive with World 5 (lists/strings/dicts)
+PEEK = set()  # Worlds 1-5 shipped; next peeks arrive with World 6 (game state / events)
 
 EXTRA_DETECTORS = {"str-conv": lambda c: "str(" in c}
 

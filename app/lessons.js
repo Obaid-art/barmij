@@ -882,6 +882,199 @@ const WORLD4_LESSONS = [
   },
 ];
 
+/* ================= World 5 — Collections ================= */
+
+const WORLD5_LESSONS = [
+  {
+    id: "w5l1",
+    title: "The treasure box",
+    subtitle: "Lists — many things, one name",
+    beats: [
+      { t: "One jar holds one thing. A <b>list</b> holds many." },
+      { t: "Watch a treasure box being packed:",
+        build: {
+          steps: [
+            { text: "colors = [", say: "Square brackets — the box opens." },
+            { text: "\"gold\", \"teal\", \"crimson\"", say: "Three treasures, commas between them." },
+            { text: "]", say: "The box closes. One name — colors — holds all three." },
+            { text: "\n\ncolor(colors[0])", say: "colors[0] — slot ZERO. Boxes count from zero, always." },
+          ],
+          effect: "colors[0] → gold",
+          done: "Slot 0 is the first. Slot 1 the second. The zero is our gift to mathematics.",
+        } },
+      { t: "The trap everyone falls in once: <b>the first slot is 0, not 1</b>." },
+    ],
+    predict: "Three dots, painted from slots 0, 1, 2 — which colors, in which order?",
+    starter: `colors = ["gold", "teal", "crimson"]\n\npenup()\njump(-90, 0)\ncolor(colors[0])\ndot(30)\njump(0, 0)\ncolor(colors[1])\ndot(30)\njump(90, 0)\ncolor(colors[2])\ndot(30)\n`,
+    task: "Run the three treasures. Then add TWO more colors to the box — and two more dots to show them.",
+    hints: [
+      "New treasures go inside the brackets: \"orchid\", with a comma.",
+      "The fourth treasure lives in slot… 3. (Not 4! The zero shifts everything.)",
+    ],
+    check: (ctx) => {
+      if (!/\[[^\]\n]*,[^\]\n]*\]/.test(ctx.code))
+        return { pass: false, msg: "Pack a box first: name = [\"thing\", \"thing\", ...] — brackets and commas." };
+      if (!/\w+\[\d+\]/.test(ctx.code))
+        return { pass: false, msg: "Open a slot by number: colors[0], colors[1]…" };
+      const dots = ctx.cmds.filter(c => c.t === "dot").length;
+      if (dots < 5 && ctx.lines.length < 5) return { pass: false, msg: "Show at least five treasures on the canvas." };
+      return { pass: true, msg: "Many things, one name, numbered slots — you just met the most useful invention in programming." };
+    },
+  },
+  {
+    id: "w5l2",
+    title: "Visit every treasure",
+    subtitle: "The loop that walks the box",
+    beats: [
+      { t: "Opening slots one by one is slow. There's a loop that <b>visits</b>." },
+      { t: "Watch the visiting loop:",
+        build: {
+          steps: [
+            { text: "for c in colors:", say: "for c in colors — no range! The loop walks the box itself." },
+            { text: "\n    color(c)", say: "Each lap, c holds the NEXT treasure." },
+            { text: "\n    forward(80)\n    back(80)\n    right(45)", say: "…and the drawing uses whatever c holds." },
+          ],
+          effect: "one ray per treasure, each in its color",
+          done: "However many treasures the box holds — the loop visits them all.",
+        } },
+      { t: "Add a treasure to the box → the loop draws one more. Automatically." },
+    ],
+    predict: "Five colors in the box, rays turning 72 — what wheel appears?",
+    starter: `colors = ["gold", "crimson", "teal", "mediumorchid", "darkorange"]\n\nwidth(5)\nfor c in colors:\n    color(c)\n    forward(90)\n    back(90)\n    right(72)\n`,
+    task: "Run the color wheel. Then grow the box to 8 colors — and fix the turn so the wheel still closes (360 ÷ 8).",
+    hints: [
+      "Eight colors need right(45) — the box and the turn must agree.",
+      "The loop never changes. Only the box does. That's the beauty.",
+    ],
+    check: (ctx) => {
+      if (!/for\s+\w+\s+in\s+(?!range\b)\w+/.test(ctx.code))
+        return { pass: false, msg: "Use the visiting loop: for c in colors: — no range, the box itself." };
+      if (ctx.lines.length < 10) return { pass: false, msg: "Let it visit — at least 5 treasures' worth of rays." };
+      return { pass: true, msg: "The loop reads the box like a guest list. One more guest? One more ray. No code changes." };
+    },
+  },
+  {
+    id: "w5l3",
+    title: "The majlis guest list",
+    subtitle: "append, len, and in",
+    beats: [
+      { t: "Boxes can start empty — and <b>grow</b>." },
+      { t: "Watch the majlis fill up:",
+        build: {
+          steps: [
+            { text: "guests = []", say: "An empty majlis — brackets with nothing inside." },
+            { text: "\nguests.append(\"Maryam\")", say: "append — one more guest walks in." },
+            { text: "\nguests.append(\"Khalid\")", say: "And another. The box grows as they arrive." },
+            { text: "\nprint(len(guests))", say: "len asks: how many are in the box? Two." },
+          ],
+          effect: "len(guests) → 2",
+          done: "append grows the box. len counts it. in checks who's inside.",
+        } },
+      { t: "And <code class=\"k\">in</code> asks a question: is \"Maryam\" <b>in</b> guests?" },
+    ],
+    starter: `guests = []\n\nfor i in range(3):\n    name = input("Who is arriving at the majlis?")\n    if name in guests:\n        print(name + " is already inside!")\n    else:\n        guests.append(name)\n\nprint("Tonight we are " + str(len(guests)) + ":")\nfor g in guests:\n    print("Ahlan, " + g + "!")\n`,
+    task: "Host the majlis: welcome 3 guests, catch any double arrival, count them, greet each by name.",
+    hints: [
+      "Try entering the same name twice — watch the in check catch it.",
+      "A bigger majlis: range(5). The rest of the code doesn't change. Why not?",
+    ],
+    check: (ctx) => {
+      if (!/\.append\(/.test(ctx.code)) return { pass: false, msg: "Guests must arrive: guests.append(name)." };
+      if (!/(?<![\w])len\(/.test(ctx.code)) return { pass: false, msg: "Count the majlis with len(guests)." };
+      if (!/\bin\s+guests|\bin\s+\w+:/.test(ctx.code) && !/if\s+\w+\s+in\s+\w+/.test(ctx.code))
+        return { pass: false, msg: "Check arrivals with in: if name in guests:" };
+      if (!ctx.stdout.trim()) return { pass: false, msg: "A silent majlis? Greet your guests with print." };
+      return { pass: true, msg: "Grow, count, check, greet — you just built what every app on Earth does with its users." };
+    },
+  },
+  {
+    id: "w5l4",
+    title: "Words are boxes too",
+    subtitle: "Strings have slots and length",
+    beats: [
+      { t: "A secret: every WORD is already a box — of letters." },
+      { t: "<code class=\"v\">word</code>[<code class=\"a\">0</code>] is its first letter. <code class=\"k\">len</code>(<code class=\"v\">word</code>) counts them." },
+      { t: "And the visiting loop walks words: <code class=\"k\">for</code> <code class=\"v\">letter</code> <code class=\"k\">in</code> <code class=\"v\">word</code>:" },
+    ],
+    predict: "A name walks through the loop, one dot per letter — how long is the trail for YOUR name?",
+    starter: `name = input("Your name, letter-collector?")\n\nprint("First letter: " + name[0])\nprint("Length: " + str(len(name)) + " letters")\n\ncolor("mediumorchid")\nfor letter in name:\n    print(letter)\n    penup()\n    forward(34)\n    dot(10)\n`,
+    task: "Run it with your name. Then print the LAST letter too — its slot is len(name) - 1. (Why minus one? The zero!)",
+    hints: [
+      "Last letter: name[len(name) - 1]. A box of 6 letters ends at slot 5.",
+      "Try your family name after — longer trail, more dots.",
+    ],
+    check: (ctx) => {
+      if (!/for\s+\w+\s+in\s+(?!range\b)\w+/.test(ctx.code))
+        return { pass: false, msg: "Walk the word: for letter in name:" };
+      if (!/(?<![\w])len\(/.test(ctx.code)) return { pass: false, msg: "Measure it: len(name)." };
+      if (!/\w+\[/.test(ctx.code)) return { pass: false, msg: "Open a letter-slot: name[0]." };
+      return { pass: true, msg: "Words were boxes all along. Now the cipher machine becomes possible…" };
+    },
+  },
+  {
+    id: "w5l5",
+    title: "The cipher machine",
+    subtitle: "صفر — the zero that named the codes",
+    beats: [
+      { t: "The word <b>cipher</b> comes from <b>صفر — sifr, zero</b>. Arab mathematicians named the secret codes." },
+      { t: "The oldest trick: slide every letter 3 steps down the alphabet." },
+      { t: "Watch the machine's heart:",
+        build: {
+          steps: [
+            { text: "spot = alphabet.find(letter)", say: "find asks: WHERE does this letter live? (-1 means: nowhere.)" },
+            { text: "\nspot = spot + 3", say: "Slide three steps down the alphabet…" },
+            { text: "\nif spot >= 26:\n    spot = spot - 26", say: "Past z? Wrap around to the start — the alphabet is a circle." },
+            { text: "\ncoded = coded + alphabet[spot]", say: "…and collect the disguised letter." },
+          ],
+          effect: "a → d,  z → c",
+          done: "Every letter slides. The message hides in plain sight.",
+        } },
+      { t: "Caesar used it for armies. You'll use it for secrets at school." },
+    ],
+    starter: `alphabet = "abcdefghijklmnopqrstuvwxyz"\n\nsecret = input("Whisper your message (small letters)...")\ncoded = ""\n\nfor letter in secret:\n    spot = alphabet.find(letter)\n    if spot == -1:\n        coded = coded + letter\n    else:\n        spot = spot + 3\n        if spot >= 26:\n            spot = spot - 26\n        coded = coded + alphabet[spot]\n\nprint("Your secret:  " + secret)\nprint("The cipher:   " + coded)\n`,
+    task: "Encode a message! Then build the DECODER: slide back by 3 — and below zero, wrap the other way (+26).",
+    hints: [
+      "The decoder is the same machine with spot - 3, and: if spot < 0: spot = spot + 26.",
+      "Test honestly: encode a word, feed the result to your decoder — did your word come home?",
+      "Change the slide from 3 to your lucky number — a cipher only your friends know.",
+    ],
+    check: (ctx) => {
+      if (!/\.find\(/.test(ctx.code)) return { pass: false, msg: "The machine's heart is find: alphabet.find(letter)." };
+      if (!/for\s+\w+\s+in\s+(?!range\b)\w+/.test(ctx.code))
+        return { pass: false, msg: "Walk the secret letter by letter: for letter in secret:" };
+      if (!/\w+\[\w+\]/.test(ctx.code)) return { pass: false, msg: "Collect from the alphabet by slot: alphabet[spot]." };
+      if (!ctx.stdout.trim()) return { pass: false, msg: "Show the cipher — print the coded message." };
+      return { pass: true, msg: "صفر gave codes their name — and today, you built one. The mathematicians would be proud." };
+    },
+  },
+  {
+    id: "w5l6",
+    title: "Challenge: the quiz machine",
+    subtitle: "Make — everything in one box",
+    beats: [
+      { t: "The final make: a quiz machine — questions in one box, answers in another." },
+      { t: "Slot i of questions matches slot i of answers. Twins by number." },
+      { t: "Ask, compare, count the score. Then judge — kindly." },
+    ],
+    starter: `questions = ["What is the capital of the UAE?"]\nanswers = ["abu dhabi"]\n\nscore = 0\n\nfor i in range(len(questions)):\n    reply = input(questions[i])\n    if reply == answers[i]:\n        print("Correct!")\n        score = score + 1\n    else:\n        print("It was: " + answers[i])\n\nprint("Score: " + str(score) + " of " + str(len(questions)))\n`,
+    task: "Grow it to at least 3 questions (your subjects, your trivia!) and add a kind final verdict with if/else.",
+    hints: [
+      "New pairs: one line in questions, its twin in answers — SAME positions.",
+      "The verdict: if score == len(questions): perfect praise. else: warm encouragement.",
+      "range(len(questions)) means: however many you add, the loop follows. Zero edits.",
+    ],
+    check: (ctx) => {
+      const lists = (ctx.code.match(/\[[^\]\n]*,[^\]\n]*\]/g) || []).length;
+      if (lists < 2) return { pass: false, msg: "Two boxes, at least 3 slots each: questions and their answer-twins." };
+      if (!/range\(\s*len\(/.test(ctx.code))
+        return { pass: false, msg: "Let the loop follow the box: for i in range(len(questions)):" };
+      if (!/score/.test(ctx.code)) return { pass: false, msg: "Count the victories — a score jar that grows." };
+      if (!ctx.stdout.trim()) return { pass: false, msg: "The machine must speak — questions, verdicts, score." };
+      return { pass: true, msg: "📚 A real quiz app — lists, loops, logic, all yours. World 5 complete. Mumtaz, ya ustadh!" };
+    },
+  },
+];
+
 /* ---------------- worlds & flat index ---------------- */
 const WORLDS = [
   { id: "w1", title: "World 1 — First Lines",
@@ -896,5 +1089,8 @@ const WORLDS = [
   { id: "w4", title: "World 4 — Your Own Magic Words",
     sub: "Teach Python new words — then build words from words.",
     lessons: WORLD4_LESSONS },
+  { id: "w5", title: "World 5 — Collections",
+    sub: "Boxes of treasures, words made of letters — and the cipher named by our zero.",
+    lessons: WORLD5_LESSONS },
 ];
 const LESSONS = WORLDS.flatMap(w => w.lessons);

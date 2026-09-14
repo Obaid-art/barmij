@@ -1,5 +1,18 @@
 # Decisions Log — Barmij
 
+- **2026-09-14 / B36 — World 5 shipped: Collections** — six lessons: the treasure box (lists,
+  with the count-from-zero trap staged in the build: "the zero is our gift to mathematics") ·
+  the visiting loop (for-in, no range) · the majlis guest list (append/len/in — the door keeper
+  catches double arrivals) · words are boxes too (string slots, len-1) · **the cipher machine**
+  (the صفر/sifr etymology taught as a beat; find/slide/wrap built stagewise; verified live:
+  salam → vdodp; decoder as the task) · Make: the quiz machine (twin lists, range(len()),
+  score, kind verdict). Engine: lists now visible in Step-mode jars; IndexError and
+  str-concat TypeErrors translated kindly. Honest scope call: **dictionaries deferred to
+  World 7** where real data motivates them (curriculum updated). 21-item W5 batch (bank = 156,
+  all engine-verified); gates PASS (beats ≤15 words, FK ≤4.9; six W5 concepts over floor;
+  W5·L2 thin-slope caught by the gate and filled); narration → 217 clips. Recurring lesson
+  logged twice now: append-to-bank edits must anchor the true end-of-array — the double-];
+  mistake happened again and was caught by console-first debugging in one minute.
 - **2026-09-14 / B35 — World 4 shipped: Your Own Magic Words** — six lessons: def with the
   define-vs-call distinction staged explicitly in the build ("Teaching is silent… now we SAY
   the word") + typing demo · square(size) parameters · poly(sides, size) with computed

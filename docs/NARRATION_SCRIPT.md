@@ -1,7 +1,7 @@
 # Narration Recording Script
 _One line per clip. Record as `app/audio/<ID>.mp3`, then map the ID in
 `app/audio_manifest.js`. Warm, unhurried, like reading to one child. (B33)_
-**183 clips total.**
+**217 clips total.**
 
 
 ## Lesson w1l1
@@ -192,6 +192,52 @@ _One line per clip. Record as `app/audio/<ID>.mp3`, then map the ID in
 - **w4l6-b1** — Teach your words: a frame word, a star word — whatever your card needs.
 - **w4l6-b2** — Ask the name with input . Draw with your words. Greet with print .
 - **w4l6-b3** — Every card it makes is different. Every card is yours.
+
+## Lesson w5l1
+- **w5l1-b0** — One jar holds one thing. A list holds many.
+- **w5l1-b1** — Watch a treasure box being packed:
+- **w5l1-b2** — The trap everyone falls in once: the first slot is 0, not 1 .
+- **w5l1-bl0** — Square brackets — the box opens.
+- **w5l1-bl1** — Three treasures, commas between them.
+- **w5l1-bl2** — The box closes. One name — colors — holds all three.
+- **w5l1-bl3** — colors[0] — slot ZERO. Boxes count from zero, always.
+
+## Lesson w5l2
+- **w5l2-b0** — Opening slots one by one is slow. There's a loop that visits .
+- **w5l2-b1** — Watch the visiting loop:
+- **w5l2-b2** — Add a treasure to the box the loop draws one more. Automatically.
+- **w5l2-bl0** — for c in colors — no range! The loop walks the box itself.
+- **w5l2-bl1** — Each lap, c holds the NEXT treasure.
+- **w5l2-bl2** — …and the drawing uses whatever c holds.
+
+## Lesson w5l3
+- **w5l3-b0** — Boxes can start empty — and grow .
+- **w5l3-b1** — Watch the majlis fill up:
+- **w5l3-b2** — And in asks a question: is "Maryam" in guests?
+- **w5l3-bl0** — An empty majlis — brackets with nothing inside.
+- **w5l3-bl1** — append — one more guest walks in.
+- **w5l3-bl2** — And another. The box grows as they arrive.
+- **w5l3-bl3** — len asks: how many are in the box? Two.
+
+## Lesson w5l4
+- **w5l4-b0** — A secret: every WORD is already a box — of letters.
+- **w5l4-b1** — word [ 0 ] is its first letter. len ( word ) counts them.
+- **w5l4-b2** — And the visiting loop walks words: for letter in word :
+
+## Lesson w5l5
+- **w5l5-b0** — The word cipher comes from صفر — sifr, zero . Arab mathematicians named the secret codes.
+- **w5l5-b1** — The oldest trick: slide every letter 3 steps down the alphabet.
+- **w5l5-b2** — Watch the machine's heart:
+- **w5l5-b3** — Caesar used it for armies. You'll use it for secrets at school.
+- **w5l5-bl0** — find asks: WHERE does this letter live? (-1 means: nowhere.)
+- **w5l5-bl1** — Slide three steps down the alphabet…
+- **w5l5-bl2** — Past z? Wrap around to the start — the alphabet is a circle.
+- **w5l5-bl3** — …and collect the disguised letter.
+
+## Lesson w5l6
+- **w5l6-b0** — The final make: a quiz machine — questions in one box, answers in another.
+- **w5l6-b1** — Slot i of questions matches slot i of answers. Twins by number.
+- **w5l6-b2** — Ask, compare, count the score. Then judge — kindly.
 
 ## Guided thinking (Code Bank)
 - **cb001-t0** — What do I want? A square — four equal sides.

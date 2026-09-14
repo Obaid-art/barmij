@@ -27,7 +27,7 @@ in founder-reviewed batches under CONTENT_POLICY.md. First batch (~40) shipped 2
 | 2 | **Decisions** ✅ built | if/elif/else, ==, input, int(), randomness | Fortune teller, guessing game, the Mood Machine |
 | 3 | **Patterns & Power** ✅ built | nested loops, bounded while, range(start, stop, step), zellij angle math | The rose window & an original zellij tile of your own; the National Day fireworks show |
 | 4 | **Your Own Magic Words** ✅ built | def · parameters (one door, two doors) · return · composition (words made of words) | poly(sides, size) — every shape from one word; ray→sun→sky; the Eid card generator |
-| 5 | **Collections** | lists, strings, dictionaries | Quiz app; secret-code (cipher — the Arabic صفر story!) machine; majlis guest list manager |
+| 5 | **Collections** ✅ built | lists (zero-slots/index/append/len) · for-in visiting · membership (in) · strings as sequences · .find | The majlis guest list · the cipher machine (the sifr/صفر story, taught) · the quiz machine. (Dictionaries deferred to World 7, where real data gives them meaning.) |
 | 6 | **Living Programs** | events, animation loop, game state | A real playable game (falcon catch / dhow dodge) |
 | 7 | **Real Data** | files, CSV, **matplotlib** (the turtle grows up: charts), pandas-light | Chart Dubai's summer, the football league, your own screen time; Ramadan moon-phase plotter |
 | 8 | **Thinking Machines** (Ra'id tier) | algorithms, search/sort, honest intro-ML with **scikit-learn (a taste, one real tiny model)** | Prayer-times explorer; "teach the machine to tell dates from olives"; free capstone + showcase |

@@ -36,6 +36,12 @@ DETECTORS = {
     "def": lambda c: re.search(r"^\s*def\s+\w+\s*\(", c, re.M) is not None,
     "def-params": lambda c: re.search(r"^\s*def\s+\w+\s*\([^)]+\)", c, re.M) is not None,
     "return": lambda c: re.search(r"\breturn\b", c) is not None,
+    "list": lambda c: re.search(r"\[[^\]\n]*,[^\]\n]*\]|\.append\(", c) is not None,
+    "indexing": lambda c: re.search(r"\w+\[\w*\d*\w*\]", c) is not None,
+    "for-in": lambda c: re.search(r"for\s+\w+\s+in\s+(?!range\b)[\w\[\"']", c) is not None,
+    "append": lambda c: ".append(" in c,
+    "len": lambda c: re.search(r"(?<![\w])len\(", c) is not None,
+    "find": lambda c: ".find(" in c,
 }
 
 # minimum items per shipped-world concept (blueprint ladder = 10; interim floor while growing)

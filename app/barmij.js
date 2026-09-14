@@ -12,13 +12,33 @@ const STR = {
 const lang = "en";
 
 /* ---------------- state ---------------- */
+/* storage is ARMORED: a corrupted key must never brick the app (JSON.parse at load used to
+   kill the whole script — permanently, on every reload). Bad data is dropped, not fatal. */
+function loadJSON(key, fallback) {
+  try {
+    const raw = localStorage.getItem(key);
+    if (raw === null) return fallback;
+    const v = JSON.parse(raw);
+    if (Array.isArray(fallback) ? Array.isArray(v) : (v && typeof v === "object" && !Array.isArray(v))) return v;
+  } catch (e) {}
+  try { localStorage.removeItem(key); } catch (e) {}
+  return fallback;
+}
+function loadStr(key) { try { return localStorage.getItem(key); } catch (e) { return null; } }
+const store = (k, v) => { try { localStorage.setItem(k, v); } catch (e) {} };
+
 const PROG_KEY = "barmij_v1_progress";
-let progress = JSON.parse(localStorage.getItem(PROG_KEY) || "{}");
+let progress = loadJSON(PROG_KEY, {});
 let current = 0;
 let pyodide = null, pyReady = false;
 let runsThisLesson = 0, hintsUsed = 0, hintIndex = 0;
-let editor = null;
+let editor = null, editorOwner = null;
 let stdoutBuf = "";
+
+/* a child's typed mission code is never silently destroyed by navigation */
+function stashEditor() {
+  if (editorOwner && editor) store("barmij_code_" + editorOwner, editor.getValue());
+}
 
 /* ---------------- python preamble: the turtle ---------------- */
 const PREAMBLE = `
@@ -184,6 +204,12 @@ reset()
 
 /* ---------------- boot ---------------- */
 window.addEventListener("DOMContentLoaded", async () => {
+  if (typeof CodeMirror === "undefined") {
+    /* a blocked CDN (school networks) must fail with words, never with a blank page */
+    document.getElementById("loading").textContent =
+      "Barmij couldn't load its code editor — check the internet connection and refresh.";
+    return;
+  }
   editor = CodeMirror.fromTextArea(document.getElementById("code"), {
     mode: "python", theme: "barmij", lineNumbers: true, indentUnit: 4,
     autofocus: false, viewportMargin: Infinity,
@@ -198,6 +224,7 @@ window.addEventListener("DOMContentLoaded", async () => {
   document.getElementById("puzzleCheck").addEventListener("click", puzzleCheck);
   document.getElementById("resetBtn").addEventListener("click", () => {
     editor.setValue(LESSONS[current].starter);
+    try { localStorage.removeItem("barmij_code_" + LESSONS[current].id); } catch (e) {}
   });
   document.getElementById("hintBtn").addEventListener("click", showHint);
   document.getElementById("nextBtn").addEventListener("click", () => openLesson(current + 1));
@@ -214,7 +241,7 @@ window.addEventListener("DOMContentLoaded", async () => {
   galCountRefresh();
   document.getElementById("narrBtn").addEventListener("click", () => {
     narrOn = !narrOn;
-    localStorage.setItem(NARR_KEY, narrOn ? "1" : "0");
+    store(NARR_KEY, narrOn ? "1" : "0");
     if (!narrOn) stopNarration();
     else narrate("live", "Read-aloud is on. I'll read each step to you, hero.");
     renderNarrBtn();
@@ -237,7 +264,8 @@ window.addEventListener("DOMContentLoaded", async () => {
   renderSidebar();
   renderRank();
   renderWarmup();
-  const last = parseInt(localStorage.getItem("barmij_last") || "0");
+  let last = parseInt(loadStr("barmij_last") || "0", 10);
+  if (!Number.isInteger(last) || last < 0 || last >= LESSONS.length) last = 0;
   openLesson(isUnlocked(last) ? last : 0, true);
 
   try {
@@ -285,20 +313,20 @@ function renderRank() {
   /* KHATAM — the whole journey, complete */
   if (LESSONS.every(l => (progress[l.id] || 0) > 0)) {
     chip.textContent = "🏆 " + RANKS[2].icon + " Ra'id ✦";
-    if (!localStorage.getItem("barmij_khatam")) {
-      localStorage.setItem("barmij_khatam", "1");
+    if (!loadStr("barmij_khatam")) {
+      store("barmij_khatam", "1");
       confetti();
       flashFeedback("ok", "🏆 KHATAM — all eight worlds! From print to thinking machines. The journey is complete, and it is YOURS.");
     }
   }
-  const prev = parseInt(localStorage.getItem("barmij_rank") || "0");
+  const prev = parseInt(loadStr("barmij_rank") || "0", 10) || 0;
   if (r > prev) {
-    localStorage.setItem("barmij_rank", String(r));
+    store("barmij_rank", String(r));
     chip.classList.remove("rankup"); void chip.offsetWidth; chip.classList.add("rankup");
     confetti();
     flashFeedback("ok", "🎖️ RANK UP — you are now " + RANKS[r].label + "! Earned, not given.");
   } else if (r < prev) {
-    localStorage.setItem("barmij_rank", String(r));
+    store("barmij_rank", String(r));
   }
 }
 
@@ -363,8 +391,8 @@ CODEBANK.sort((a, b) => a.g - b.g || RANK_ORDER[a.rank] - RANK_ORDER[b.rank] || 
    completes the review and pushes the skill to its next, longer interval. */
 const REVIEW_KEY = "barmij_reviews";
 const INTERVALS_DAYS = [2, 7, 21];
-let reviewsDb = JSON.parse(localStorage.getItem(REVIEW_KEY) || "{}");
-const saveReviews = () => localStorage.setItem(REVIEW_KEY, JSON.stringify(reviewsDb));
+let reviewsDb = loadJSON(REVIEW_KEY, {});
+const saveReviews = () => store(REVIEW_KEY, JSON.stringify(reviewsDb));
 
 function lessonGateOf(i) {
   let wi = 0, li = i;
@@ -439,6 +467,7 @@ function showThinking(it) {
 }
 
 function openBank() {
+  stashEditor(); editorOwner = null;
   bankMode = true; currentBankItem = null;
   document.getElementById("lessonPanel").style.display = "none";
   document.getElementById("bankPanel").style.display = "block";
@@ -710,6 +739,7 @@ function renderSidebar() {
 
 function openLesson(i, keepQuiet) {
   if (i >= LESSONS.length || !isUnlocked(i)) return;
+  stashEditor(); /* whatever was typed survives the navigation */
   bankMode = false; currentBankItem = null;
   document.getElementById("lessonPanel").style.display = "block";
   document.getElementById("bankPanel").style.display = "none";
@@ -733,14 +763,16 @@ function openLesson(i, keepQuiet) {
   for (const w of WORLDS) { if (li < w.lessons.length) break; li -= w.lessons.length; wi++; }
   document.getElementById("crumb").textContent =
     `${WORLDS[wi].title} · Lesson ${li + 1} of ${WORLDS[wi].lessons.length}`;
-  localStorage.setItem("barmij_last", String(i));
+  store("barmij_last", String(i));
   runsThisLesson = 0; hintsUsed = 0; hintIndex = 0;
   const ls = LESSONS[i];
   document.getElementById("lessonTitle").textContent = ls.title;
   document.getElementById("lessonSub").textContent = ls.subtitle;
   document.getElementById("taskText").innerHTML = `<b>${STR[lang].task}:</b> ${ls.task}`;
   document.getElementById("predictBox").style.display = "none";
-  editor.setValue(ls.starter);
+  const savedCode = loadStr("barmij_code_" + ls.id);
+  editor.setValue(savedCode !== null ? savedCode : ls.starter);
+  editorOwner = ls.id;
   initDemo(ls);
   /* staged reveal: beats first (storyGo appears when they finish), then demo, then mission */
   lessonStage = 0;
@@ -771,6 +803,7 @@ let runSeq = 0; /* a newer Run supersedes an older one still awaiting — no int
 async function run() {
   if (!pyReady) { flashFeedback("err", "Python is still waking up — one moment, hero."); return; }
   const myRun = ++runSeq;
+  stashEditor(); /* the typed code survives even a closed browser */
   runsThisLesson++;
   stopLive();
   hideSaveBar();
@@ -851,7 +884,7 @@ async function run() {
         const stars = hintsUsed === 0 ? (runsThisLesson <= 2 ? 3 : 2) : 1;
         if (stars > (progress[LESSONS[current].id] || 0)) {
           progress[LESSONS[current].id] = stars;
-          localStorage.setItem(PROG_KEY, JSON.stringify(progress));
+          store(PROG_KEY, JSON.stringify(progress));
         }
         renderSidebar(); renderRank();
         scheduleReview(lessonGateOf(current));
@@ -890,7 +923,7 @@ async function run() {
     const stars = hintsUsed === 0 ? (runsThisLesson <= 2 ? 3 : 2) : 1;
     if (stars > (progress[LESSONS[current].id] || 0)) {
       progress[LESSONS[current].id] = stars;
-      localStorage.setItem(PROG_KEY, JSON.stringify(progress));
+      store(PROG_KEY, JSON.stringify(progress));
     }
     renderSidebar();
     renderRank();
@@ -1386,7 +1419,7 @@ function demoTake() {
    young readers. OFF by default (no sound uninvited — B7). Placeholder voice: the browser's
    speech engine; the founder's recordings (audio_manifest.js) override it clip by clip. */
 const NARR_KEY = "barmij_narration";
-let narrOn = localStorage.getItem(NARR_KEY) === "1";
+let narrOn = loadStr(NARR_KEY) === "1";
 let narrVoice = null, narrAudio = null;
 
 function pickNarrVoice() {
@@ -1435,13 +1468,14 @@ function renderNarrBtn() {
    immediate and specific. Matching is by SHAPE + color (unordered, either direction, tolerant)
    — any code that draws the goal wins; the hidden target-maker is never an answer key. */
 const CH_KEY = "barmij_challenges";
-let challengesSolved = JSON.parse(localStorage.getItem(CH_KEY) || "{}");
+let challengesSolved = loadJSON(CH_KEY, {});
 let challengeMode = false, chState = null, chHintIdx = 0;
 
 CHALLENGES.forEach(c => Object.assign(c, computeGate(c.code)));
 CHALLENGES.sort((a, b) => a.g - b.g || a.id.localeCompare(b.id));
 
 function openChallenges() {
+  stashEditor(); editorOwner = null;
   challengeMode = false; chState = null;
   galleryMode = false; bankMode = false; currentBankItem = null;
   if (puz) puzzleExit();
@@ -1540,7 +1574,7 @@ function challengeEvaluate(cmds) {
   const { hit, total, extras } = segMatch(chState.targetCmds, cmds);
   if (hit === total && extras === 0) {
     challengesSolved[chState.def.id] = true;
-    localStorage.setItem(CH_KEY, JSON.stringify(challengesSolved));
+    store(CH_KEY, JSON.stringify(challengesSolved));
     if (dueReviewGate() === chState.def.g) completeReview(chState.def.g);
     fb.className = "feedback ok";
     fb.textContent = `✅ 🎯 MATCHED — the ghost is yours! ${chState.def.title}, summoned by your own code, your own way.`;
@@ -1571,7 +1605,7 @@ function challengeEvaluate(cmds) {
    passing, one optional reflection prompt (portfolio practice + self-explanation). All child-
    entered text rendered via textContent only. */
 const GAL_KEY = "barmij_gallery";
-let gallery = JSON.parse(localStorage.getItem(GAL_KEY) || "[]");
+let gallery = loadJSON(GAL_KEY, []);
 let galleryMode = false;
 let lastRun = null; /* {code, hadCmds, firstOut} — what the save bar would save */
 
@@ -1652,6 +1686,7 @@ function showSaveForm() {
 }
 
 function openGallery() {
+  stashEditor(); editorOwner = null;
   galleryMode = true; bankMode = false; currentBankItem = null;
   stopNarration();
   if (challengeMode) exitChallenge();
@@ -1736,7 +1771,7 @@ function renderGallery() {
    the arrangement and compares BEHAVIOR to the target — a different valid order that produces
    the same result is a win, because it is one. (Parsons & Haden 2006; Ericson et al.) */
 const PUZ_KEY = "barmij_puzzles";
-let puzzlesSolved = JSON.parse(localStorage.getItem(PUZ_KEY) || "{}");
+let puzzlesSolved = loadJSON(PUZ_KEY, {});
 let puz = null;
 
 CODEBANK.forEach(it => {
@@ -1870,7 +1905,7 @@ async function puzzleCheck() {
   const outOk = stdoutBuf.trim() === puz.targetOut;
   if (cmdsEqual(cmds, puz.targetCmds) && outOk) {
     puzzlesSolved[puz.item.id] = true;
-    localStorage.setItem(PUZ_KEY, JSON.stringify(puzzlesSolved));
+    store(PUZ_KEY, JSON.stringify(puzzlesSolved));
     if (dueReviewGate() === puz.item.g) completeReview(puz.item.g);
     fb.className = "feedback ok";
     fb.textContent = "✅ 🧩 Same masterpiece — your order works! (Even if it wasn't the original order — same result means also correct.)";

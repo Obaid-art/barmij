@@ -1,5 +1,29 @@
 # Decisions Log — Barmij
 
+- **2026-09-14 / B44 — The job-on-the-line pass (founder: an auditor "who would lose his job
+  entirely if he did not catch bugs").** Attacked surfaces no pass had touched:
+  1. A CORRUPTED STORAGE KEY BRICKED THE APP — PERMANENTLY. Top-level JSON.parse of any
+     barmij_* key (a browser crash mid-write is enough) killed the whole script, on every
+     reload, forever, with a blank page. PROVEN live (set "{corrupted!!" → app dead), then
+     armored: loadJSON()/loadStr()/store() wrap every storage read AND write; bad data is
+     dropped, never fatal. Re-proven: the same corruption now boots clean and self-cleans.
+     A garbage barmij_last (NaN) also crashed boot — now validated and clamped.
+  2. DATA LOSS: a child's typed mission code was silently destroyed by ANY navigation (peek
+     at another lesson via the Journey drawer → work gone). Editor content is now stashed
+     per-lesson (barmij_code_<id>) on navigation and on every Run, restored on return —
+     survives even a closed browser. "Reset code" restores the starter and clears the stash.
+     Verified end-to-end.
+  3. BLOCKED CDN = BLANK PAGE: if the CodeMirror script fails (school networks block CDNs),
+     the boot handler died before wiring a single button — silent blank app. Now a clear
+     message ("couldn't load its code editor — check the internet and refresh"). Pyodide
+     failure already had one; the editor did not.
+  4. MONKEY TEST: 80 random interleaved actions across every feature (lessons, bank,
+     challenges, puzzles, step, LIVE, gallery, save bar, drawer, hints, broken code included)
+     — ZERO uncaught errors. The state machine holds.
+  259/259 programs re-verified, gates PASS. Assets v22. Storage engine law: every
+  localStorage read goes through loadJSON/loadStr, every write through store() (galSave keeps
+  its own try/catch — its failure IS the quota feature).
+
 - **2026-09-14 / B43 — The angry-auditor pass (founder: "literally any mistake, however
   small").** Caught and fixed:
   1. THE SEARCH LESSON'S RECEIPT LIED (w8l2): with no break (untaught, deliberately), steps

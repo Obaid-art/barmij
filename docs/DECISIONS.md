@@ -1,5 +1,16 @@
 # Decisions Log — Barmij
 
+- **2026-09-14 / B30 — 🧩 Parsons puzzles with ghost targets.** Any eligible bank item (3-12
+  lines, deterministic, no input) becomes a puzzle for free: the finished drawing appears as a
+  pale ghost on the canvas; the code arrives as shuffled role-colored tiles; the child taps them
+  into order and chooses indentation (auto-suggested after a ':' line, adjustable — the secret
+  handshake as a decision). The check RUNS the arrangement and compares BEHAVIOR to the target:
+  a different valid order producing the same result is accepted and told so — honest computing,
+  not answer-key matching. A mismatch draws the child's attempt in color OVER the ghost so the
+  difference itself teaches. 41 puzzles born from the existing bank, zero new content authored.
+  Warm-ups now sometimes arrive as puzzles (varied retrieval). Evidence: Parsons & Haden 2006;
+  Ericson et al. — comparable learning to code-writing in roughly half the time, less
+  frustration; ideal for young typists. Completes the fading ladder: watch → ORDER → type → make.
 - **2026-09-14 / B29 — English-only product (founder: "no more arabic").** All Arabic script
   removed from the UI, content, and license page: logo is "Barmij" alone, language toggle
   deleted, ranks shown as Mustakshif/Bannaa/Ra'id (Latin), the two bank items with Arabic

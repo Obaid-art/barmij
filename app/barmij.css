@@ -300,6 +300,32 @@ figure svg [fill="#3f9d6e"] { fill: var(--green); }
 }
 .CodeMirror .step-line { background: var(--lav-soft) !important; }
 
+/* 🧩 Parsons puzzles — order the thoughts */
+.puz-goal { font-size: 14.5px; font-weight: 700; color: var(--lav-text); margin-bottom: 10px; }
+.puz-label { font-size: 11.5px; font-weight: 800; color: var(--muted); text-transform: uppercase; letter-spacing: .4px; margin: 12px 0 6px; }
+.puz-placed, .puz-tray { display: flex; flex-direction: column; gap: 6px; min-height: 34px; }
+.puz-tray { flex-direction: row; flex-wrap: wrap; }
+.puz-tile {
+  display: inline-flex; align-items: center; gap: 8px;
+  background: #fff; border: 1.5px solid var(--line); border-radius: 10px;
+  padding: 8px 12px; cursor: pointer;
+  font-family: "JetBrains Mono", Consolas, monospace; font-size: 14.5px; font-weight: 700;
+  transition: transform .1s, box-shadow .1s;
+}
+.puz-tile:hover { transform: translateY(-1px); box-shadow: var(--shadow); border-color: var(--blue); }
+.puz-tile .r-kw { color: var(--blue-text); font-weight: 800; }
+.puz-tile .r-name { color: var(--lav-text); }
+.puz-tile .r-val { color: var(--amber-text); }
+.puz-tile .r-ink { color: #2e3a46; }
+.puz-placed .puz-tile { cursor: default; border-color: var(--blue-soft); background: #fbfcfe; }
+.puz-mini {
+  border: 1.2px solid var(--line); background: var(--panel); border-radius: 7px;
+  font: inherit; font-size: 12px; font-weight: 800; color: var(--muted);
+  padding: 2px 8px; cursor: pointer;
+}
+.puz-mini:hover { border-color: var(--blue); color: var(--blue-text); }
+.puz-indent { display: inline-block; }
+
 /* guided thinking track */
 .think-step { font-size: 16.5px; line-height: 1.6; color: var(--ink); min-height: 48px; padding: 4px 2px; }
 .think-step b { color: var(--blue-text); }

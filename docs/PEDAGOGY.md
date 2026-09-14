@@ -28,6 +28,16 @@ citations pending (NOT_YET_BUILT.md)._
   the child re-types it on the same stage with per-keystroke feedback (guided practice), then
   the free editor (independence). The faded sequence inside a single two-minute experience.
 
+## 4b. Parsons problems — ordering before writing (Parsons & Haden 2006; Ericson et al.)
+- Research repeatedly finds Parsons puzzles teach program construction about as well as
+  writing code, in roughly half the time with less frustration — the strongest
+  learning-per-minute result in CS education. Ideal for young typists.
+- Mechanic (SHIPPED 2026-09-14, B30): eligible bank items become 🧩 puzzles — ghost target on
+  canvas, shuffled role-colored tiles, tap-to-order, indentation as an explicit decision.
+  Checking runs the arrangement and compares behavior (alternate valid orders accepted and
+  praised); mismatches overlay the attempt on the ghost so the difference teaches. Slots into
+  the fading ladder as the missing rung: watch → order → type → make.
+
 ## 5. The notional machine & misconceptions (Sorva; du Boulay)
 - Sorva, J. (2013). "Notional machines and introductory programming education." *ACM TOCE* 13(2).
 - Documented novice misconceptions we design against: `=` means equality (it's assignment — the

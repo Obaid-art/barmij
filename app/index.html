@@ -7,7 +7,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700;800;900&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/codemirror.min.css">
-<link rel="stylesheet" href="barmij.css?v=7">
+<link rel="stylesheet" href="barmij.css?v=8">
 </head>
 <body>
 
@@ -71,6 +71,20 @@
     </div>
     <div class="task" id="taskText"></div>
 
+    <div class="demo-card" id="puzzlePanel" style="display:none">
+      <div class="demo-head">
+        <span class="demo-title">🧩 Order the thoughts</span>
+        <span class="spacer" style="flex:1"></span>
+        <button class="btn ghost" id="puzzleExit">✕</button>
+      </div>
+      <div class="puz-goal" id="puzzleGoal"></div>
+      <div class="puz-label">Your program — tap ⇥ to indent, ✕ to put a piece back</div>
+      <div id="puzzlePlaced" class="puz-placed"></div>
+      <div class="puz-label">The pieces — tap one to place it next</div>
+      <div id="puzzleTray" class="puz-tray"></div>
+      <div class="demo-btns"><button class="btn run" id="puzzleCheck">✔ Check my order</button></div>
+    </div>
+
     <div class="demo-card" id="thinkCard" style="display:none">
       <div class="demo-head"><span class="demo-title">🧠 Think like a programmer</span></div>
       <div class="think-step" id="thinkStep"></div>
@@ -123,8 +137,8 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/codemirror.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/mode/python/python.min.js"></script>
 <script src="https://cdn.jsdelivr.net/pyodide/v0.26.2/full/pyodide.js"></script>
-<script src="lessons.js?v=7"></script>
-<script src="codebank.js?v=7"></script>
-<script src="barmij.js?v=7"></script>
+<script src="lessons.js?v=8"></script>
+<script src="codebank.js?v=8"></script>
+<script src="barmij.js?v=8"></script>
 </body>
 </html>

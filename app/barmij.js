@@ -114,6 +114,8 @@ window.addEventListener("DOMContentLoaded", async () => {
   document.getElementById("stepPrev").addEventListener("click", () => stepMove(-1));
   document.getElementById("stepNext").addEventListener("click", () => stepMove(1));
   document.getElementById("stepExit").addEventListener("click", exitStep);
+  document.getElementById("puzzleExit").addEventListener("click", puzzleExit);
+  document.getElementById("puzzleCheck").addEventListener("click", puzzleCheck);
   document.getElementById("resetBtn").addEventListener("click", () => {
     editor.setValue(LESSONS[current].starter);
   });
@@ -271,11 +273,14 @@ function renderWarmup() {
   const pool = CODEBANK.filter(it => it.g === gate && !it.peek && it.rank !== "r");
   if (!pool.length) { card.style.display = "none"; return; }
   const pick = pool[(Math.random() * pool.length) | 0];
+  const asPuzzle = pick.puzzle && Math.random() < 0.5; /* vary the retrieval — same skill, new angle */
   card.style.display = "flex";
   document.getElementById("warmupText").textContent =
-    `Keep it second nature — a 2-minute warm-up of your W${Math.floor(gate / 10)}·L${gate % 10} skills: ${pick.emoji} ${pick.title}`;
+    `Keep it second nature — a 2-minute warm-up of your W${Math.floor(gate / 10)}·L${gate % 10} skills: ` +
+    (asPuzzle ? `🧩 puzzle: ${pick.title}` : `${pick.emoji} ${pick.title}`);
   document.getElementById("warmupGo").onclick = () => {
     openBank();
+    if (asPuzzle) { puzzleStart(pick); return; }
     currentBankItem = pick;
     editor.setValue(pick.code);
     if (pick.think) showThinking(pick); else run();
@@ -315,6 +320,7 @@ function openBank() {
   setCodeStage(true); /* the bank IS the doing stage */
   document.getElementById("taskText").style.display = "none";
   document.getElementById("thinkCard").style.display = "none";
+  if (puz) puzzleExit();
   exitStep();
   document.getElementById("hintBox").style.display = "none";
   document.getElementById("nextWrap").style.display = "none";
@@ -342,13 +348,20 @@ function renderBank() {
           <span class="rank-badge ${it.rank}">${it.rank === "m" ? "Mustakshif" : it.rank === "b" ? "Bannaa" : "Ra'id"}</span>
           ${it.talks ? '<span class="talks-badge">🎤 talks to you</span>' : ""}
           ${it.think ? '<span class="think-badge">🧠 guided</span>' : ""}
+          ${it.puzzle ? `<button class="puz-mini puz-launch" data-id="${it.id}">🧩${puzzlesSolved[it.id] ? "✅" : " puzzle"}</button>` : ""}
           <span class="gate-tag">${it.label}</span>
         </div>
       </div>`).join("")}</div>`;
   panel.querySelectorAll(".bank-filters button").forEach(b =>
     b.addEventListener("click", () => { bankFilter = b.dataset.f; renderBank(); }));
+  panel.querySelectorAll(".puz-launch").forEach(btn =>
+    btn.addEventListener("click", (e) => {
+      e.stopPropagation();
+      puzzleStart(CODEBANK.find(it => it.id === btn.dataset.id));
+    }));
   panel.querySelectorAll(".bank-card").forEach(card =>
     card.addEventListener("click", () => {
+      if (puz) puzzleExit();
       currentBankItem = CODEBANK.find(it => it.id === card.dataset.id);
       editor.setValue(currentBankItem.code);
       if (currentBankItem.think) showThinking(currentBankItem); /* think first, run after */
@@ -549,6 +562,7 @@ function openLesson(i, keepQuiet) {
   document.getElementById("bankPanel").style.display = "none";
   document.getElementById("taskText").style.display = "";
   document.getElementById("thinkCard").style.display = "none";
+  if (puz) puzzleExit();
   exitStep();
   document.getElementById("bankBtn").classList.remove("active");
   document.body.classList.remove("drawer-open");
@@ -950,6 +964,179 @@ function demoTake() {
   editor.replaceRange(demo.heroText + "\n", { line: 0, ch: 0 });
   $d("demoSay").textContent = "It's in your editor — now press ▶ Run and make it yours!";
   editor.focus();
+}
+
+/* ---------------- 🧩 Parsons puzzles — order the thoughts (DECISIONS B30) ----------------
+   The finished drawing appears as a ghost; the code arrives as shuffled tiles. The child
+   orders them (and chooses indentation — the secret handshake as a decision). The check RUNS
+   the arrangement and compares BEHAVIOR to the target — a different valid order that produces
+   the same result is a win, because it is one. (Parsons & Haden 2006; Ericson et al.) */
+const PUZ_KEY = "barmij_puzzles";
+let puzzlesSolved = JSON.parse(localStorage.getItem(PUZ_KEY) || "{}");
+let puz = null;
+
+CODEBANK.forEach(it => {
+  const n = it.code.split("\n").filter(l => l.trim()).length;
+  it.puzzle = !it.talks && !/random|input\(/.test(it.code) && n >= 3 && n <= 12;
+});
+
+function drawGhost(cmds) {
+  clearCanvas();
+  const ctx = setupCanvas();
+  for (const s of cmds) {
+    if (s.t === "dot") {
+      ctx.fillStyle = "#d7dde6";
+      ctx.beginPath(); ctx.arc(s.x, -s.y, s.r, 0, 7); ctx.fill();
+    } else {
+      ctx.strokeStyle = "#d7dde6"; ctx.lineWidth = s.w;
+      ctx.beginPath(); ctx.moveTo(s.x1, -s.y1); ctx.lineTo(s.x2, -s.y2); ctx.stroke();
+    }
+  }
+}
+
+async function puzzleStart(it) {
+  exitStep();
+  document.getElementById("thinkCard").style.display = "none";
+  document.getElementById("editorCard").style.display = "none";
+  document.getElementById("hintBox").style.display = "none";
+  document.getElementById("feedback").className = "feedback";
+  clearOutputs();
+  currentBankItem = it;
+  /* run the original once, silently, to learn the target behavior */
+  stdoutBuf = "";
+  pyodide.runPython("reset()");
+  await pyodide.runPythonAsync(it.code);
+  const targetCmds = JSON.parse(pyodide.runPython("_dump()"));
+  const targetOut = stdoutBuf.trim();
+  const lines = it.code.split("\n").filter(l => l.trim());
+  let tray = lines.map(l => l.trim());
+  for (let k = tray.length - 1; k > 0; k--) { /* shuffle; reshuffle if unchanged */
+    const j = (Math.random() * (k + 1)) | 0; [tray[k], tray[j]] = [tray[j], tray[k]];
+  }
+  if (tray.join("\n") === lines.map(l => l.trim()).join("\n")) tray.reverse();
+  puz = { item: it, tray, placed: [], targetCmds, targetOut };
+  document.getElementById("puzzleGoal").textContent =
+    `${it.emoji} ${it.title} — the ghost below is the goal. Order the pieces to draw it.`;
+  document.getElementById("puzzlePanel").style.display = "block";
+  drawGhost(targetCmds);
+  renderPuzzle();
+  document.getElementById("puzzlePanel").scrollIntoView({ behavior: REDUCED_MOTION ? "auto" : "smooth", block: "center" });
+}
+
+function puzzleTile(text) {
+  const span = document.createElement("span");
+  tokenizeRoles(text).forEach(c => {
+    const s = document.createElement("span"); s.className = c.cls; s.textContent = c.ch; span.appendChild(s);
+  });
+  return span;
+}
+
+function renderPuzzle() {
+  const placedBox = document.getElementById("puzzlePlaced");
+  const trayBox = document.getElementById("puzzleTray");
+  placedBox.innerHTML = ""; trayBox.innerHTML = "";
+  puz.placed.forEach((p, i) => {
+    const tile = document.createElement("div");
+    tile.className = "puz-tile";
+    tile.style.marginInlineStart = (p.indent / 4) * 26 + "px";
+    const ind = document.createElement("button");
+    ind.className = "puz-mini"; ind.textContent = "⇥";
+    ind.title = "change indent";
+    ind.onclick = () => { p.indent = (p.indent + 4) % 12; renderPuzzle(); };
+    const rm = document.createElement("button");
+    rm.className = "puz-mini"; rm.textContent = "✕";
+    rm.onclick = () => { puz.placed.splice(i, 1); puz.tray.push(p.text); renderPuzzle(); };
+    tile.appendChild(ind); tile.appendChild(puzzleTile(p.text)); tile.appendChild(rm);
+    placedBox.appendChild(tile);
+  });
+  if (!puz.placed.length) placedBox.innerHTML = '<span class="small" style="color:var(--muted)">…your program starts empty…</span>';
+  puz.tray.forEach((text, i) => {
+    const tile = document.createElement("div");
+    tile.className = "puz-tile";
+    tile.appendChild(puzzleTile(text));
+    tile.onclick = () => {
+      const prev = puz.placed[puz.placed.length - 1];
+      const indent = prev ? (prev.text.trimEnd().endsWith(":") ? Math.min(prev.indent + 4, 8) : prev.indent) : 0;
+      puz.placed.push({ text, indent });
+      puz.tray.splice(i, 1);
+      renderPuzzle();
+    };
+    trayBox.appendChild(tile);
+  });
+}
+
+function cmdsEqual(a, b) {
+  if (a.length !== b.length) return false;
+  const near = (x, y) => Math.abs(x - y) < 1.5;
+  for (let i = 0; i < a.length; i++) {
+    const p = a[i], q = b[i];
+    if (p.t !== q.t) return false;
+    if (p.t === "line") {
+      if (!near(p.x1, q.x1) || !near(p.y1, q.y1) || !near(p.x2, q.x2) || !near(p.y2, q.y2)) return false;
+      if (p.c !== q.c || p.w !== q.w) return false;
+    } else if (!near(p.x, q.x) || !near(p.y, q.y) || !near(p.r, q.r) || p.c !== q.c) return false;
+  }
+  return true;
+}
+
+async function puzzleCheck() {
+  if (!puz) return;
+  const fb = document.getElementById("feedback");
+  if (puz.tray.length) {
+    fb.className = "feedback err";
+    fb.textContent = "🧩 Every piece belongs somewhere — " + puz.tray.length + " still waiting in the tray.";
+    return;
+  }
+  const code = puz.placed.map(p => " ".repeat(p.indent) + p.text).join("\n");
+  stdoutBuf = "";
+  let cmds;
+  try {
+    pyodide.runPython("reset()");
+    await pyodide.runPythonAsync(code);
+    cmds = JSON.parse(pyodide.runPython("_dump()"));
+  } catch (err) { showError(err); return; }
+  const outOk = stdoutBuf.trim() === puz.targetOut;
+  if (cmdsEqual(cmds, puz.targetCmds) && outOk) {
+    puzzlesSolved[puz.item.id] = true;
+    localStorage.setItem(PUZ_KEY, JSON.stringify(puzzlesSolved));
+    if (dueReviewGate() === puz.item.g) completeReview(puz.item.g);
+    fb.className = "feedback ok";
+    fb.textContent = "✅ 🧩 Same masterpiece — your order works! (Even if it wasn't the original order — same result means also correct.)";
+    confetti();
+    clearCanvas();
+    await animate(cmds);
+    renderStdoutPuz();
+  } else {
+    /* their attempt in color, the goal as ghost underneath — the difference teaches */
+    drawGhost(puz.targetCmds);
+    const ctx = setupCanvas();
+    for (const s of cmds) {
+      if (s.t === "dot") { ctx.fillStyle = s.c; ctx.beginPath(); ctx.arc(s.x, -s.y, s.r, 0, 7); ctx.fill(); }
+      else { ctx.strokeStyle = s.c; ctx.lineWidth = s.w; ctx.beginPath(); ctx.moveTo(s.x1, -s.y1); ctx.lineTo(s.x2, -s.y2); ctx.stroke(); }
+    }
+    renderStdoutPuz();
+    fb.className = "feedback err";
+    fb.textContent = outOk
+      ? "🧭 It runs — but compare your colored drawing with the ghost. Where do they part ways? Rearrange and try again."
+      : "🧭 It runs — but the printed words differ from the goal. Check the order of your print lines.";
+    fb.scrollIntoView({ behavior: "smooth", block: "nearest" });
+  }
+}
+
+function renderStdoutPuz() {
+  const out = document.getElementById("outputs");
+  out.innerHTML = "";
+  stdoutBuf.split("\n").filter(s => s.trim()).forEach(line => {
+    const b = document.createElement("div"); b.className = "bubble"; b.textContent = line; out.appendChild(b);
+  });
+}
+
+function puzzleExit() {
+  puz = null;
+  document.getElementById("puzzlePanel").style.display = "none";
+  document.getElementById("editorCard").style.display = "";
+  clearCanvas(); clearOutputs();
+  document.getElementById("feedback").className = "feedback";
 }
 
 /* ---------------- 👣 Step mode — the notional machine, visible (DECISIONS B28) ----------

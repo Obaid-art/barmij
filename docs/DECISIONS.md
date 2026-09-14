@@ -1,5 +1,22 @@
 # Decisions Log — Barmij
 
+- **2026-09-14 / B47 — The student-answer matrix (founder: "correct and incorrect answers —
+  any crash?").** Every lesson tested against the full spectrum of what a real child submits,
+  through the exact run() pipeline (exec + frames + safeCheck). The matrix:
+  - CORRECT: hand-written honest solutions for the 14 lessons whose missions demand additions
+    (w1l1/w1l2/w1l6/w2l1/w2l3/w2l4/w2l6/w3l6/w4l6/w5l1/w5l6/w6l6/w7l6/w8l6 — including a
+    full dhow-dodge game, a labeled life-chart, and a champion+chart capstone) — ALL 14 PASS.
+    With the 34 run-first starters (B42), every one of the 48 lessons has a proven passing path.
+  - INCOMPLETE: those 14 starters run unmodified — all fail with warm, SPECIFIC coaching
+    ("Nice, 1 message! Now make it three or more"), never a crash, never a dead end.
+  - GARBAGE: 6 hostile inputs (empty editor, prose, broken syntax, infinite while, division
+    by zero, undefined name) x all 48 lessons = 288 runs — zero crashes, zero false passes,
+    zero empty messages; every error lands in a friendly translation.
+  - POPUP ABUSE: Cancel, empty, and words fed to every input() lesson — each lands in one of
+    three good endings: still plays (the fork takes the other road), guides (task coaching),
+    or kind error (the int() and slot-zero translations, both reading like teaching).
+  NOTHING TO FIX — the first pass of eight (B40-B47) to end with an empty fix list.
+
 - **2026-09-14 / B46 — The beauty pass (founder: "beauty, aesthetics?").** A designer's
   critique after six functional audits — fixes stay inside the charter (calm, roles-not-
   decoration, Okabe-Ito):

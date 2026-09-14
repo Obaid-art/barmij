@@ -2,19 +2,14 @@
 "use strict";
 
 /* ---------------- i18n (chrome labels only; lesson content EN for now) ---------------- */
+/* English-only UI (founder, 2026-09-14). Latin warmth words (Ahlan, Yalla, Mumtaz) stay. */
 const STR = {
   en: { journey: "🗺️ Journey", run: "▶ Run", reset: "Reset code", hint: "💡 Hint", next: "Next lesson →",
         task: "Your mission", predict: "🔮 Predict first", loading: "Waking Python up… (first time takes a moment)",
-        world: "World 1 — First Lines", worldSub: "Real Python. Real drawings. Your first six spells.",
-        editor: "Your code", locked: "Finish the lesson before this one first 🙂", lang: "عربي",
+        editor: "Your code", locked: "Finish the lesson before this one first 🙂",
         storyGo: "Yalla — continue ▸", skip: "Skip to the mission ▸" },
-  ar: { journey: "🗺️ الرحلة", run: "▶ شغّل", reset: "أعد الكود", hint: "💡 تلميح", next: "الدرس التالي ←",
-        task: "مهمتك", predict: "🔮 توقّع أولاً", loading: "بايثون يستيقظ… (أول مرة تأخذ لحظات)",
-        world: "العالم ١ — الأسطر الأولى", worldSub: "بايثون حقيقي. رسومات حقيقية. تعاويذك الست الأولى.",
-        editor: "كودك", locked: "أنهِ الدرس السابق أولاً 🙂", lang: "English",
-        storyGo: "يلا — تابع ◂", skip: "انتقل إلى المهمة ◂" },
 };
-let lang = localStorage.getItem("barmij_lang") || "en";
+const lang = "en";
 
 /* ---------------- state ---------------- */
 const PROG_KEY = "barmij_v1_progress";
@@ -131,11 +126,6 @@ window.addEventListener("DOMContentLoaded", async () => {
   document.getElementById("demoSkipBtn").addEventListener("click", () => revealCodeStage(true));
   document.getElementById("storyGoBtn").addEventListener("click", storyGo);
   document.getElementById("demoCode").addEventListener("keydown", heroKey);
-  document.getElementById("langBtn").addEventListener("click", () => {
-    lang = lang === "en" ? "ar" : "en";
-    localStorage.setItem("barmij_lang", lang);
-    applyLang(); renderSidebar();
-  });
   document.getElementById("bankBtn").addEventListener("click", openBank);
   document.getElementById("bankCount").textContent = CODEBANK.length;
   const toggleDrawer = () => document.body.classList.toggle("drawer-open");
@@ -172,15 +162,13 @@ function applyLang() {
   document.getElementById("journeyBtn").textContent = s.journey;
   document.getElementById("storyGoBtn").textContent = s.storyGo;
   document.getElementById("demoSkipBtn").textContent = s.skip;
-  document.getElementById("langBtn").textContent = s.lang;
-  if (!pyReady) document.getElementById("loading").textContent = s.loading;
 }
 
 /* ---------------- ranks — earned by mastery, never by age (DECISIONS B14) ---------------- */
 const RANKS = [
-  { key: "mustakshif", label: "مستكشف Mustakshif", icon: "🧭" },
-  { key: "bannaa", label: "بنّاء Bannaa", icon: "🛠️" },
-  { key: "raid", label: "رائد Ra'id", icon: "🦅" },
+  { key: "mustakshif", label: "Mustakshif", icon: "🧭" },
+  { key: "bannaa", label: "Bannaa", icon: "🛠️" },
+  { key: "raid", label: "Ra'id", icon: "🦅" },
 ];
 function worldComplete(w) { return w.lessons.every(ls => (progress[ls.id] || 0) > 0); }
 function computeRank() {
@@ -351,7 +339,7 @@ function renderBank() {
         <h3>${it.emoji} ${it.title}</h3>
         <div class="cap">${it.caption}</div>
         <div class="meta">
-          <span class="rank-badge ${it.rank}">${it.rank === "m" ? "مستكشف" : it.rank === "b" ? "بنّاء" : "رائد"}</span>
+          <span class="rank-badge ${it.rank}">${it.rank === "m" ? "Mustakshif" : it.rank === "b" ? "Bannaa" : "Ra'id"}</span>
           ${it.talks ? '<span class="talks-badge">🎤 talks to you</span>' : ""}
           ${it.think ? '<span class="think-badge">🧠 guided</span>' : ""}
           <span class="gate-tag">${it.label}</span>
@@ -532,7 +520,7 @@ function renderSidebar() {
     const head = document.createElement("div");
     head.className = "world-title";
     if (wi > 0) head.style.marginTop = "16px";
-    head.textContent = lang === "ar" && world.titleAr ? world.titleAr : world.title;
+    head.textContent = world.title;
     const sub = document.createElement("div");
     sub.className = "world-sub";
     sub.textContent = world.sub;

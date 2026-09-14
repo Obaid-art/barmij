@@ -505,11 +505,9 @@ const WORLD2_LESSONS = [
 /* ---------------- worlds & flat index ---------------- */
 const WORLDS = [
   { id: "w1", title: "World 1 — First Lines",
-    titleAr: "العالم ١ — الأسطر الأولى",
     sub: "Real Python. Real drawings. Your first six spells.",
     lessons: WORLD1_LESSONS },
   { id: "w2", title: "World 2 — Decisions",
-    titleAr: "العالم ٢ — القرارات",
     sub: "Programs that listen, choose, and surprise you.",
     lessons: WORLD2_LESSONS },
 ];

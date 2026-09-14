@@ -1,4 +1,4 @@
-/* Barmij برمج — design language: colors encode ROLES, never decoration.
+/* Barmij — design language: colors encode ROLES, never decoration.
    blue = Python's words · lavender = names you invent · amber = values · rose = effects */
 :root {
   /* Palette retuned to the Okabe-Ito colorblind-safe range (DESIGN_CHARTER.md §III.9).

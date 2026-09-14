@@ -50,7 +50,7 @@ const CODEBANK = [
   { id: "cb010", rank: "m", world: 1, emoji: "🗣️", title: "Salam, world",
     caption: "The oldest tradition in programming — greeting the world. In both our languages.",
     remix: "Add a third line greeting your city: print(\"Salam, Al Ain!\")",
-    code: `print("السلام عليكم يا عالم")\nprint("Hello, world — from the UAE!")\n`, talks: true },
+    code: `print("Salam, world!")\nprint("Hello from the UAE!")\n`, talks: true },
 
   /* ---------- Bannaa — loops, chance, decisions ---------- */
   { id: "cb011", rank: "b", world: 1, emoji: "🌀", title: "Spiral galaxy",
@@ -430,7 +430,7 @@ const CODEBANK = [
   { id: "cb092", rank: "m", world: 1, emoji: "🕌", title: "Salam stack",
     caption: "Greetings of the world, stacked in print.",
     remix: "Add greetings you know — French? Tagalog? Urdu?",
-    code: `print("Salam!")\nprint("السلام عليكم")\nprint("Hello!")\nprint("Namaste!")\nprint("Ni hao!")\nprint("One world, many greetings, one print.")\n`, talks: true },
+    code: `print("Salam!")\nprint("Marhaba!")\nprint("Hello!")\nprint("Namaste!")\nprint("Ni hao!")\nprint("One world, many greetings, one print.")\n`, talks: true },
   { id: "cb093", rank: "b", world: 1, emoji: "🌳", title: "Ghaf tree sketch",
     caption: "The national tree — a trunk and a crown of rays.",
     remix: "A wider crown: range(9) with right(20) between rays.",

@@ -1,5 +1,11 @@
 # Decisions Log — Barmij
 
+- **2026-09-14 / B29 — English-only product (founder: "no more arabic").** All Arabic script
+  removed from the UI, content, and license page: logo is "Barmij" alone, language toggle
+  deleted, ranks shown as Mustakshif/Bannaa/Ra'id (Latin), the two bank items with Arabic
+  strings rewritten. Latin warmth words (Ahlan, Yalla, Mumtaz, Salam) STAY — they are the voice.
+  Kept invisible: the Arabic-keyboard detection regex (functional helper, never displayed).
+  The Arabic content track is off the roadmap unless the founder reopens it.
 - **2026-09-14 / B28 — 👣 Step mode: the notional machine, visible** (founder: "in this pass we
   get this, in another pass we get that — writing code while seeing a window showing what's
   happening"). A Step button beside Run: the code runs once under a real Python line-tracer,

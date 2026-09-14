@@ -65,7 +65,9 @@ def distance(x1, y1, x2, y2):
     return math.hypot(x2 - x1, y2 - y1)
 
 def write(x, y, msg):
-    _cmds.append({"t": "text", "x": float(x), "y": float(y), "m": str(msg), "c": _state["color"]})
+    if len(_cmds) > 3000:
+        raise RuntimeError("DRAW_LIMIT")
+    _cmds.append({"t": "text", "x": float(x), "y": float(y), "m": str(msg)[:200], "c": _state["color"]})
 
 def key_pressed(name):
     try:
@@ -834,7 +836,7 @@ async function run() {
       fb.textContent = "🔴 It's ALIVE — arrows to play, Esc or ⏹ to stop." + (currentBankItem ? " Remix: " + currentBankItem.remix : "");
       if (currentBankItem && dueReviewGate() === currentBankItem.g) completeReview(currentBankItem.g);
     } else {
-      const verdict = LESSONS[current].check({ cmds, lines: [], code, stdout: stdoutBuf, frames });
+      const verdict = safeCheck(LESSONS[current], { cmds, lines: [], code, stdout: stdoutBuf, chart: chartShownThisRun, frames });
       if (verdict.pass) {
         fb.className = "feedback ok";
         fb.textContent = "✅ " + verdict.msg + " (Playing now — Esc stops.)";
@@ -872,7 +874,7 @@ async function run() {
     if (currentBankItem && dueReviewGate() === currentBankItem.g) completeReview(currentBankItem.g);
     return;
   }
-  const verdict = LESSONS[current].check({ cmds, lines, code, stdout: stdoutBuf, chart: chartShownThisRun });
+  const verdict = safeCheck(LESSONS[current], { cmds, lines, code, stdout: stdoutBuf, chart: chartShownThisRun, frames: [] });
   if (verdict.pass) {
     const YAY = ["Mumtaz! 🌟", "Ya salam! ✨", "Wallah, beautiful! 🎨", "Genius! 🧠", "Masha'Allah! 🌙", "Yalla, look at that! 🚀"];
     fb.className = "feedback ok";
@@ -895,13 +897,29 @@ async function run() {
   fb.scrollIntoView({ behavior: "smooth", block: "nearest" });
 }
 
+/* a check must never take the feedback down with it — surprises get a kind, honest answer */
+function safeCheck(lesson, ctx) {
+  try { return lesson.check(ctx); }
+  catch (e) {
+    console.error("check() crashed for " + lesson.id, e);
+    return { pass: false, msg: "Your code ran — but it surprised my checker! Compare it with the mission once more, or Reset code and rebuild." };
+  }
+}
+
 function renderStdout() {
   const out = document.getElementById("outputs");
-  stdoutBuf.split("\n").filter(s => s.trim().length).forEach(line => {
+  const all = stdoutBuf.split("\n").filter(s => s.trim().length);
+  all.slice(0, 200).forEach(line => {
     const b = document.createElement("div");
-    b.className = "bubble"; b.textContent = line;
+    b.className = "bubble"; b.textContent = line.slice(0, 400);
     out.appendChild(b);
   });
+  if (all.length > 200) {
+    const b = document.createElement("div");
+    b.className = "bubble";
+    b.textContent = `… and ${all.length - 200} more lines — all real, just too many to show one by one.`;
+    out.appendChild(b);
+  }
 }
 
 function clearOutputs() { document.getElementById("outputs").innerHTML = ""; }
@@ -973,12 +991,19 @@ const cv = () => document.getElementById("world");
    (overlays: the child's attempt on top of the ghost). Cheaper too: no realloc per frame. */
 function setupCanvas(keep) {
   const c = cv(), dpr = window.devicePixelRatio || 1;
-  const w = c.clientWidth || 640, h = 460;
-  if (c.width !== w * dpr || c.height !== h * dpr) { c.width = w * dpr; c.height = h * dpr; }
+  const w = c.clientWidth || 640;
+  /* the logical stage is 480x460 (x ±240, y ±230) — on narrow screens the WHOLE stage
+     scales down to fit, so the falcon's walls and the zellij's edges are never cut off */
+  const s = Math.min(1, w / 480);
+  const h = Math.round(460 * s);
+  if (c.width !== w * dpr || c.height !== h * dpr) {
+    c.width = w * dpr; c.height = h * dpr;
+    c.style.height = h + "px";
+  }
   const ctx = c.getContext("2d");
   ctx.setTransform(1, 0, 0, 1, 0, 0);
   if (!keep) ctx.clearRect(0, 0, c.width, c.height);
-  ctx.setTransform(dpr, 0, 0, dpr, w * dpr / 2, h * dpr / 2);
+  ctx.setTransform(dpr * s, 0, 0, dpr * s, w * dpr / 2, h * dpr / 2);
   ctx.lineCap = "round"; ctx.lineJoin = "round";
   return ctx;
 }
@@ -1455,8 +1480,9 @@ async function startChallenge(c) {
   document.getElementById("chHintBox").style.display = "none";
   document.getElementById("feedback").className = "feedback";
   clearOutputs(); hideSaveBar();
-  /* build the target silently */
+  /* build the target silently — on scrubbed ground, so no child global can shadow a tool */
   stdoutBuf = "";
+  pyodide.runPython("_scrub()");
   pyodide.runPython("reset()");
   await pyodide.runPythonAsync(c.code);
   chState = { def: c, targetCmds: JSON.parse(pyodide.runPython("_dump()")) };
@@ -1734,8 +1760,9 @@ async function puzzleStart(it) {
   document.getElementById("feedback").className = "feedback";
   clearOutputs();
   currentBankItem = it;
-  /* run the original once, silently, to learn the target behavior */
+  /* run the original once, silently, to learn the target behavior — on scrubbed ground */
   stdoutBuf = "";
+  pyodide.runPython("_scrub()");
   pyodide.runPython("reset()");
   await pyodide.runPythonAsync(it.code);
   const targetCmds = JSON.parse(pyodide.runPython("_dump()"));
@@ -1860,11 +1887,8 @@ async function puzzleCheck() {
 }
 
 function renderStdoutPuz() {
-  const out = document.getElementById("outputs");
-  out.innerHTML = "";
-  stdoutBuf.split("\n").filter(s => s.trim()).forEach(line => {
-    const b = document.createElement("div"); b.className = "bubble"; b.textContent = line; out.appendChild(b);
-  });
+  document.getElementById("outputs").innerHTML = "";
+  renderStdout();
 }
 
 function puzzleExit() {

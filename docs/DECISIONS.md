@@ -1,5 +1,30 @@
 # Decisions Log — Barmij
 
+- **2026-09-14 / B42 — Third deep pass: adversarial checks, scale guards, MOBILE.** Findings:
+  1. CHECK CRASH = SILENT DEATH: an accidentally INDENTED def tick() (isLive is line-anchored,
+     the W6 checks' guards are not) sent live-shaped code down the normal path, where
+     ctx.frames was undefined — w6l1–w6l4 checks threw and the child got NO feedback at all.
+     Fixed twice over: the normal path now passes frames: [] (checks then answer with real
+     guidance — verified: "change a game jar inside tick"), and every check runs inside
+     safeCheck() — a crashing check can never take the feedback down again.
+  2. MOBILE WAS CLIPPED: the logical stage assumes x ±240 but a phone canvas is ~311px wide —
+     the falcon's walls (±220) and zellij edges were off-screen. setupCanvas now scales the
+     whole 480x460 logical stage to fit narrow screens (pixel-verified: all four ±220 corners
+     visible at 375px). Rest of mobile audited clean: zero horizontal overflow on lesson/
+     bank/challenges/puzzle, drawer fine.
+  3. SCALE GUARDS: write() joined DRAW_LIMIT (was the one uncapped drawing command — a while
+     of write() piled unbounded canvas text) and clips messages at 200 chars; stdout bubbles
+     cap at 200 + an honest "…and N more lines" (4000-print flood verified snappy); challenge
+     and puzzle target builds now run on scrubbed ground (a child's forward = 5 can no longer
+     poison a ghost).
+  4. Starter-passes-check sweep: 34 teach-lessons pass on first Run — audited each against
+     its task and kept BY DESIGN (PRIMM's Run phase + gentle slope); every lesson whose task
+     adds a quantified demand (w1l1/w1l2/w2l1/w2l3/w2l4/w5l1, all six Makes) does enforce it.
+  5. Cosmetics: bank grid 2-column breakpoint fixed (1250px relic → 640px, matching the other
+     grids); dead CSS rules from removed features deleted (.logo .ar, .subtitle, .stage,
+     .puz-indent); license.html "name or characters" → "name" (B23: no characters exist).
+  259/259 programs re-verified; gates PASS; locking, star flow, drawer re-smoked. Assets v20.
+
 - **2026-09-14 / B41 — Deep flow & pedagogy audit (founder: reveal order, flow killers,
   ugliness, "are we jumping concepts / expecting too much?").** Findings and fixes:
   1. "SHOW EVERYTHING" LEFT BUILDS BLANK: revealBeat played only the LAST beat's build, so a

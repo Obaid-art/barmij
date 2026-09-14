@@ -44,8 +44,6 @@ header {
 }
 .logo { display: flex; align-items: baseline; gap: 8px; }
 .logo .en { font-size: 26px; font-weight: 900; color: var(--blue); letter-spacing: .3px; }
-.logo .ar { font-size: 24px; font-weight: 700; color: var(--lav); }
-.subtitle { color: var(--muted); font-size: 13.5px; }
 .spacer { flex: 1; }
 .langbtn {
   border: 1.5px solid var(--line); background: var(--card); border-radius: 999px;
@@ -156,7 +154,6 @@ code.r { background: var(--rose-soft); color: var(--rose-text); border: 3px doub
 .cm-s-barmij .cm-operator { color: #2e3a46; }
 .cm-s-barmij .cm-comment { color: #7a8694; font-style: italic; }
 
-.stage { display: grid; grid-template-columns: 1fr; gap: 14px; }
 .canvas-card {
   background: var(--card); border-radius: var(--radius); box-shadow: var(--shadow);
   padding: 12px; position: relative;
@@ -258,7 +255,7 @@ figure svg [fill="#3f9d6e"] { fill: var(--green); }
 @keyframes rankpulse { 50% { transform: scale(1.12); box-shadow: 0 0 0 6px rgba(156,134,207,.25); } }
 
 .bank-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 14px; }
-@media (max-width: 1250px) { .bank-grid { grid-template-columns: 1fr; } }
+@media (max-width: 640px) { .bank-grid { grid-template-columns: 1fr; } }
 .bank-card {
   border: 1.5px solid var(--line); border-radius: 12px; padding: 12px 14px;
   background: #fff; cursor: pointer; transition: transform .12s, box-shadow .12s;
@@ -380,7 +377,6 @@ figure svg [fill="#3f9d6e"] { fill: var(--green); }
   padding: 2px 8px; cursor: pointer;
 }
 .puz-mini:hover { border-color: var(--blue); color: var(--blue-text); }
-.puz-indent { display: inline-block; }
 
 /* guided thinking track */
 .think-step { font-size: 16.5px; line-height: 1.6; color: var(--ink); min-height: 48px; padding: 4px 2px; }

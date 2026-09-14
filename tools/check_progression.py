@@ -28,8 +28,9 @@ INTRO = {
     "randint": (2, 3), "choice": (2, 3),
     "int-conv": (2, 5), "elif": (2, 5), "str-conv": (2, 5),
     "nested-loops": (3, 1), "step-range": (3, 3), "while": (3, 4),
+    "def": (4, 1), "def-params": (4, 2), "return": (4, 4),
 }
-PEEK = set()  # World 3 shipped 2026-09-14; next peeks arrive with World 4 (def/return)
+PEEK = set()  # Worlds 1-4 shipped; next peeks arrive with World 5 (lists/strings/dicts)
 
 EXTRA_DETECTORS = {"str-conv": lambda c: "str(" in c}
 

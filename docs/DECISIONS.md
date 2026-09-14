@@ -1,5 +1,17 @@
 # Decisions Log — Barmij
 
+- **2026-09-14 / B35 — World 4 shipped: Your Own Magic Words** — six lessons: def with the
+  define-vs-call distinction staged explicitly in the build ("Teaching is silent… now we SAY
+  the word") + typing demo · square(size) parameters · poly(sides, size) with computed
+  360/sides — one word, every regular shape · return with the jar-catches-the-answer build ·
+  composition (ray→sun→sky: "all software is this tower") · Make: the Eid card generator
+  (input + own words + print). Engine upgrades shipped with it: **Step mode now walks INSIDE
+  the child's own functions** (parameter jars like size = 90 visible mid-loop — verified) and
+  **RecursionError translated kindly** ("your word calls itself, forever…" — verified).
+  16-item W4 bank batch (bank = 135, all engine-verified); all gates PASS (beats ≤14 words,
+  FK -0.1–3.6; def 16 / def-params 12 / return 6 items; progression W4·L1/L2/L4 soft entries,
+  zero queue-jumping); narration script → 183 clips. The W4L6 check rejected the test author's
+  own 9-line card — the gates guard everyone.
 - **2026-09-14 / B34 — World 3 shipped: Patterns & Power** — six lessons (nested loops with a
   double-handshake typing demo + build beat · the zellij rose window · range(start, stop, step)
   build · the patient while with its "promise" build · the National Day fireworks show ·

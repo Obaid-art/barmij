@@ -33,6 +33,9 @@ DETECTORS = {
     "nested-loops": lambda c: _nested_for(c),
     "step-range": lambda c: re.search(r"range\([^)]+,[^)]+,[^)]+\)", c) is not None,
     "while": lambda c: re.search(r"^\s*while\b", c, re.M) is not None,
+    "def": lambda c: re.search(r"^\s*def\s+\w+\s*\(", c, re.M) is not None,
+    "def-params": lambda c: re.search(r"^\s*def\s+\w+\s*\([^)]+\)", c, re.M) is not None,
+    "return": lambda c: re.search(r"\breturn\b", c) is not None,
 }
 
 # minimum items per shipped-world concept (blueprint ladder = 10; interim floor while growing)

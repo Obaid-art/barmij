@@ -97,6 +97,10 @@ def _step_run(code):
             for k, v in frame.f_globals.items():
                 if k not in _BASELINE and not k.startswith("_") and isinstance(v, (bool, int, float, str)):
                     vs[k] = repr(v)[:32]
+            if frame.f_locals is not frame.f_globals:  # inside a child's own function: show its jars
+                for k, v in frame.f_locals.items():
+                    if not k.startswith("_") and isinstance(v, (bool, int, float, str)):
+                        vs[k] = repr(v)[:32]
             _tr.append({"line": frame.f_lineno, "vars": vs, "nc": len(_cmds), "no": len(_outs)})
         return _tracer
     err = None
@@ -265,6 +269,9 @@ function computeGate(code) {
   add(_nestedForJS(code), 3, 1);
   add(/range\([^)]+,[^)]+,[^)]+\)/.test(code), 3, 3);
   add(/^\s*while\b/m.test(code), 3, 4);
+  add(/^\s*def\s+\w+\s*\(\s*\)/m.test(code), 4, 1);
+  add(/^\s*def\s+\w+\s*\([^)]+\)/m.test(code), 4, 2);
+  add(/\breturn\b/.test(code), 4, 4);
   const g = gates.length ? Math.max(...gates) : 11;
   return { g, peek: false, label: `after W${Math.floor(g / 10)}·L${g % 10}` };
 }
@@ -749,6 +756,8 @@ function friendly(msg) {
     return "Your loop never found its way out — it ran 20,000 steps! A while needs its promise to come true (like n = n + 1 inside the loop).";
   if (/DRAW_LIMIT/.test(last))
     return "Over 3,000 drawn lines — the turtle is exhausted! Try smaller numbers in range().";
+  if (/RecursionError/.test(last))
+    return "Your word calls ITSELF, forever! A word may use other words — but a word that says itself needs an exit door. (That's advanced magic — for now, call a different word.)";
   if (/ZeroDivisionError/.test(last))
     return "You divided by zero! Even computers can't do that one 🙂";
   if (/SyntaxError/.test(last))

@@ -691,6 +691,197 @@ const WORLD3_LESSONS = [
   },
 ];
 
+/* ================= World 4 — Your Own Magic Words ================= */
+
+const WORLD4_LESSONS = [
+  {
+    id: "w4l1",
+    title: "Teach Python a word",
+    subtitle: "def — your first invention",
+    beats: [
+      { t: "Until now you used Python's words. Now you INVENT one." },
+      { t: "Watch a new word being taught:",
+        build: {
+          steps: [
+            { text: "def star():", say: "def — 'dear Python, learn a new word: star.'" },
+            { text: "\n    for i in range(5):\n        forward(120)\n        right(144)", say: "The recipe, indented — this is what the word MEANS." },
+            { text: "\n\nstar()", say: "Teaching is silent. Nothing was drawn yet. Now we SAY the word…" },
+          ],
+          effect: "the star appears — the word obeyed",
+          done: "Teach once. Say it whenever you want, forever.",
+        } },
+      { t: "The great secret: <b>teaching a word is silent — saying it makes it happen</b>." },
+      { t: "Python only knows the words you teach it. Today, its dictionary grew." },
+    ],
+    predict: "The code teaches star() but says it TWICE — how many stars appear?",
+    demo: { steps: [
+      { say: "def, a space, then YOUR word's name — and the empty doors ():", text: "def burst():" },
+      { say: "Enter, four spaces — the recipe belongs to the word:", text: "\n    forward(80)" },
+      { say: "Still inside the word:", text: "\n    back(80)" },
+      { say: "Now leave the recipe — NO spaces — and say your word:", text: "\nburst()" },
+    ]},
+    starter: `def star():\n    for i in range(5):\n        forward(120)\n        right(144)\n\ncolor("gold")\nstar()\npenup()\njump(-150, -60)\npendown()\ncolor("crimson")\nstar()\n`,
+    task: "Run the twin stars. Then teach a SECOND word — burst() or box() — and say both words in one program.",
+    hints: [
+      "A second word is a second def block. Teach both at the top, say them below.",
+      "The word's name is yours to invent — letters and underscores, no spaces.",
+    ],
+    check: (ctx) => {
+      const m = ctx.code.match(/def\s+(\w+)\s*\(\s*\)\s*:/);
+      if (!m) return { pass: false, msg: "Teach a word first: def yourword(): with the recipe indented under it." };
+      const calls = (ctx.code.match(new RegExp("\\b" + m[1] + "\\s*\\(", "g")) || []).length - 1;
+      if (calls < 2) return { pass: false, msg: `You taught "${m[1]}" — now SAY it at least twice. Teaching alone draws nothing.` };
+      if (ctx.lines.length < 8) return { pass: false, msg: "Let your word work — at least 8 drawn lines." };
+      return { pass: true, msg: "Python's dictionary just grew — because YOU taught it. That's what programmers do all day." };
+    },
+  },
+  {
+    id: "w4l2",
+    title: "A word that listens",
+    subtitle: "Parameters — the door in the word",
+    beats: [
+      { t: "Your word can have a <b>door</b> — a jar it receives through." },
+      { t: "Watch the door being built:",
+        build: {
+          steps: [
+            { text: "def square(size):", say: "size — a door. Each call hands a value through it." },
+            { text: "\n    for i in range(4):\n        forward(size)\n        right(90)", say: "Inside, size is a jar — filled by whoever calls." },
+            { text: "\n\nsquare(50)\nsquare(110)", say: "Two calls, two gifts: first size is 50… then 110." },
+          ],
+          effect: "two squares, one word",
+          done: "One recipe, endless sizes. The door makes the word powerful.",
+        } },
+      { t: "Same word + different gift = different result." },
+    ],
+    predict: "square(50), square(110), square(170) — what family of squares appears?",
+    starter: `def square(size):\n    for i in range(4):\n        forward(size)\n        right(90)\n\ncolor("teal")\nwidth(3)\nsquare(50)\nsquare(110)\nsquare(170)\n`,
+    task: "Run the family. Then add TWO more sizes — and a color() change between calls.",
+    hints: [
+      "Each new square is just one more line: square(80).",
+      "color(\"crimson\") before a call paints that square only — until the next color.",
+    ],
+    check: (ctx) => {
+      const m = ctx.code.match(/def\s+(\w+)\s*\(\s*\w+\s*\)\s*:/);
+      if (!m) return { pass: false, msg: "Give your word a door: def square(size): — one name inside the brackets." };
+      const args = [...ctx.code.matchAll(new RegExp("\\b" + m[1] + "\\s*\\(\\s*(\\d+)", "g"))].map(x => x[1]);
+      if (new Set(args).size < 3) return { pass: false, msg: "Call it with at least 3 DIFFERENT sizes — that's the door's whole point." };
+      if (ctx.lines.length < 12) return { pass: false, msg: "Let the family grow — at least 12 lines." };
+      return { pass: true, msg: "One word, many gifts, many squares. You just invented a tool, not a drawing." };
+    },
+  },
+  {
+    id: "w4l3",
+    title: "The universal shape",
+    subtitle: "Two doors — sides AND size",
+    beats: [
+      { t: "Two doors: <code class=\"k\">def</code> <code class=\"v\">poly</code>(<code class=\"v\">sides</code>, <code class=\"v\">size</code>)." },
+      { t: "The turn is computed: 360 ÷ sides. Python writes ÷ as <b>/</b>." },
+      { t: "One word now draws EVERY regular shape that exists." },
+    ],
+    predict: "poly(3, 120), poly(4, 90), poly(6, 70), poly(8, 55) — which shapes will stack up?",
+    starter: `def poly(sides, size):\n    for i in range(sides):\n        forward(size)\n        right(360 / sides)\n\nwidth(3)\ncolor("crimson")\npoly(3, 120)\ncolor("teal")\npoly(4, 90)\ncolor("goldenrod")\npoly(6, 70)\ncolor("mediumorchid")\npoly(8, 55)\n`,
+    task: "Run the shape tower. Then call poly(12, 45) and poly(20, 30) — watch shapes become circles.",
+    hints: [
+      "More sides + smaller size = smoother. poly(36, 15) is almost a perfect circle.",
+      "The order of gifts matters: poly(sides first, size second) — always.",
+    ],
+    check: (ctx) => {
+      if (!/def\s+\w+\s*\(\s*\w+\s*,\s*\w+\s*\)\s*:/.test(ctx.code))
+        return { pass: false, msg: "Two doors, comma between: def poly(sides, size):" };
+      if (!/360\s*\/\s*\w+/.test(ctx.code))
+        return { pass: false, msg: "Let the word compute its own turn: right(360 / sides)." };
+      if (ctx.lines.length < 15) return { pass: false, msg: "Call it more — at least 4 shapes' worth of lines." };
+      return { pass: true, msg: "Triangle, square, hexagon, circle — retired. One word rules them all." };
+    },
+  },
+  {
+    id: "w4l4",
+    title: "A word that answers",
+    subtitle: "return — the gift that comes back",
+    beats: [
+      { t: "Some words don't draw — they <b>answer</b>." },
+      { t: "Watch a word learn to answer:",
+        build: {
+          steps: [
+            { text: "def double(n):", say: "A word with a door, as before…" },
+            { text: "\n    return n * 2", say: "return — send the answer BACK to whoever asked." },
+            { text: "\n\nsize = double(75)", say: "The answer lands in a jar: size is now 150." },
+            { text: "\nforward(size)", say: "…and the drawing uses it." },
+          ],
+          effect: "size = 150",
+          done: "Ask a word a question. Catch its answer in a jar. Use it.",
+        } },
+      { t: "print shows a human. <code class=\"k\">return</code> hands to the PROGRAM." },
+    ],
+    predict: "Each square's size is double the last — 40, then ?, then ? — how big is the third?",
+    starter: `def double(n):\n    return n * 2\n\ndef square(size):\n    for i in range(4):\n        forward(size)\n        right(90)\n\nwidth(3)\ns = 40\ncolor("teal")\nsquare(s)\ns = double(s)\ncolor("goldenrod")\nsquare(s)\ns = double(s)\ncolor("crimson")\nsquare(s)\n`,
+    task: "Run the doubling squares. Then teach triple(n) — return n * 3 — and grow a second family with it.",
+    hints: [
+      "triple is double's twin: def triple(n): return n * 3.",
+      "The jar trick: s = triple(s) REPLACES the jar with the answer. That's how growth compounds.",
+    ],
+    check: (ctx) => {
+      if (!/\breturn\b/.test(ctx.code))
+        return { pass: false, msg: "The lesson's magic is return — a word must hand an answer back." };
+      if (!/\w+\s*=\s*\w+\s*\(/.test(ctx.code))
+        return { pass: false, msg: "Catch the answer in a jar: size = double(75)." };
+      if (ctx.lines.length < 12) return { pass: false, msg: "Use the answers to draw — at least 12 lines." };
+      return { pass: true, msg: "Words that answer + jars that catch = calculation itself. This is the heart of all software." };
+    },
+  },
+  {
+    id: "w4l5",
+    title: "Words made of words",
+    subtitle: "Composition — the tower of meaning",
+    beats: [
+      { t: "The deepest magic: a new word may USE your words." },
+      { t: "<code class=\"v\">ray</code>() is taught… then <code class=\"v\">sun</code>() is taught USING ray()." },
+      { t: "Words build words build words. <b>All software is this tower.</b>" },
+    ],
+    predict: "sun() says ray() twelve times, turning 30 between — what rises?",
+    starter: `def ray():\n    forward(75)\n    back(75)\n\ndef sun():\n    for i in range(12):\n        ray()\n        right(30)\n\ncolor("gold")\nwidth(4)\nsun()\npenup()\njump(150, 90)\npendown()\ncolor("darkorange")\nsun()\n`,
+    task: "Two suns rise. Now teach sky() — a word that says sun() in THREE places. One word, whole sky.",
+    hints: [
+      "sky()'s recipe: penup, jump somewhere, pendown, sun() — three times over.",
+      "Then the whole program below the defs becomes just: sky()",
+    ],
+    check: (ctx) => {
+      const defs = [...ctx.code.matchAll(/def\s+(\w+)\s*\(/g)].map(x => x[1]);
+      if (defs.length < 2) return { pass: false, msg: "Teach at least two words — one of them built FROM the other." };
+      if (!defs.some(n => new RegExp("\\n\\s+" + n + "\\s*\\(").test(ctx.code)))
+        return { pass: false, msg: "The tower is missing: one of your words must be CALLED inside another word's recipe." };
+      if (ctx.lines.length < 20) return { pass: false, msg: "Let the tower shine — at least 20 lines of sky." };
+      return { pass: true, msg: "ray builds sun builds sky. You just discovered how every program on Earth is made." };
+    },
+  },
+  {
+    id: "w4l6",
+    title: "Challenge: the Eid card generator",
+    subtitle: "Make — a machine that makes cards",
+    beats: [
+      { t: "The final make: a machine that generates Eid cards." },
+      { t: "Teach your words: a frame word, a star word — whatever your card needs." },
+      { t: "Ask the name with <code class=\"k\">input</code>. Draw with your words. Greet with <code class=\"k\">print</code>." },
+      { t: "Every card it makes is different. Every card is yours." },
+    ],
+    starter: `# The Eid Card Generator\n# Your words, your card. A frame? Stars? A crescent?\n\nname = input("Who is this Eid card for?")\n\n`,
+    task: "Build it: teach at least 2 of your own words, use them to draw the card, and print a greeting with the name.",
+    hints: [
+      "frame(): four forward/right lines around the edge. star(size): you've known it since World 1.",
+      "Scatter stars: penup, jump(x, y), pendown, star(30) — inside a loop for many.",
+      "The greeting glues: print(\"Eid Mubarak, \" + name + \"!\")",
+    ],
+    check: (ctx) => {
+      const defs = [...ctx.code.matchAll(/def\s+(\w+)\s*\(/g)].map(x => x[1]);
+      if (defs.length < 2) return { pass: false, msg: "A generator needs its own vocabulary — teach at least 2 words with def." };
+      if (!/input\s*\(/.test(ctx.code)) return { pass: false, msg: "Whose card is it? Ask with input(...)." };
+      if (!/print\s*\(/.test(ctx.code)) return { pass: false, msg: "Greet them! print the name into an Eid wish." };
+      if (ctx.lines.length < 10) return { pass: false, msg: "Decorate — a card deserves at least 10 drawn lines." };
+      return { pass: true, msg: "🌙 A machine that makes gifts. World 4 complete — Python speaks YOUR words now. Eid Mubarak!" };
+    },
+  },
+];
+
 /* ---------------- worlds & flat index ---------------- */
 const WORLDS = [
   { id: "w1", title: "World 1 — First Lines",
@@ -702,5 +893,8 @@ const WORLDS = [
   { id: "w3", title: "World 3 — Patterns & Power",
     sub: "Repeat the repeating — the geometry of our mosques, the shows of our Union.",
     lessons: WORLD3_LESSONS },
+  { id: "w4", title: "World 4 — Your Own Magic Words",
+    sub: "Teach Python new words — then build words from words.",
+    lessons: WORLD4_LESSONS },
 ];
 const LESSONS = WORLDS.flatMap(w => w.lessons);

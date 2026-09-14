@@ -1,7 +1,7 @@
 # Narration Recording Script
 _One line per clip. Record as `app/audio/<ID>.mp3`, then map the ID in
 `app/audio_manifest.js`. Warm, unhurried, like reading to one child. (B33)_
-**149 clips total.**
+**183 clips total.**
 
 
 ## Lesson w1l1
@@ -146,6 +146,52 @@ _One line per clip. Record as `app/audio/<ID>.mp3`, then map the ID in
 - **w3l6-b1** — Choose N shapes: 6, 8, 10 or 12. Turn = 360 ÷ N.
 - **w3l6-b2** — Any inner shape: square, triangle, hexagon… or something stranger.
 - **w3l6-b3** — Mosques kept these patterns for centuries. Yours starts today.
+
+## Lesson w4l1
+- **w4l1-b0** — Until now you used Python's words. Now you INVENT one.
+- **w4l1-b1** — Watch a new word being taught:
+- **w4l1-b2** — The great secret: teaching a word is silent — saying it makes it happen .
+- **w4l1-b3** — Python only knows the words you teach it. Today, its dictionary grew.
+- **w4l1-d0** — def, a space, then YOUR word's name — and the empty doors ():
+- **w4l1-d1** — Enter, four spaces — the recipe belongs to the word:
+- **w4l1-d2** — Still inside the word:
+- **w4l1-d3** — Now leave the recipe — NO spaces — and say your word:
+- **w4l1-bl0** — def — 'dear Python, learn a new word: star.'
+- **w4l1-bl1** — The recipe, indented — this is what the word MEANS.
+- **w4l1-bl2** — Teaching is silent. Nothing was drawn yet. Now we SAY the word…
+
+## Lesson w4l2
+- **w4l2-b0** — Your word can have a door — a jar it receives through.
+- **w4l2-b1** — Watch the door being built:
+- **w4l2-b2** — Same word + different gift = different result.
+- **w4l2-bl0** — size — a door. Each call hands a value through it.
+- **w4l2-bl1** — Inside, size is a jar — filled by whoever calls.
+- **w4l2-bl2** — Two calls, two gifts: first size is 50… then 110.
+
+## Lesson w4l3
+- **w4l3-b0** — Two doors: def poly ( sides , size ).
+- **w4l3-b1** — The turn is computed: 360 ÷ sides. Python writes ÷ as / .
+- **w4l3-b2** — One word now draws EVERY regular shape that exists.
+
+## Lesson w4l4
+- **w4l4-b0** — Some words don't draw — they answer .
+- **w4l4-b1** — Watch a word learn to answer:
+- **w4l4-b2** — print shows a human. return hands to the PROGRAM.
+- **w4l4-bl0** — A word with a door, as before…
+- **w4l4-bl1** — return — send the answer BACK to whoever asked.
+- **w4l4-bl2** — The answer lands in a jar: size is now 150.
+- **w4l4-bl3** — …and the drawing uses it.
+
+## Lesson w4l5
+- **w4l5-b0** — The deepest magic: a new word may USE your words.
+- **w4l5-b1** — ray () is taught… then sun () is taught USING ray().
+- **w4l5-b2** — Words build words build words. All software is this tower.
+
+## Lesson w4l6
+- **w4l6-b0** — The final make: a machine that generates Eid cards.
+- **w4l6-b1** — Teach your words: a frame word, a star word — whatever your card needs.
+- **w4l6-b2** — Ask the name with input . Draw with your words. Greet with print .
+- **w4l6-b3** — Every card it makes is different. Every card is yours.
 
 ## Guided thinking (Code Bank)
 - **cb001-t0** — What do I want? A square — four equal sides.

@@ -23,13 +23,14 @@ DETECTORS = {
     "loop-var-use": lambda c: _loop_var_used(c),
     "input": lambda c: "input(" in c,
     "string-glue": lambda c: re.search(r"\"\s*\+|\+\s*\"|\+\s*str\(", c) is not None,
-    "int-conv": lambda c: "int(" in c,
+    "int-conv": lambda c: re.search(r"(?<![A-Za-z_])int\(", c) is not None,
     "if": lambda c: re.search(r"^\s*if\b", c, re.M) is not None,
-    "elif-else": lambda c: "elif" in c or re.search(r"^\s*else\s*:", c, re.M) is not None,
+    "else": lambda c: re.search(r"^\s*else\s*:", c, re.M) is not None,  # taught WITH if (fork lesson)
+    "elif": lambda c: re.search(r"\belif\b", c) is not None,
     "comparisons": lambda c: "==" in c or re.search(r"[<>]", c) is not None,
     "randint": lambda c: "randint" in c,
     "choice": lambda c: "choice" in c,
-    "nested-loops [W3]": lambda c: len(re.findall(r"\bfor\s+\w+\s+in\b", c)) >= 2,
+    "nested-loops [W3]": lambda c: _nested_for(c),
     "step-range [W3]": lambda c: re.search(r"range\([^)]+,[^)]+,[^)]+\)", c) is not None,
     "while [W3]": lambda c: re.search(r"^\s*while\b", c, re.M) is not None,
 }
@@ -37,6 +38,22 @@ DETECTORS = {
 # minimum items per shipped-world concept (blueprint ladder = 10; interim floor while growing)
 MIN_PER_CONCEPT = 6
 SHIPPED = [k for k in DETECTORS if "[W3]" not in k]
+
+
+def _nested_for(c):
+    """True only for a for INSIDE another for (sequential loops are innocent)."""
+    stack = []  # indents of currently-open for blocks
+    for line in c.split("\n"):
+        if not line.strip():
+            continue
+        indent = len(line) - len(line.lstrip())
+        while stack and indent <= stack[-1]:
+            stack.pop()
+        if re.match(r"\s*for\s+\w+\s+in\b", line):
+            if stack:
+                return True
+            stack.append(indent)
+    return False
 
 
 def _loop_var_used(c):

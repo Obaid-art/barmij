@@ -164,6 +164,7 @@ const WORLD1_LESSONS = [
       { t: "They style whatever the pen draws <b>next</b>." },
       { t: "It knows 100+ colors: <code class=\"a\">\"red\"</code> <code class=\"a\">\"teal\"</code> <code class=\"a\">\"hotpink\"</code> <code class=\"a\">\"royalblue\"</code> <code class=\"a\">\"orchid\"</code>…" },
       { t: "Change color between lines → every side different." },
+      { t: "Bonus pen tricks: <code class=\"k\">penup()</code> lifts the pen · <code class=\"k\">jump(x, y)</code> teleports · <code class=\"k\">dot()</code> stamps." },
     ],
     starter: `color("royalblue")\nwidth(8)\nforward(120)\nright(120)\ncolor("gold")\nforward(120)\nright(120)\ncolor("seagreen")\nforward(120)\n`,
     task: "Draw a picture that uses at least 3 different colors. Any shape you like — this is YOUR art.",

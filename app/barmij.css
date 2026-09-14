@@ -272,6 +272,7 @@ figure svg [fill="#3f9d6e"] { fill: var(--green); }
 .rank-badge.b { background: var(--amber-soft); color: var(--amber-text); border: 1px dashed var(--amber); }
 .rank-badge.r { background: #ddf0e9; color: #00543d; border: 1px dotted var(--green); }
 .talks-badge { font-size: 10.5px; font-weight: 800; padding: 2px 9px; border-radius: 999px; background: var(--rose-soft); color: var(--rose-text); }
+.gate-tag { font-size: 10.5px; font-weight: 800; color: var(--muted); margin-inline-start: auto; }
 .bank-filters { display: flex; gap: 7px; flex-wrap: wrap; margin-top: 10px; }
 .bank-filters button {
   border: 1.5px solid var(--line); background: #fff; border-radius: 999px;

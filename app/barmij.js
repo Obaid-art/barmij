@@ -158,6 +158,42 @@ function renderRank() {
 /* ---------------- the Code Bank (DECISIONS B17) ---------------- */
 let bankMode = false, currentBankItem = null, bankFilter = "all";
 
+/* gentle-order gates (mirrors tools/check_progression.py): each item is placed at the moment
+   all its concepts have been taught — the bank presents the gentle slope, never a cliff */
+function _nestedForJS(code) {
+  const stack = [];
+  for (const line of code.split("\n")) {
+    if (!line.trim()) continue;
+    const indent = line.length - line.trimStart().length;
+    while (stack.length && indent <= stack[stack.length - 1]) stack.pop();
+    if (/^\s*for\s+\w+\s+in\b/.test(line)) {
+      if (stack.length) return true;
+      stack.push(indent);
+    }
+  }
+  return false;
+}
+function computeGate(code) {
+  const gates = [];
+  const add = (cond, w, l) => { if (cond) gates.push(w * 10 + l); };
+  add(/print\(/.test(code), 1, 1);
+  add(/forward\(|back\(|right\(|left\(/.test(code), 1, 2);
+  add(/color\(|width\(|penup\(|jump\(|dot\(/.test(code), 1, 3);
+  add(/^[ \t]*[A-Za-z_]\w*[ \t]*=[ \t]*[^=]/m.test(code), 1, 4);
+  add(/\bfor\s+\w+\s+in\s+range\(/.test(code), 1, 5);
+  add(/input\(|"\s*\+|\+\s*"/.test(code), 2, 1);
+  add(/^\s*if\b/m.test(code) || /^\s*else\s*:/m.test(code) || /==|[<>]/.test(code), 2, 2);
+  add(/randint|choice/.test(code), 2, 3);
+  add(/(?<![A-Za-z_])int\(|\belif\b|str\(/.test(code), 2, 5);
+  const peek = /^\s*while\b/m.test(code) ||
+    /range\([^)]+,[^)]+,[^)]+\)/.test(code) || _nestedForJS(code);
+  const g = peek ? 99 : (gates.length ? Math.max(...gates) : 11);
+  return { g, peek, label: peek ? "🔭 World 3 peek" : `after W${Math.floor(g / 10)}·L${g % 10}` };
+}
+CODEBANK.forEach(it => Object.assign(it, computeGate(it.code)));
+const RANK_ORDER = { m: 0, b: 1, r: 2 };
+CODEBANK.sort((a, b) => a.g - b.g || RANK_ORDER[a.rank] - RANK_ORDER[b.rank] || a.id.localeCompare(b.id));
+
 function openBank() {
   bankMode = true; currentBankItem = null;
   document.getElementById("lessonPanel").style.display = "none";
@@ -180,7 +216,7 @@ function renderBank() {
   const FLT = [["all", "All"], ["m", "🧭 Mustakshif"], ["b", "🛠️ Bannaa"], ["r", "🦅 Ra'id"]];
   panel.innerHTML = `
     <h1>Code Bank</h1>
-    <div class="sub">${CODEBANK.length} original programs — tap one, it runs, then remix it until it's yours.</div>
+    <div class="sub">${CODEBANK.length} original programs, in gentle order — each one uses only what you've already met. Tap, run, remix.</div>
     <div class="bank-filters">${FLT.map(([k, l]) =>
       `<button data-f="${k}" class="${bankFilter === k ? "on" : ""}">${l}</button>`).join("")}</div>
     <div class="bank-grid">${items.map(it => `
@@ -190,6 +226,7 @@ function renderBank() {
         <div class="meta">
           <span class="rank-badge ${it.rank}">${it.rank === "m" ? "مستكشف" : it.rank === "b" ? "بنّاء" : "رائد"}</span>
           ${it.talks ? '<span class="talks-badge">🎤 talks to you</span>' : ""}
+          <span class="gate-tag">${it.label}</span>
         </div>
       </div>`).join("")}</div>`;
   panel.querySelectorAll(".bank-filters button").forEach(b =>

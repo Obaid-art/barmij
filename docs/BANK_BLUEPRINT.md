@@ -31,12 +31,21 @@ Renkl's example-based learning) plus deliberate reinforcement (PEDAGOGY §2-3, �
 | **Independent** | a small goal using mainly this concept | 3 |
 | **Transfer** | this concept in a NEW context (art concept → talking program, etc.) | 2 |
 
-### The arithmetic of 500 (engineered, not vibes)
-- 36 core concepts × 10 ladder items ≈ **360** concept-ladder items
-- **+100 spiral/interleaved items** — each deliberately mixes 2-3 concepts from *earlier* worlds
-  (interleaving & spacing: Rohrer 2012; Cepeda 2006) so old skills stay warm while new ones build
-- **+40 capstone/project seeds** (constructionism: whole small programs worth owning)
-- **= ~500**, every one with a job description.
+### Size (REVISED 2026-09-14, founder: "forget the 500 — no padding")
+There is **no numeric quota**. The bank holds exactly as many items as mastery requires —
+the ladder per concept, the spiral quota, the gates — **and not one more**. An item that
+teaches nothing new and reinforces nothing due is padding, and padding is rejected at review.
+Quality bars replace the number: every concept fully laddered · every unlock point soft ·
+spiral quota met · zero orphans. (~360 ladder + spirals + capstones remains the natural
+*order of magnitude* when all 8 Worlds ship — as an outcome, never a target.)
+
+### Item role 5 — GUIDED think-alouds (added 2026-09-14, founder's ask)
+Selected items carry a **thinking track**: the programmer's actual reasoning, step by tappable
+step, BEFORE the child runs — "What do I want? … What repeats? … So: a loop." This is
+cognitive apprenticeship (Collins, Brown & Newman 1989 — making expert thinking visible) plus
+self-explanation prompting (Chi et al. 1994). Goal per the founder: not professional coders by
+course's end, but **complete foundations + the habit of thinking like a programmer** — ready
+for university. At least one guided item per core concept cluster; marked 🧠 in the bank.
 
 ## Differentiation (the founder: "people are different")
 - Every concept's ladder spans ranks: at least 2 items reachable at Mustakshif presentation

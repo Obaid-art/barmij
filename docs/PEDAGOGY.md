@@ -42,8 +42,18 @@ citations pending (NOT_YET_BUILT.md)._
   specific. No grades, no red X — a hint and another try.
 
 ## 7. Retrieval & spacing (Roediger & Karpicke 2006; Cepeda et al. 2006)
-- Mechanic: each World opens with a 2-minute "warm-up spell" retrieving prior concepts;
-  challenge remixes deliberately reuse older skills.
+- Mechanic (SHIPPED 2026-09-14, B27): passing a lesson schedules its skills at expanding
+  intervals — 2 → 7 → 21 days. A due skill surfaces as ONE gentle, snoozable warm-up banner
+  suggesting a matching bank item; completing it advances the interval. Never blocking, never
+  nagging. Interleaving backs it structurally: 100% of W2 items also exercise W1 skills
+  (enforced by tools/check_progression.py).
+
+## 7b. Cognitive apprenticeship — thinking made visible (Collins, Brown & Newman 1989)
+- Also: self-explanation effect (Chi et al. 1994).
+- Mechanic (SHIPPED 2026-09-14, B27): guided 🧠 bank items open with the programmer's actual
+  reasoning, thought by tappable thought — "What do I want? What repeats? So: a loop." — the
+  expert's invisible thinking made visible BEFORE the run. The founder's goal in one line:
+  graduates who own the foundations and the habit of thinking like a programmer.
 
 ## 8. Multimedia learning (Mayer) — how the material itself must be built
 - Mayer, R. E. (2020). *Multimedia Learning* (3rd ed.), Cambridge University Press — decades of

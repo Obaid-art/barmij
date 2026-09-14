@@ -1,5 +1,15 @@
 # Decisions Log — Barmij
 
+- **2026-09-14 / B27 — Quota killed, thinking shipped, spacing shipped.** (a) The "500" target
+  is DEAD (founder: "no padding") — the bank holds what mastery requires, gated by quality bars
+  only (BANK_BLUEPRINT revised). (b) **Guided think-alouds**: bank items can carry a thinking
+  track — the programmer's reasoning, thought by tappable thought, before the run (cognitive
+  apprenticeship, Collins/Brown/Newman; self-explanation, Chi). Six exemplars shipped (🧠 badge),
+  one per concept cluster; more with each World. (c) **Spaced-repetition scheduler shipped**
+  (PEDAGOGY §3): passing a lesson schedules its skills at 2 → 7 → 21 days; a due skill surfaces
+  as ONE gentle snoozable warm-up banner suggesting a matching bank item; running it advances
+  the interval. Goal restated per founder: not professional coders — complete foundations +
+  the habit of thinking like a programmer, ready for university.
 - **2026-09-14 / B26 — Bank Blueprint adopted + batch 2 shipped.** The 500 is engineered, not
   vibes: 36 concepts × worked/tweak/independent/transfer ladder (+100 interleaved spirals, +40
   capstones) = ~500, machine-checked by tools/check_bank.py (auto-detects concepts from code —

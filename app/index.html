@@ -7,7 +7,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700;800;900&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/codemirror.min.css">
-<link rel="stylesheet" href="barmij.css?v=4">
+<link rel="stylesheet" href="barmij.css?v=5">
 </head>
 <body>
 
@@ -21,6 +21,13 @@
 
 <div id="drawerOverlay"></div>
 <div class="layout">
+
+  <div class="warmup" id="warmupCard" style="display:none">
+    <span class="wicon">🔁</span>
+    <span id="warmupText"></span>
+    <button class="btn demo-primary" id="warmupGo">Warm up ▸</button>
+    <button class="btn ghost" id="warmupLater">later</button>
+  </div>
 
   <aside class="side">
     <div id="lessonList"></div>
@@ -65,6 +72,12 @@
     </div>
     <div class="task" id="taskText"></div>
 
+    <div class="demo-card" id="thinkCard" style="display:none">
+      <div class="demo-head"><span class="demo-title">🧠 Think like a programmer</span></div>
+      <div class="think-step" id="thinkStep"></div>
+      <div class="demo-btns"><button class="btn demo-primary" id="thinkNext">next thought ▸</button></div>
+    </div>
+
     <div class="editor-card" id="editorCard">
       <div class="editor-head">
         <span class="title" id="editorTitle">Your code</span>
@@ -100,8 +113,8 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/codemirror.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/mode/python/python.min.js"></script>
 <script src="https://cdn.jsdelivr.net/pyodide/v0.26.2/full/pyodide.js"></script>
-<script src="lessons.js?v=4"></script>
-<script src="codebank.js?v=4"></script>
-<script src="barmij.js?v=4"></script>
+<script src="lessons.js?v=5"></script>
+<script src="codebank.js?v=5"></script>
+<script src="barmij.js?v=5"></script>
 </body>
 </html>

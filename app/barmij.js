@@ -98,6 +98,7 @@ window.addEventListener("DOMContentLoaded", async () => {
   applyLang();
   renderSidebar();
   renderRank();
+  renderWarmup();
   const last = parseInt(localStorage.getItem("barmij_last") || "0");
   openLesson(isUnlocked(last) ? last : 0, true);
 
@@ -194,6 +195,83 @@ CODEBANK.forEach(it => Object.assign(it, computeGate(it.code)));
 const RANK_ORDER = { m: 0, b: 1, r: 2 };
 CODEBANK.sort((a, b) => a.g - b.g || RANK_ORDER[a.rank] - RANK_ORDER[b.rank] || a.id.localeCompare(b.id));
 
+/* ---------------- spaced-repetition scheduler (PEDAGOGY §3: 2 / 7 / 21 days) ----------------
+   Passing a lesson schedules its skills for revisit. A due skill surfaces as ONE gentle
+   warm-up banner (never blocking, always snoozable). Running the suggested bank item
+   completes the review and pushes the skill to its next, longer interval. */
+const REVIEW_KEY = "barmij_reviews";
+const INTERVALS_DAYS = [2, 7, 21];
+let reviewsDb = JSON.parse(localStorage.getItem(REVIEW_KEY) || "{}");
+const saveReviews = () => localStorage.setItem(REVIEW_KEY, JSON.stringify(reviewsDb));
+
+function lessonGateOf(i) {
+  let wi = 0, li = i;
+  for (const w of WORLDS) { if (li < w.lessons.length) break; li -= w.lessons.length; wi++; }
+  return (wi + 1) * 10 + (li + 1);
+}
+function scheduleReview(gate) {
+  if (!reviewsDb[gate]) {
+    reviewsDb[gate] = { stage: 0, due: Date.now() + INTERVALS_DAYS[0] * 864e5 };
+    saveReviews();
+  }
+}
+function dueReviewGate() {
+  const due = Object.entries(reviewsDb)
+    .filter(([g, r]) => r.stage < INTERVALS_DAYS.length && r.due <= Date.now())
+    .sort((a, b) => a[1].due - b[1].due);
+  return due.length ? parseInt(due[0][0]) : null;
+}
+function completeReview(gate) {
+  const r = reviewsDb[gate];
+  if (!r) return;
+  r.stage++;
+  if (r.stage < INTERVALS_DAYS.length) r.due = Date.now() + INTERVALS_DAYS[r.stage] * 864e5;
+  saveReviews();
+  renderWarmup();
+}
+function renderWarmup() {
+  const card = document.getElementById("warmupCard");
+  const gate = dueReviewGate();
+  if (gate === null) { card.style.display = "none"; return; }
+  const pool = CODEBANK.filter(it => it.g === gate && !it.peek && it.rank !== "r");
+  if (!pool.length) { card.style.display = "none"; return; }
+  const pick = pool[(Math.random() * pool.length) | 0];
+  card.style.display = "flex";
+  document.getElementById("warmupText").textContent =
+    `Keep it second nature — a 2-minute warm-up of your W${Math.floor(gate / 10)}·L${gate % 10} skills: ${pick.emoji} ${pick.title}`;
+  document.getElementById("warmupGo").onclick = () => {
+    openBank();
+    currentBankItem = pick;
+    editor.setValue(pick.code);
+    if (pick.think) showThinking(pick); else run();
+  };
+  document.getElementById("warmupLater").onclick = () => {
+    reviewsDb[gate].due = Date.now() + 864e5; /* snooze one day — gentle, never nagging */
+    saveReviews();
+    renderWarmup();
+  };
+}
+
+/* ---------------- guided think-alouds (BANK_BLUEPRINT role 5) ---------------- */
+function showThinking(it) {
+  const card = document.getElementById("thinkCard");
+  card.style.display = "block";
+  let idx = 0;
+  const steps = it.think;
+  const render = () => {
+    document.getElementById("thinkStep").innerHTML =
+      `<b>Thought ${idx + 1} of ${steps.length}:</b> ${steps[idx]}`;
+    document.getElementById("thinkNext").textContent =
+      idx < steps.length - 1 ? "next thought ▸" : "▶ Now run it";
+  };
+  document.getElementById("thinkNext").onclick = () => {
+    if (idx < steps.length - 1) { idx++; render(); }
+    else { card.style.display = "none"; run(); }
+  };
+  render();
+  card.scrollIntoView({ behavior: REDUCED_MOTION ? "auto" : "smooth", block: "center" });
+}
+
 function openBank() {
   bankMode = true; currentBankItem = null;
   document.getElementById("lessonPanel").style.display = "none";
@@ -201,6 +279,7 @@ function openBank() {
   document.getElementById("demoCard").style.display = "none";
   setCodeStage(true); /* the bank IS the doing stage */
   document.getElementById("taskText").style.display = "none";
+  document.getElementById("thinkCard").style.display = "none";
   document.getElementById("hintBox").style.display = "none";
   document.getElementById("nextWrap").style.display = "none";
   document.getElementById("feedback").className = "feedback";
@@ -226,6 +305,7 @@ function renderBank() {
         <div class="meta">
           <span class="rank-badge ${it.rank}">${it.rank === "m" ? "مستكشف" : it.rank === "b" ? "بنّاء" : "رائد"}</span>
           ${it.talks ? '<span class="talks-badge">🎤 talks to you</span>' : ""}
+          ${it.think ? '<span class="think-badge">🧠 guided</span>' : ""}
           <span class="gate-tag">${it.label}</span>
         </div>
       </div>`).join("")}</div>`;
@@ -235,7 +315,8 @@ function renderBank() {
     card.addEventListener("click", () => {
       currentBankItem = CODEBANK.find(it => it.id === card.dataset.id);
       editor.setValue(currentBankItem.code);
-      run();
+      if (currentBankItem.think) showThinking(currentBankItem); /* think first, run after */
+      else run();
     }));
 }
 
@@ -431,6 +512,7 @@ function openLesson(i, keepQuiet) {
   document.getElementById("lessonPanel").style.display = "block";
   document.getElementById("bankPanel").style.display = "none";
   document.getElementById("taskText").style.display = "";
+  document.getElementById("thinkCard").style.display = "none";
   document.getElementById("bankBtn").classList.remove("active");
   document.body.classList.remove("drawer-open");
   current = i;
@@ -495,6 +577,7 @@ async function run() {
     fb.className = "feedback ok";
     fb.textContent = "✨ It ran! " + (currentBankItem ? "Remix idea: " + currentBankItem.remix : "Change a number and run again — that's how it becomes yours.");
     fb.scrollIntoView({ behavior: "smooth", block: "nearest" });
+    if (currentBankItem && dueReviewGate() === currentBankItem.g) completeReview(currentBankItem.g);
     return;
   }
   const verdict = LESSONS[current].check({ cmds, lines, code, stdout: stdoutBuf });
@@ -509,6 +592,7 @@ async function run() {
     }
     renderSidebar();
     renderRank();
+    scheduleReview(lessonGateOf(current)); /* today's skills return in 2 days — then 7, then 21 */
     confetti();
     if (current + 1 < LESSONS.length) document.getElementById("nextWrap").style.display = "block";
   } else {

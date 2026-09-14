@@ -60,6 +60,14 @@ citations pending (NOT_YET_BUILT.md)._
 - Mechanic: Run is one keystroke; the drawing animates instantly; errors are friendly and
   specific. No grades, no red X — a hint and another try.
 
+## 6b. Deliberate practice (Ericsson, Krampe & Tesch-Römer 1993)
+- Expertise grows from practice with a clear goal, effort at the edge of ability, and
+  immediate, specific feedback — not from repetition alone.
+- Mechanic (SHIPPED 2026-09-14, B32): 🎯 Challenges — a ghost drawing is the goal, the editor
+  starts blank, and feedback names exactly what matched, what's missing, what's extra, with the
+  attempt overlaid on the ghost. Matching is by shape + color, never by answer-key code: any
+  program that draws the goal wins — reinforcing that in computing, the behavior is the truth.
+
 ## 7. Retrieval & spacing (Roediger & Karpicke 2006; Cepeda et al. 2006)
 - Mechanic (SHIPPED 2026-09-14, B27): passing a lesson schedules its skills at expanding
   intervals — 2 → 7 → 21 days. A due skill surfaces as ONE gentle, snoozable warm-up banner

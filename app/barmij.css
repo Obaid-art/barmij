@@ -300,6 +300,20 @@ figure svg [fill="#3f9d6e"] { fill: var(--green); }
 }
 .CodeMirror .step-line { background: var(--lav-soft) !important; }
 
+/* 🎯 Challenges — match the masterpiece */
+.ch-goal { font-size: 16px; line-height: 1.6; font-weight: 700; color: var(--ink); }
+.ch-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 14px; }
+@media (max-width: 640px) { .ch-grid { grid-template-columns: 1fr; } }
+.ch-card {
+  border: 1.5px solid var(--line); border-radius: 12px; background: #fff;
+  padding: 12px 14px; cursor: pointer; transition: transform .12s, box-shadow .12s;
+}
+.ch-card:hover { transform: translateY(-2px); box-shadow: var(--shadow); border-color: var(--blue); }
+.ch-card h3 { margin: 0 0 4px; font-size: 15px; }
+.ch-card .cap { color: var(--muted); font-size: 12.5px; line-height: 1.45; }
+.ch-card .meta { display: flex; gap: 6px; margin-top: 8px; align-items: center; }
+.ch-solved { font-size: 11px; font-weight: 800; color: #00543d; background: #ddf0e9; border-radius: 999px; padding: 2px 9px; }
+
 /* 🖼️ My Gallery — a private portfolio; lives only on this device */
 .savebar {
   display: flex; align-items: center; gap: 10px; flex-wrap: wrap;

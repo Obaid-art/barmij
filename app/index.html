@@ -7,7 +7,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700;800;900&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/codemirror.min.css">
-<link rel="stylesheet" href="barmij.css?v=9">
+<link rel="stylesheet" href="barmij.css?v=10">
 </head>
 <body>
 
@@ -34,6 +34,10 @@
       <span class="num">📚</span><span><b>Code Bank</b></span>
       <span class="stars" id="bankCount"></span>
     </div>
+    <div class="lesson-item" id="challengesBtn">
+      <span class="num">🎯</span><span><b>Challenges</b></span>
+      <span class="stars" id="challengesCount"></span>
+    </div>
     <div class="lesson-item" id="galleryBtn">
       <span class="num">🖼️</span><span><b>My Gallery</b></span>
       <span class="stars" id="galleryCount"></span>
@@ -57,6 +61,7 @@
     </div>
     <div id="bankPanel" style="display:none"></div>
     <div id="galleryPanel" style="display:none"></div>
+    <div id="challengesPanel" style="display:none"></div>
   </section>
 
   <section class="bench">
@@ -75,6 +80,17 @@
       </div>
     </div>
     <div class="task" id="taskText"></div>
+
+    <div class="demo-card" id="chGoalCard" style="display:none">
+      <div class="demo-head">
+        <span class="demo-title" id="chTitle">🎯 Match the masterpiece</span>
+        <span class="spacer" style="flex:1"></span>
+        <button class="btn ghost" id="chHintBtn">💡 Hint</button>
+        <button class="btn ghost" id="chExit">✕</button>
+      </div>
+      <div class="ch-goal" id="chGoal"></div>
+      <div class="hintbox" id="chHintBox" style="margin-top:10px"></div>
+    </div>
 
     <div class="demo-card" id="puzzlePanel" style="display:none">
       <div class="demo-head">
@@ -144,8 +160,9 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/codemirror.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/mode/python/python.min.js"></script>
 <script src="https://cdn.jsdelivr.net/pyodide/v0.26.2/full/pyodide.js"></script>
-<script src="lessons.js?v=9"></script>
-<script src="codebank.js?v=9"></script>
-<script src="barmij.js?v=9"></script>
+<script src="lessons.js?v=10"></script>
+<script src="codebank.js?v=10"></script>
+<script src="challenges.js?v=10"></script>
+<script src="barmij.js?v=10"></script>
 </body>
 </html>

@@ -1,5 +1,16 @@
 # Decisions Log — Barmij
 
+- **2026-09-14 / B32 — 🎯 Challenges: Match the Masterpiece.** Twelve curated, original,
+  prerequisite-gated challenges (auto-gated from their hidden target-maker code, sorted on the
+  gentle slope): a ghost drawing appears, the editor starts blank ("Summon the ghost. Your
+  code, your way."), and matching is by SHAPE + color — unordered, direction-agnostic, tolerant
+  — so any code that draws the goal wins (verified: an unrolled opposite-rotation square
+  matches the loop-drawn target). Feedback is precise deliberate-practice feedback: "3 of 4
+  matched · 1 missing · 2 extras · check the COLOR", with the attempt overlaid in color on the
+  ghost. Hint ladder per challenge; solved state persists; success feeds the spaced-review
+  scheduler and offers the Gallery save. Grounding: Ericsson's deliberate practice (clear goal,
+  edge-of-ability effort, immediate specific feedback). Also: default pen color moved to the
+  Okabe-Ito blue (#0072B2) for palette consistency.
 - **2026-09-14 / B31 — 🖼️ My Gallery: the private portfolio.** After ANY clean run — pass or
   fail, lesson or bank or puzzle — a save bar offers "💾 Save to My Gallery": name it, add one
   optional reflection ("What did you teach the computer?"), kept with a thumbnail. Gallery page:

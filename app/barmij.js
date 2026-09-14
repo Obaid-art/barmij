@@ -28,7 +28,7 @@ _state = {}
 def reset():
     global _cmds, _state
     _cmds = []
-    _state = {"x":0.0,"y":0.0,"h":0.0,"pen":True,"color":"#5b8dc9","width":4}
+    _state = {"x":0.0,"y":0.0,"h":0.0,"pen":True,"color":"#0072B2","width":4}
 def forward(d):
     x2 = _state["x"] + d*math.sin(math.radians(_state["h"]))
     y2 = _state["y"] + d*math.cos(math.radians(_state["h"]))
@@ -132,6 +132,16 @@ window.addEventListener("DOMContentLoaded", async () => {
   document.getElementById("bankCount").textContent = CODEBANK.length;
   document.getElementById("galleryBtn").addEventListener("click", openGallery);
   galCountRefresh();
+  document.getElementById("challengesBtn").addEventListener("click", openChallenges);
+  document.getElementById("challengesCount").textContent = CHALLENGES.length;
+  document.getElementById("chExit").addEventListener("click", exitChallenge);
+  document.getElementById("chHintBtn").addEventListener("click", () => {
+    if (!chState) return;
+    const box = document.getElementById("chHintBox");
+    box.style.display = "block";
+    box.textContent = "💡 " + chState.def.hints[Math.min(chHintIdx, chState.def.hints.length - 1)];
+    chHintIdx++;
+  });
   const toggleDrawer = () => document.body.classList.toggle("drawer-open");
   document.getElementById("journeyBtn").addEventListener("click", toggleDrawer);
   document.getElementById("drawerOverlay").addEventListener("click", toggleDrawer);
@@ -325,6 +335,9 @@ function openBank() {
   galleryMode = false;
   document.getElementById("galleryPanel").style.display = "none";
   document.getElementById("galleryBtn").classList.remove("active");
+  if (challengeMode) exitChallenge();
+  document.getElementById("challengesPanel").style.display = "none";
+  document.getElementById("challengesBtn").classList.remove("active");
   hideSaveBar();
   if (puz) puzzleExit();
   exitStep();
@@ -571,6 +584,9 @@ function openLesson(i, keepQuiet) {
   galleryMode = false;
   document.getElementById("galleryPanel").style.display = "none";
   document.getElementById("galleryBtn").classList.remove("active");
+  if (challengeMode) exitChallenge();
+  document.getElementById("challengesPanel").style.display = "none";
+  document.getElementById("challengesBtn").classList.remove("active");
   hideSaveBar();
   if (puz) puzzleExit();
   exitStep();
@@ -636,6 +652,7 @@ async function run() {
   const lines = cmds.filter(c => c.t === "line");
   lastRun = { code, hadCmds: cmds.length > 0, firstOut: stdoutBuf.split("\n").find(s => s.trim()) || "" };
   showSaveBar(); /* anything that runs may be kept — art is never gated by a test */
+  if (challengeMode && chState) { challengeEvaluate(cmds); return; }
   const fb = document.getElementById("feedback");
   if (bankMode || galleryMode) {
     fb.className = "feedback ok";
@@ -979,6 +996,136 @@ function demoTake() {
   editor.focus();
 }
 
+/* ---------------- 🎯 Challenges — match the masterpiece (DECISIONS B32) ----------------
+   Deliberate practice (Ericsson): the ghost is the goal, the editor starts blank, feedback is
+   immediate and specific. Matching is by SHAPE + color (unordered, either direction, tolerant)
+   — any code that draws the goal wins; the hidden target-maker is never an answer key. */
+const CH_KEY = "barmij_challenges";
+let challengesSolved = JSON.parse(localStorage.getItem(CH_KEY) || "{}");
+let challengeMode = false, chState = null, chHintIdx = 0;
+
+CHALLENGES.forEach(c => Object.assign(c, computeGate(c.code)));
+CHALLENGES.sort((a, b) => a.g - b.g || a.id.localeCompare(b.id));
+
+function openChallenges() {
+  challengeMode = false; chState = null;
+  galleryMode = false; bankMode = false; currentBankItem = null;
+  if (puz) puzzleExit();
+  exitStep(); hideSaveBar();
+  ["lessonPanel", "bankPanel", "galleryPanel", "demoCard", "taskText", "thinkCard", "hintBox", "nextWrap", "chGoalCard"]
+    .forEach(id => document.getElementById(id).style.display = "none");
+  document.getElementById("challengesPanel").style.display = "block";
+  setCodeStage(true);
+  document.getElementById("taskText").style.display = "none";
+  document.getElementById("feedback").className = "feedback";
+  document.getElementById("bankBtn").classList.remove("active");
+  document.getElementById("galleryBtn").classList.remove("active");
+  document.getElementById("challengesBtn").classList.add("active");
+  document.body.classList.remove("drawer-open");
+  renderChallenges();
+  window.scrollTo({ top: 0, behavior: "smooth" });
+}
+
+function renderChallenges() {
+  const panel = document.getElementById("challengesPanel");
+  panel.innerHTML = `
+    <h1>Challenges</h1>
+    <div class="sub">The ghost shows the goal — your code must summon it. Any way that draws it, wins.</div>
+    <div class="ch-grid"></div>`;
+  const grid = panel.querySelector(".ch-grid");
+  CHALLENGES.forEach(c => {
+    const card = document.createElement("div");
+    card.className = "ch-card";
+    card.innerHTML = `<h3>${c.emoji} ${c.title}</h3><div class="cap"></div>
+      <div class="meta">${challengesSolved[c.id] ? '<span class="ch-solved">✔ matched</span>' : ""}
+      <span class="gate-tag">${c.label}</span></div>`;
+    card.querySelector(".cap").textContent = c.goal;
+    card.addEventListener("click", () => startChallenge(c));
+    grid.appendChild(card);
+  });
+}
+
+async function startChallenge(c) {
+  if (!pyReady) { flashFeedback("err", "Python is still waking up — one moment, hero."); return; }
+  challengeMode = true; chHintIdx = 0;
+  document.getElementById("chGoalCard").style.display = "block";
+  document.getElementById("chTitle").textContent = `🎯 ${c.emoji} ${c.title}`;
+  document.getElementById("chGoal").textContent = c.goal;
+  document.getElementById("chHintBox").style.display = "none";
+  document.getElementById("feedback").className = "feedback";
+  clearOutputs(); hideSaveBar();
+  /* build the target silently */
+  stdoutBuf = "";
+  pyodide.runPython("reset()");
+  await pyodide.runPythonAsync(c.code);
+  chState = { def: c, targetCmds: JSON.parse(pyodide.runPython("_dump()")) };
+  editor.setValue("# Summon the ghost. Your code, your way.\n\n");
+  drawGhost(chState.targetCmds);
+  document.getElementById("chGoalCard").scrollIntoView({ behavior: REDUCED_MOTION ? "auto" : "smooth", block: "center" });
+  editor.focus();
+}
+
+function exitChallenge() {
+  challengeMode = false; chState = null;
+  document.getElementById("chGoalCard").style.display = "none";
+  clearCanvas();
+  document.getElementById("feedback").className = "feedback";
+}
+
+/* shape matching: unordered, either direction, tolerant — color must agree */
+function segMatch(target, mine) {
+  const tol = 8;
+  const near = (a, b) => Math.abs(a - b) <= tol;
+  const used = new Array(mine.length).fill(false);
+  let hit = 0;
+  for (const t of target) {
+    let found = -1;
+    for (let j = 0; j < mine.length; j++) {
+      if (used[j]) continue;
+      const m = mine[j];
+      if (t.t !== m.t || t.c !== m.c) continue;
+      if (t.t === "line") {
+        const fwd = near(t.x1, m.x1) && near(t.y1, m.y1) && near(t.x2, m.x2) && near(t.y2, m.y2);
+        const rev = near(t.x1, m.x2) && near(t.y1, m.y2) && near(t.x2, m.x1) && near(t.y2, m.y1);
+        if (fwd || rev) found = j;
+      } else if (near(t.x, m.x) && near(t.y, m.y) && Math.abs(t.r - m.r) <= 5) found = j;
+      if (found >= 0) break;
+    }
+    if (found >= 0) { used[found] = true; hit++; }
+  }
+  return { hit, total: target.length, extras: mine.length - hit };
+}
+
+function challengeEvaluate(cmds) {
+  const fb = document.getElementById("feedback");
+  const { hit, total, extras } = segMatch(chState.targetCmds, cmds);
+  if (hit === total && extras === 0) {
+    challengesSolved[chState.def.id] = true;
+    localStorage.setItem(CH_KEY, JSON.stringify(challengesSolved));
+    if (dueReviewGate() === chState.def.g) completeReview(chState.def.g);
+    fb.className = "feedback ok";
+    fb.textContent = `✅ 🎯 MATCHED — the ghost is yours! ${chState.def.title}, summoned by your own code, your own way.`;
+    confetti();
+    return;
+  }
+  /* their attempt in color over the ghost — the difference is the teacher */
+  drawGhost(chState.targetCmds);
+  const ctx = setupCanvas();
+  for (const s of cmds) {
+    if (s.t === "dot") { ctx.fillStyle = s.c; ctx.beginPath(); ctx.arc(s.x, -s.y, s.r, 0, 7); ctx.fill(); }
+    else { ctx.strokeStyle = s.c; ctx.lineWidth = s.w; ctx.beginPath(); ctx.moveTo(s.x1, -s.y1); ctx.lineTo(s.x2, -s.y2); ctx.stroke(); }
+  }
+  fb.className = "feedback err";
+  const parts = [`🧭 ${hit} of ${total} matched`];
+  if (hit < total) parts.push(`${total - hit} of the ghost's marks still missing`);
+  if (extras > 0) parts.push(`${extras} extra mark${extras > 1 ? "s" : ""} the goal doesn't have`);
+  const colorMiss = cmds.length && chState.targetCmds.length &&
+    cmds.every(m => m.c !== chState.targetCmds[0].c);
+  if (colorMiss) parts.push("check the COLOR the goal asks for");
+  fb.textContent = parts.join(" · ") + ". Compare your colors with the gray ghost — then adjust and Run again.";
+  fb.scrollIntoView({ behavior: "smooth", block: "nearest" });
+}
+
 /* ---------------- 🖼️ My Gallery — private portfolio (DECISIONS B31) ----------------
    Constructionism's payoff: artifacts a child OWNS. Privacy by design (device-only, stated in
    the UI), no likes/feeds/comparison (deliberate anti-features), saving never gated by a test
@@ -1067,6 +1214,9 @@ function showSaveForm() {
 
 function openGallery() {
   galleryMode = true; bankMode = false; currentBankItem = null;
+  if (challengeMode) exitChallenge();
+  document.getElementById("challengesPanel").style.display = "none";
+  document.getElementById("challengesBtn").classList.remove("active");
   if (puz) puzzleExit();
   exitStep();
   hideSaveBar();

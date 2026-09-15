@@ -1,0 +1,164 @@
+﻿<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Barmij — learn real Python</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect x='15' y='15' width='34' height='34' rx='5' fill='%23E69F00' transform='rotate(45 32 32)'/%3E%3Crect x='15' y='15' width='34' height='34' rx='5' fill='%230072B2'/%3E%3Ccircle cx='32' cy='32' r='7' fill='%23ffffff'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700;800;900&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/codemirror.min.css">
+<link rel="stylesheet" href="barmij.css?v=38">
+</head>
+<body>
+
+<header>
+  <div class="logo"><svg class="mark" viewBox="0 0 64 64" width="27" height="27" aria-hidden="true"><rect x="15" y="15" width="34" height="34" rx="5" fill="#E69F00" transform="rotate(45 32 32)"/><rect x="15" y="15" width="34" height="34" rx="5" fill="#0072B2"/><circle cx="32" cy="32" r="7" fill="#ffffff"/></svg><span class="en">Barmij</span></div>
+  <span class="spacer"></span>
+  <button class="langbtn" id="journeyBtn">🗺️ Journey</button>
+  <span class="rank-chip" id="rankChip"></span>
+</header>
+
+<div id="drawerOverlay"></div>
+<div class="layout">
+
+  <div class="warmup" id="warmupCard" style="display:none">
+    <span class="wicon">🔁</span>
+    <span id="warmupText"></span>
+    <button class="btn demo-primary" id="warmupGo">Warm up ▸</button>
+    <button class="btn ghost" id="warmupLater">later</button>
+  </div>
+
+  <aside class="side">
+    <div id="lessonList"></div>
+    <div class="lesson-item" id="bankBtn" style="margin-top:14px; border-top:1px solid var(--line); padding-top:14px">
+      <span class="num">📚</span><span><b>Code Bank</b></span>
+      <span class="stars" id="bankCount"></span>
+    </div>
+    <div class="lesson-item" id="challengesBtn">
+      <span class="num">🎯</span><span><b>Challenges</b></span>
+      <span class="stars" id="challengesCount"></span>
+    </div>
+    <div class="lesson-item" id="galleryBtn">
+      <span class="num">🖼️</span><span><b>My Gallery</b></span>
+      <span class="stars" id="galleryCount"></span>
+    </div>
+    <div class="legend">
+      <span style="background:var(--blue-soft);color:var(--blue-text);border:1.5px solid var(--blue)">Python's words</span>
+      <span style="background:var(--lav-soft);color:var(--lav-text);border:1.5px dotted var(--lav)">names you invent</span>
+      <span style="background:var(--amber-soft);color:var(--amber-text);border:1.5px dashed var(--amber)">values</span>
+      <span style="background:var(--rose-soft);color:var(--rose-text);border:3px double var(--rose)">what happens</span>
+    </div>
+  </aside>
+
+  <section class="lesson">
+    <div id="lessonPanel">
+      <div class="crumb" id="crumb"></div>
+      <h1 id="lessonTitle"></h1>
+      <div class="sub" id="lessonSub"></div>
+      <div id="lessonBody"></div>
+      <p style="margin-top:18px"><button class="btn demo-primary" id="storyGoBtn">Yalla — continue ▸</button></p>
+    </div>
+    <div id="bankPanel" style="display:none"></div>
+    <div id="galleryPanel" style="display:none"></div>
+    <div id="challengesPanel" style="display:none"></div>
+  </section>
+
+  <section class="bench">
+    <div class="task" id="taskText"></div>
+
+    <div class="demo-card" id="chGoalCard" style="display:none">
+      <div class="demo-head">
+        <span class="demo-title" id="chTitle">🎯 Match the masterpiece</span>
+        <span class="spacer" style="flex:1"></span>
+        <button class="btn ghost" id="chHintBtn">💡 Hint</button>
+        <button class="btn ghost" id="chExit">✕</button>
+      </div>
+      <div class="ch-goal" id="chGoal"></div>
+      <div class="hintbox" id="chHintBox" style="margin-top:10px"></div>
+    </div>
+
+    <div class="demo-card" id="puzzlePanel" style="display:none">
+      <div class="demo-head">
+        <span class="demo-title">🧩 Order the thoughts</span>
+        <span class="spacer" style="flex:1"></span>
+        <button class="btn ghost" id="puzzleExit">✕</button>
+      </div>
+      <div class="puz-goal" id="puzzleGoal"></div>
+      <div class="puz-label">Your program — tap ⇥ to indent, ✕ to put a piece back</div>
+      <div id="puzzlePlaced" class="puz-placed"></div>
+      <div class="puz-label">The pieces — tap one to place it next</div>
+      <div id="puzzleTray" class="puz-tray"></div>
+      <div class="demo-btns"><button class="btn run" id="puzzleCheck">✔ Check my order</button></div>
+    </div>
+
+    <div class="demo-card" id="thinkCard" style="display:none">
+      <div class="demo-head"><span class="demo-title">🧠 Think like a programmer</span></div>
+      <div class="think-step" id="thinkStep"></div>
+      <div class="demo-btns">
+        <button class="btn ghost" id="thinkPrev" style="display:none">◀ back</button>
+        <button class="btn demo-primary" id="thinkNext">next thought ▸</button>
+      </div>
+    </div>
+
+    <div class="editor-card" id="editorCard">
+      <div class="editor-head">
+        <span class="title" id="editorTitle">Your code</span>
+        <span class="spacer" style="flex:1"></span>
+        <button class="btn ghost" id="hintBtn">💡 Hint</button>
+        <button class="btn ghost" id="resetBtn">Reset code</button>
+        <button class="btn ghost" id="stepBtn" disabled>👣 Step</button>
+        <button class="btn run" id="runBtn" disabled>▶ Run</button>
+      </div>
+      <textarea id="code"></textarea>
+    </div>
+
+    <div class="step-bar" id="stepBar" style="display:none">
+      <button class="btn ghost" id="stepPrev">◀ Back</button>
+      <button class="btn demo-primary" id="stepNext">Next ▶</button>
+      <div class="step-meta">
+        <div id="stepInfo"></div>
+        <div class="step-src" id="stepSrc"></div>
+      </div>
+      <button class="btn ghost" id="stepExit">✕</button>
+    </div>
+
+    <div class="hintbox" id="hintBox"></div>
+
+    <div class="canvas-card" id="canvasCard">
+      <canvas id="world" height="460" role="img" aria-label="The drawing stage — your code's art appears here"></canvas>
+      <div id="loading">Waking Python up… (first time takes a moment)</div>
+    </div>
+
+    <div class="livebar" id="liveBar" style="display:none">
+      <span class="live-dot"></span><b>LIVE</b> — arrow keys play · Esc stops
+      <span class="spacer" style="flex:1"></span>
+      <button class="btn ghost" id="liveStopBtn">⏹ Stop</button>
+    </div>
+
+    <div class="savebar" id="saveBar" style="display:none"></div>
+
+    <div class="outputs" id="outputs"></div>
+    <div class="feedback" id="feedback"></div>
+    <div class="nextbar" id="nextWrap"><button class="btn" id="nextBtn">Next lesson →</button></div>
+  </section>
+
+</div>
+
+<footer style="text-align:center; padding:26px 20px 34px; color:var(--muted); font-size:13px; font-weight:700">
+  Barmij is free for every learner and teacher, forever — and not for sale, by anyone.
+  <a href="license.html" style="color:var(--blue-text)">CC BY-NC-SA 4.0</a>
+</footer>
+
+<canvas id="confetti"></canvas>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/codemirror.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/mode/python/python.min.js"></script>
+<script src="https://cdn.jsdelivr.net/pyodide/v0.26.2/full/pyodide.js"></script>
+<script src="figures.js?v=38"></script>
+<script src="lessons.js?v=38"></script>
+<script src="codebank.js?v=38"></script>
+<script src="challenges.js?v=38"></script>
+<script src="barmij.js?v=38"></script>
+</body>
+</html>

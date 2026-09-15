@@ -1,5 +1,16 @@
 # Decisions Log — Barmij
 
+- **2026-09-15 / B55 — ONE box, one gaze (founder: "no more writing below — a child should
+  not be watching two things simultaneously").** The Watch-then-try card used to split
+  attention: code typing in the box, the turtle's sentence below it. Now they share ONE
+  bordered box — the turtle's line at the top, the code directly beneath, a hairline between
+  (split-attention principle, honored at last). Build beats reordered the same way: caption
+  above the constructing code. Hero nudges now appear inside the very box the child is
+  typing in. (The founder's "not fixed" sighting of the Enter bridge was a STALE TAB from
+  before the deploy — the current version verified again: forward(100) then typing r-i-g-h-t
+  flows to the celebration with no Enter. Remedy for stale tabs: reload; versions are
+  cache-busted per asset.) Assets v31, redeployed.
+
 - **2026-09-15 / B54 — Founder's flow notes: the Next door, smoother seams, and the end of
   "hero".**
   1. THE NEXT-LESSON DOOR: previously the Next button simply didn't exist until a pass — a

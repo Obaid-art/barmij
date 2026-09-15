@@ -214,7 +214,7 @@ code.r { background: var(--rose-soft); color: var(--rose-text); border: 3px doub
 .build-code .r-name { color: var(--lav-text); }
 .build-code .r-val { color: var(--amber-text); }
 .build-code .r-ink { color: #2e3a46; }
-.build-cap { margin-top: 12px; font-size: 15.5px; font-weight: 700; color: var(--lav-text); min-height: 24px; }
+.build-cap { margin: 0 0 10px; font-size: 15.5px; font-weight: 700; color: var(--lav-text); min-height: 24px; }
 .build-effect { display: none; align-items: center; gap: 12px; margin-top: 14px; }
 .build-effect .arrow { color: var(--muted); font-size: 24px; }
 .build-effect .chip {
@@ -413,13 +413,18 @@ figure svg [fill="#3f9d6e"] { fill: var(--green); }
 }
 .demo-head { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
 .demo-title { font-weight: 900; font-size: 14.5px; color: #55418a; }
-.demo-code {
+/* ONE box, one gaze (B55): the turtle's line and the code live together — caption on top,
+   code right under it. A child never watches two places at once. */
+.demo-box {
   background: #fdfcff; border: 1.5px solid var(--line); border-radius: 12px;
-  padding: 14px 16px; min-height: 58px; margin: 0;
+}
+.demo-box:focus-within { border-color: var(--lav); box-shadow: 0 0 0 3px var(--lav-soft); }
+.demo-code {
+  background: transparent; border: 0;
+  padding: 12px 16px 14px; min-height: 50px; margin: 0;
   font-family: "JetBrains Mono", Consolas, monospace; font-size: 17px; line-height: 1.8;
   white-space: pre-wrap; overflow-wrap: anywhere; outline: none; cursor: text;
 }
-.demo-code:focus { border-color: var(--lav); box-shadow: 0 0 0 3px var(--lav-soft); }
 .demo-code .r-kw { color: var(--blue-text); font-weight: 800; }
 .demo-code .r-name { color: var(--lav-text); font-weight: 700; }
 .demo-code .r-val { color: var(--amber-text); font-weight: 700; }
@@ -435,7 +440,8 @@ figure svg [fill="#3f9d6e"] { fill: var(--green); }
 .demo-cursor.wobble { animation: wobble .3s ease; }
 @keyframes wobble { 25% { transform: translateX(-4px); } 75% { transform: translateX(4px); } }
 .demo-caption {
-  display: flex; align-items: flex-start; gap: 9px; margin-top: 10px; min-height: 30px;
+  display: flex; align-items: flex-start; gap: 9px; min-height: 30px;
+  padding: 10px 14px 8px; border-bottom: 1px dashed var(--line);
   font-size: 15px; font-weight: 700; color: var(--lav-text);
 }
 .demo-caption .who { font-size: 20px; line-height: 1.2; }

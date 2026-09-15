@@ -84,7 +84,7 @@ def adhd_everywhere():
     app = SRC.parent
     bad = []
     js = SRC.read_text(encoding="utf-8")
-    for field, cap in (("task", 30), ("msg", 24), ("say", 12)):
+    for field, cap in (("task", 30), ("msg", 24), ("say", 12), ("g", 30), ("yay", 24), ("miss", 24)):
         for m in re.finditer(rf'\b{field}:\s*"((?:[^"\\]|\\.)*)"', js):
             if _wc(m.group(1)) > cap:
                 bad.append(f"lessons {field} {_wc(m.group(1))}w: {clean(m.group(1))[:55]}")

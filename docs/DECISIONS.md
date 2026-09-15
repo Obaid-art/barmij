@@ -1,5 +1,29 @@
 # Decisions Log — Barmij
 
+- **2026-09-15 / B59 — GUIDED MISSIONS: line by line, step by step (founder: "whenever a
+  child writes a single line, we say YES, here you go — then we give them the second line…
+  we are teaching them ALGORITHMICALLY").** The mission wall is dead. A mission is now a
+  SEQUENCE of prompted steps, shown ONE at a time (B49 law), advanced by the real Run
+  button — never by key interception:
+  - Child writes a line → ▶ Run → "✅ The computer spoke — your first command, obeyed. —
+    next: Add a SECOND print line…" + a small confetti — the earned line collects as a
+    green ✓ in the mission card, the next goal slides in. All steps done → the classic
+    full celebration, stars, and the Next door opens.
+  - Engine: lesson.steps = [{g, ok(ctx), yay, miss}]; statuses recomputed per run
+    (stateless, honest — delete your line, lose your check); ctx enriched (outs array,
+    runs count, starter). Lessons without steps behave exactly as before.
+  - AUTHORED for all 12 W1–W2 lessons, 2-3 steps each — including "Run it AGAIN — is it
+    the same star?" (the re-run itself is a step) and "answer blue / now answer anything
+    else" (both roads, prompted). Worlds 3-8 keep classic checks for now (next wave,
+    after founder review of the pattern).
+  - Gate extended: step prompts (g ≤30w), celebrations (yay ≤24w) and nudges (miss ≤24w)
+    under the permanent ADHD scan.
+  - VERIFIED as a simulated child: all 12 journeys advance exactly one step per run with
+    the right prompt, ending in the full pass. The harness caught two of my own flaws
+    before shipping (w2l1's echo-line shortcut — twice) and one test bug (a locked lesson
+    silently redirecting the test — the lock working).
+  Assets v35, deployed.
+
 - **2026-09-15 / B58 — Flood complete + figures ANIMATE + the spoiler audit (founder: "flood
   the rest… fair-paced animations… no silly mistakes like the one I just caught").**
   1. EVERY FIGURE NOW BUILDS ITSELF, fair-paced: parts land one by one (~0.4-0.85s apart),

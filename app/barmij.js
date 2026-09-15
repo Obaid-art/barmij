@@ -715,6 +715,28 @@ function storyGo() {
   revealCodeStage(true); /* story → mission, one step — the builds already showed the code */
 }
 
+/* ---------------- guided missions (B59): line by line, step by step ----------------
+   The founder's law: "everything has to be prompted after each line — we are teaching them
+   ALGORITHMICALLY." A mission with steps shows ONE goal at a time; each Run answers: the
+   completed line is celebrated, the next line is prompted. The real editor, the real Run —
+   no key interception, ever. */
+let missionStepIdx = 0;
+
+function renderMission(ls, statuses) {
+  const el = document.getElementById("taskText");
+  if (!ls.steps) { el.innerHTML = `<b>${STR[lang].task}:</b> ${ls.task}`; return; }
+  const n = ls.steps.length;
+  const idx = statuses ? statuses.indexOf(false) : 0;
+  const cur = idx === -1 ? n : idx;
+  let html = `<div class="mhead"><b>Your mission</b><span class="mcount">${cur >= n ? "complete ✓" : `step ${cur + 1} of ${n}`}</span></div>`;
+  ls.steps.forEach((s, i) => {
+    if (i < cur) html += `<div class="mstep done">✓ ${s.yay}</div>`;
+    else if (i === cur) html += `<div class="mstep now">▸ ${s.g}</div>`;
+    /* future steps stay hidden — one thing at a time (B49) */
+  });
+  el.innerHTML = html;
+}
+
 /* ---------------- lessons & navigation ---------------- */
 function isUnlocked(i) {
   if (i === 0) return true;
@@ -782,7 +804,8 @@ function openLesson(i, keepQuiet) {
   const ls = LESSONS[i];
   document.getElementById("lessonTitle").textContent = ls.title;
   document.getElementById("lessonSub").textContent = ls.subtitle;
-  document.getElementById("taskText").innerHTML = `<b>${STR[lang].task}:</b> ${ls.task}`;
+  missionStepIdx = 0;
+  renderMission(ls, null);
   const savedCode = loadStr("barmij_code_" + ls.id);
   editor.setValue(savedCode !== null ? savedCode : ls.starter);
   editorOwner = ls.id;
@@ -926,7 +949,30 @@ async function run() {
     if (currentBankItem && dueReviewGate() === currentBankItem.g) completeReview(currentBankItem.g);
     return;
   }
-  const verdict = safeCheck(LESSONS[current], { cmds, lines, code, stdout: stdoutBuf, chart: chartShownThisRun, frames: [] });
+  const ctxObj = { cmds, lines, code, stdout: stdoutBuf, chart: chartShownThisRun, frames: [],
+                   outs: stdoutBuf.split("\n").filter(s => s.trim()), runs: runsThisLesson, starter: LESSONS[current].starter };
+  if (LESSONS[current].steps) {
+    /* guided: which steps does this run satisfy? Celebrate the newly earned line, prompt the next */
+    const lsG = LESSONS[current];
+    const statuses = lsG.steps.map(s => { try { return !!s.ok(ctxObj); } catch (e) { return false; } });
+    const idx = statuses.indexOf(false);
+    renderMission(lsG, statuses);
+    if (idx !== -1) {
+      if (idx > missionStepIdx) {
+        missionStepIdx = idx;
+        fb.className = "feedback ok";
+        fb.textContent = "✅ " + lsG.steps[idx - 1].yay + " — next: " + lsG.steps[idx].g;
+        confetti(24);
+      } else {
+        fb.className = "feedback err";
+        fb.textContent = "🧭 " + (lsG.steps[idx].miss || lsG.steps[idx].g);
+      }
+      fb.scrollIntoView({ behavior: "smooth", block: "nearest" });
+      return;
+    }
+    missionStepIdx = lsG.steps.length;
+  }
+  const verdict = safeCheck(LESSONS[current], ctxObj);
   if (verdict.pass) {
     const YAY = ["Mumtaz! 🌟", "Ya salam! ✨", "Wallah, beautiful! 🎨", "Genius! 🧠", "Masha'Allah! 🌙", "Yalla, look at that! 🚀"];
     fb.className = "feedback ok";
@@ -1843,11 +1889,11 @@ function flashFeedback(kind, text) {
   /* the timer may only erase ITS OWN message — never a verdict that arrived after it */
   setTimeout(() => { if (fb.textContent === text) fb.className = "feedback"; }, 2200);
 }
-function confetti() {
+function confetti(count = 90) {
   const c = document.getElementById("confetti"), ctx = c.getContext("2d");
   c.width = innerWidth; c.height = innerHeight;
   const cols = ["#0072B2", "#CC79A7", "#E69F00", "#D55E00", "#007A59"]; /* the charter palette celebrates too */
-  const parts = Array.from({ length: 90 }, () => ({
+  const parts = Array.from({ length: count }, () => ({
     x: Math.random() * c.width, y: -20 - Math.random() * 120,
     vx: (Math.random() - .5) * 2.4, vy: 2.2 + Math.random() * 3.2,
     s: 5 + Math.random() * 6, r: Math.random() * 6.28, vr: (Math.random() - .5) * .3,

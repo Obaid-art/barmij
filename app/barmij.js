@@ -912,8 +912,8 @@ async function run() {
       fb.textContent = "🔴 It's ALIVE — arrows to play, Esc or ⏹ to stop." + (currentBankItem ? " Remix: " + currentBankItem.remix : "");
       if (currentBankItem && dueReviewGate() === currentBankItem.g) completeReview(currentBankItem.g);
     } else {
-      const ctxLive = { cmds, lines: [], code, stdout: stdoutBuf, chart: chartShownThisRun, frames,
-                        outs: stdoutBuf.split("\n").filter(s => s.trim()), runs: runsThisLesson, starter: LESSONS[current].starter };
+      const ctxLive = { cmds, lines: [], code: stripCode(code), stdout: stdoutBuf, chart: chartShownThisRun, frames,
+                        outs: stdoutBuf.split("\n").filter(s => s.trim()), runs: runsThisLesson, starter: stripCode(LESSONS[current].starter) };
       if (LESSONS[current].steps) {
         const lsG = LESSONS[current];
         const statuses = lsG.steps.map(s => { try { return !!s.ok(ctxLive); } catch (e) { return false; } });
@@ -971,8 +971,8 @@ async function run() {
     if (currentBankItem && dueReviewGate() === currentBankItem.g) completeReview(currentBankItem.g);
     return;
   }
-  const ctxObj = { cmds, lines, code, stdout: stdoutBuf, chart: chartShownThisRun, frames: [],
-                   outs: stdoutBuf.split("\n").filter(s => s.trim()), runs: runsThisLesson, starter: LESSONS[current].starter };
+  const ctxObj = { cmds, lines, code: stripCode(code), stdout: stdoutBuf, chart: chartShownThisRun, frames: [],
+                   outs: stdoutBuf.split("\n").filter(s => s.trim()), runs: runsThisLesson, starter: stripCode(LESSONS[current].starter) };
   if (LESSONS[current].steps) {
     /* guided: which steps does this run satisfy? Celebrate the newly earned line, prompt the next */
     const lsG = LESSONS[current];
@@ -1014,6 +1014,22 @@ async function run() {
     fb.textContent = "🧭 " + verdict.msg;
   }
   fb.scrollIntoView({ behavior: "smooth", block: "nearest" });
+}
+
+/* checks judge CODE, never comments (B61): a construct in a # comment is inert and must
+   not tick a step — so every regex sees the code comment-stripped (quote-safe: a "#" inside
+   a string, like a color, survives). Whitespace noise is normalized too, so a comment-only
+   or blank-line edit never counts as "you changed the code". */
+function stripCode(src) {
+  let out = "", q = null;
+  for (let i = 0; i < src.length; i++) {
+    const ch = src[i];
+    if (q) { out += ch; if (ch === "\\") { out += src[++i] || ""; } else if (ch === q) q = null; }
+    else if (ch === '"' || ch === "'") { q = ch; out += ch; }
+    else if (ch === "#") { while (i < src.length && src[i] !== "\n") i++; i--; }
+    else out += ch;
+  }
+  return out.replace(/[ \t]+$/gm, "").replace(/\n{3,}/g, "\n\n").trim();
 }
 
 /* a check must never take the feedback down with it — surprises get a kind, honest answer */

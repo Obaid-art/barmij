@@ -1,5 +1,22 @@
 # Decisions Log — Barmij
 
+- **2026-09-15 / B61 — The short-circuit hunt (founder: "you sure — no short circuits? no
+  nonsense hiding?").** Attacked the guided steps the way a clever child would, and found
+  ONE real hole: THE COMMENT CHEAT. Step checks read code with regexes, so a construct
+  living in a # comment — "# randint(1, 20)" — ticked its step ✓ while doing nothing; a
+  child pasting a hint into a comment could earn nonsense green checks. Killed at the root:
+  every step and check now judges the code COMMENT-STRIPPED (stripCode: quote-safe, so a
+  "#0072B2" color inside a string survives; escapes handled) and whitespace-normalized —
+  which also means a comment-only or blank-lines-only edit never ticks a "make it YOURS"
+  step. LAW: checks judge CODE, never comments.
+  Verified with four cheat probes (comment-claimed randint, comment-only change, blank-lines
+  change, comment-claimed falcon wrap — all correctly stay un-ticked) and regression
+  journeys incl. the comment-heavy Make lessons (w1l6/w6l6 starters are mostly comments —
+  all flow perfectly). Also audited: a step can never tick on broken code (steps evaluate
+  only after successful execution); pasting the full honest solution at step 1 jumps
+  straight to the celebration — allowed, because that child did the work. Gates PASS,
+  assets v37, deployed.
+
 - **2026-09-15 / B60 — GUIDED MISSIONS EVERYWHERE: 48/48 (founder: "yalla, carry it through
   all worlds").** All thirty-six remaining lessons authored, 2-3 line-by-line steps each —
   and the LIVE branch now evaluates steps too, so even the falcon lessons prompt step by

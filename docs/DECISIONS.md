@@ -1,5 +1,27 @@
 # Decisions Log — Barmij
 
+- **2026-09-15 / B60 — GUIDED MISSIONS EVERYWHERE: 48/48 (founder: "yalla, carry it through
+  all worlds").** All thirty-six remaining lessons authored, 2-3 line-by-line steps each —
+  and the LIVE branch now evaluates steps too, so even the falcon lessons prompt step by
+  step while the game keeps playing ("✅ … — next: … (Playing now — Esc stops.)").
+  THE HARNESS EARNED ITS NAME — every world walked by a simulated child, and it caught FIVE
+  design flaws before any real child could:
+  1. w8l3's task said "sort biggest-first — one character!" while its check demanded a
+     RISING staircase — an obedient child would be failed. Check now honors both directions.
+  2. w3l2's tile steps were mutually exclusive edits (making tile 3 un-earned tile 2) —
+     collapsed into one either-tile step. LAW: steps must be SEQUENTIAL-COMPATIBLE — later
+     edits may never destroy earlier evidence.
+  3. w8l2's two experiments (absent guest / Sara at slot 0) had the same exclusivity —
+     merged into one either-experiment step.
+  4. w4l6's steps led a child to 9 drawn lines while the final check demanded 10 — a fail
+     after three green checks. Step 2 now asks for the second star twice, landing at 10+.
+  5. w7l2's check demanded 4 bars while a 3-food dictionary is honest work — relaxed to 3.
+  Verified: all 36 new journeys advance exactly one step per run to the full pass (W6 via
+  live-branch steps, W7 with charts, W8 through the capstone signed "Built by Obaid");
+  259/259 programs still clean; gates PASS on every step string. Assets v36, deployed.
+  The whole curriculum now teaches the founder's way: ALGORITHMICALLY — one line, one YES,
+  one next line — from print("Ahlan!") to the signature at the end of World 8.
+
 - **2026-09-15 / B59 — GUIDED MISSIONS: line by line, step by step (founder: "whenever a
   child writes a single line, we say YES, here you go — then we give them the second line…
   we are teaching them ALGORITHMICALLY").** The mission wall is dead. A mission is now a

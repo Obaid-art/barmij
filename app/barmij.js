@@ -912,7 +912,29 @@ async function run() {
       fb.textContent = "🔴 It's ALIVE — arrows to play, Esc or ⏹ to stop." + (currentBankItem ? " Remix: " + currentBankItem.remix : "");
       if (currentBankItem && dueReviewGate() === currentBankItem.g) completeReview(currentBankItem.g);
     } else {
-      const verdict = safeCheck(LESSONS[current], { cmds, lines: [], code, stdout: stdoutBuf, chart: chartShownThisRun, frames });
+      const ctxLive = { cmds, lines: [], code, stdout: stdoutBuf, chart: chartShownThisRun, frames,
+                        outs: stdoutBuf.split("\n").filter(s => s.trim()), runs: runsThisLesson, starter: LESSONS[current].starter };
+      if (LESSONS[current].steps) {
+        const lsG = LESSONS[current];
+        const statuses = lsG.steps.map(s => { try { return !!s.ok(ctxLive); } catch (e) { return false; } });
+        const sIdx = statuses.indexOf(false);
+        renderMission(lsG, statuses);
+        if (sIdx !== -1) {
+          if (sIdx > missionStepIdx) {
+            missionStepIdx = sIdx;
+            fb.className = "feedback ok";
+            fb.textContent = "✅ " + lsG.steps[sIdx - 1].yay + " — next: " + lsG.steps[sIdx].g + " (Playing now — Esc stops.)";
+            confetti(24);
+          } else {
+            fb.className = "feedback err";
+            fb.textContent = "🧭 " + (lsG.steps[sIdx].miss || lsG.steps[sIdx].g) + " (It still runs — play, observe, adjust.)";
+          }
+          enterLive();
+          return;
+        }
+        missionStepIdx = lsG.steps.length;
+      }
+      const verdict = safeCheck(LESSONS[current], ctxLive);
       if (verdict.pass) {
         fb.className = "feedback ok";
         fb.textContent = "✅ " + verdict.msg + " (Playing now — Esc stops.)";

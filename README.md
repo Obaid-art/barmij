@@ -1,5 +1,7 @@
 # Barmij برمج — real Python for every student in the UAE
 
+**LIVE for everyone, everywhere: https://obaid-art.github.io/barmij/**
+
 A free initiative (see docs/INITIATIVE.md): visual, joyful, pedagogically serious Python for
 school students, built to be gifted to the Ministry of Education.
 

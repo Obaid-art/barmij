@@ -1,5 +1,19 @@
 # Decisions Log — Barmij
 
+- **2026-09-15 / B51 — BARMIJ IS LIVE. 🌍** The founder created his GitHub account
+  (Obaid-art), authorized the CLI himself from Abu Dhabi, and the gift went to the world:
+  - Repository: https://github.com/Obaid-art/barmij (public — the code, the docs, all
+    fifty-one decisions of history)
+  - THE LINK: **https://obaid-art.github.io/barmij/** — free hosting on GitHub Pages
+    (gh-pages branch = app/ at root), HTTPS enforced, no server bills, ever — the
+    free-forever product on free-forever infrastructure.
+  Verified from the live internet before telling the founder: Pyodide woke, three prints
+  passed w1l1 ("The computer speaks your words"), and a golden star was drawn by real
+  Python at the public URL. First audience: the founder's professor, 2026-09-15.
+  Deploy discipline: master holds truth; publishing an update = commit to master, then
+  refresh gh-pages from it (git commit-tree HEAD:app + branch -f + push) so the site is
+  always a pure image of app/.
+
 - **2026-09-14 / B50 — ADHD limits applied EVERYWHERE, and made LAW (founder: "applied
   everywhere… no leftovers").** B49 covered lessons; this pass covered everything else:
   1. FULL-SURFACE SCAN: all 199 bank captions/remix-hints, every think-aloud step, all 12

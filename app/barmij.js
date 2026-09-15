@@ -598,7 +598,7 @@ function renderBeats(ls) {
     div.className = "beat";
     div.dataset.i = i;
     let html = b.t;
-    if (b.fig) html += `<figure>${FIG[b.fig]}${b.figcap ? `<figcaption>${b.figcap}</figcaption>` : ""}</figure>`;
+    if (b.fig) html += `<figure>${typeof b.fig === "string" ? FIG[b.fig] : BF(b.fig)}${b.figcap ? `<figcaption>${b.figcap}</figcaption>` : ""}</figure>`;
     if (b.build) html += `<div class="build"><div class="build-cap"></div><div class="build-code"></div>
       <div class="build-effect"><span class="arrow">→</span><span class="chip">${b.build.effect}</span></div></div>`;
     div.innerHTML = html;

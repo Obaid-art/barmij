@@ -1,5 +1,29 @@
 # Decisions Log — Barmij
 
+- **2026-09-15 / B57 — THE FIGURE FLOOD (founder: "flood it with figures, explaining what's
+  happening at each stage, then make them practice — text is boring… figures kids easily
+  comprehend").** The charter's oldest promise ("every concept gets a beautiful figure"),
+  finally paid in full — and paid SYSTEMATICALLY:
+  - app/figures.js: a figure ENGINE, not 48 hand drawings. Four generators in the manuscript
+    language (role-colored token boxes with the charter's border cues, arrows, rose effect
+    chips): ANATOMY (a code line dissected, labels beneath, → what happens), SLOTS (boxes
+    with slot numbers — lists, strings, bags), CYCLE (steps around a loop — heartbeats,
+    while-promises, for-in), ROWS (little pipelines: code → result, stacked).
+  - Beats carry figure DATA (fig: {k:…}); the engine renders them at view time. Kid-simple
+    law: one idea per figure, ≤4 elements, concrete words ("slot 0", "what happens"),
+    arrows left-to-right or circular.
+  - 27 new figures authored across ALL EIGHT WORLDS (43 figure placements total with the
+    legacy anatomy set): print anatomy, color/width, the choice bag, int(input), the mood
+    fork, nested-laps, 360 arithmetic, range(start,stop,step), the while cycle, fireworks,
+    teach-vs-say, the size door, poly's two doors, return-catches, ray→sun→sky, slot-zero,
+    for-in cycle, append/len/in, word-as-slots, the Caesar slide, quiz twins, the tick
+    heartbeat, key_pressed True/False, fall-and-respawn, the distance judge, three game
+    laws, number→bar, dict-by-name, three chart duties, the split pipeline, the champion,
+    the search walk, the sort staircase, cost-vs-size, fit/predict.
+  Verified: 43 figures render on all 48 stories, zero geometry faults, zero console errors,
+  gates PASS (fig data keys chosen to never collide with the beat-text gate). Assets v33,
+  deployed. Remaining polish: founder review of each figure — his eye is the final gate.
+
 - **2026-09-15 / B56 — THE TYPING CARD IS DEAD (founder: keyboard failed him twice on the
   live site; "blank space then 'watch me first' is very strange… should happen
   automatically… I prefer it like the figures… I will not publish this").** When a component

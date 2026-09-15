@@ -106,7 +106,13 @@ const WORLD1_LESSONS = [
           effect: "Ahlan!",
           done: "Run it — and the computer says your words.",
         } },
-      { t: "The colors never lie: <code class=\"k\">Python's word</code> → <code class=\"a\">your words</code> → <code class=\"r\">what happens</code>." },
+      { t: "The colors never lie:",
+        fig: { k: "anat", p: [
+          { c: "print", r: "k", l: "Python's word" },
+          { c: "(", r: "i" },
+          { c: "\"Ahlan!\"", r: "v", l: "your words, in quotes" },
+          { c: ")", r: "i" },
+        ], eff: "Ahlan!", effl: "what happens" } },
     ],
     predict: "Before you press Run — what exactly do you think will appear?",
     starter: `print("Ahlan! I am the computer")\n`,
@@ -159,7 +165,11 @@ const WORLD1_LESSONS = [
     title: "Colors & thick pens",
     subtitle: "Your drawing, your style",
     beats: [
-      { t: "Two new magic words: <code class=\"k\">color</code>(<code class=\"a\">\"gold\"</code>) and <code class=\"k\">width</code>(<code class=\"a\">8</code>)." },
+      { t: "Two new magic words:",
+        fig: { k: "rows", rows: [
+          { code: [{ c: "color(", r: "k" }, { c: "\"gold\"", r: "v" }, { c: ")", r: "k" }], res: "next lines turn gold" },
+          { code: [{ c: "width(", r: "k" }, { c: "8", r: "v" }, { c: ")", r: "k" }], res: "a thick pen" },
+        ] } },
       { t: "They style whatever the pen draws <b>next</b>." },
       { t: "It knows 100+ colors: <code class=\"a\">\"red\"</code> <code class=\"a\">\"teal\"</code> <code class=\"a\">\"hotpink\"</code> <code class=\"a\">\"royalblue\"</code> <code class=\"a\">\"orchid\"</code>…" },
       { t: "Change color between lines → every side different." },
@@ -256,7 +266,10 @@ const WORLD1_LESSONS = [
     subtitle: "Make — no starter code, just you",
     beats: [
       { t: "Your first solo make: a five-pointed star ⭐" },
-      { t: "You know everything needed: <code class=\"a\">5</code> equal lines, turning <code class=\"a\">144</code>° after each." },
+      { t: "You know everything needed:",
+        fig: { k: "rows", rows: [
+          { lab: "5 times", code: [{ c: "forward(150)", r: "k" }, { c: " then ", r: "i" }, { c: "right(144)", r: "k" }], res: "⭐" },
+        ] } },
       { t: "(A square turned 90. A star folds sharper.)" },
       { t: "Loop or no loop — your call. Mastery means <b>your way</b>." },
     ],
@@ -418,7 +431,9 @@ const WORLD2_LESSONS = [
     beats: [
       { t: "<code class=\"k\">import</code> <code class=\"v\">random</code> — a toolbox of chance." },
       { t: "One tool throws dice:", fig: "dice" },
-      { t: "See <code>[ ... ]</code>? A <b>bag</b> of options. Python grabs ONE — eyes closed." },
+      { t: "See <code>[ ... ]</code>? A <b>bag</b> of options:",
+        fig: { k: "slots", items: ["\"gold\"", "\"royalblue\"", "\"hotpink\"", "\"seagreen\""], idx: false,
+               note: "choice grabs ONE — eyes closed, different every run" } },
       { t: "The grabbing tool: <code class=\"v\">random</code>.<code class=\"k\">choice</code>([<code class=\"a\">\"gold\"</code>, <code class=\"a\">\"pink\"</code>])" },
       { t: "Same code. Different result. <b>Every run.</b>" },
     ],
@@ -444,7 +459,12 @@ const WORLD2_LESSONS = [
     subtitle: "input + random = magic",
     beats: [
       { t: "Two powers, one machine: <code class=\"k\">input</code> + <code class=\"v\">random</code>." },
-      { t: "A question from a human. An answer from chance. 🔮" },
+      { t: "A question from a human. An answer from chance. 🔮",
+        fig: { k: "rows", rows: [
+          { lab: "ask", code: [{ c: "input(...)", r: "k" }], res: "your question" },
+          { lab: "chance", code: [{ c: "choice([ 8 fortunes ])", r: "k" }], res: "ONE fortune" },
+          { lab: "reply", code: [{ c: "print(...)", r: "k" }], res: "the magic answer" },
+        ] } },
       { t: "This is how real apps are born." },
     ],
     starter: `import random\n\nquestion = input("Ask the fortune teller anything...")\n\nfortune = random.choice([\n    "Yes, absolutely!",\n    "The stars say... try again tomorrow",\n    "All signs point to YES",\n    "Very doubtful, ya sadiqi",\n])\n\nprint("You asked: " + question)\nprint("The fortune says: " + fortune)\n`,
@@ -468,7 +488,12 @@ const WORLD2_LESSONS = [
     subtitle: "elif, int — your first real game",
     beats: [
       { t: "<code class=\"k\">input</code> gives <b>words</b> — even \"7\" is a word." },
-      { t: "<code class=\"k\">int</code>(...) turns words into real numbers. Now &gt; and &lt; work." },
+      { t: "<code class=\"k\">int</code>(...) turns words into real numbers:",
+        fig: { k: "anat", p: [
+          { c: "int(", r: "k", l: "words → number" },
+          { c: "input(\"...\")", r: "k", l: "the typed answer" },
+          { c: ")", r: "i" },
+        ], eff: "7", effl: "a real number — now > and < work" } },
       { t: "<code class=\"k\">str</code>(...) is the twin, reversed — numbers back into words, ready for +." },
       { t: "Between if and else lives <code class=\"k\">elif</code>: \"else, if…\"" },
       { t: "That's everything a guessing game needs. 🎯" },
@@ -495,7 +520,12 @@ const WORLD2_LESSONS = [
     beats: [
       { t: "Final make: a machine that answers <b>feelings</b> with <b>art</b>." },
       { t: "Ingredients: <code class=\"k\">input</code> to ask · <code class=\"k\">if</code>/<code class=\"k\">elif</code>/<code class=\"k\">else</code> to choose · 3 moods minimum." },
-      { t: "Happy → golden sun? Sleepy → blue waves? Excited → pink firework?" },
+      { t: "One feeling in, one artwork out:",
+        fig: { k: "rows", rows: [
+          { lab: "\"happy\"", code: [], res: "a golden sun" },
+          { lab: "\"sleepy\"", code: [], res: "blue waves" },
+          { lab: "anything else", code: [], res: "a pink firework" },
+        ] } },
       { t: "You are artist AND engineer. There is no wrong machine." },
     ],
     starter: `# The Mood Machine\n# Ask how they feel - then answer with art.\n\nmood = input("How do you feel today?")\n\n`,
@@ -536,7 +566,12 @@ const WORLD3_LESSONS = [
           effect: "a ring of 6 hexagons",
           done: "Four little lines. Thirty-six moves. That is the power of nesting.",
         } },
-      { t: "Indent depth says who you belong to." },
+      { t: "Indent depth says who you belong to:",
+        fig: { k: "rows", rows: [
+          { lab: "outer lap 1", code: [{ c: "inner runs 6 times", r: "i" }], res: "one hexagon" },
+          { lab: "outer lap 2", code: [{ c: "inner runs again", r: "i" }], res: "next hexagon" },
+          { lab: "6 laps", code: [{ c: "6 × 6", r: "i" }], res: "36 moves" },
+        ] } },
       { t: "Small code, huge work — that's what computers are FOR." },
     ],
     predict: "Six hexagons, each drawn after a turn of 60 — what ring appears?",
@@ -561,7 +596,10 @@ const WORLD3_LESSONS = [
     beats: [
       { t: "Zellij — the tile art of our mosques. Pure geometry, pure patience." },
       { t: "The recipe: draw a shape. Turn a little. Draw again." },
-      { t: "To close the circle: small turn × repeats = <b>360</b>." },
+      { t: "To close the circle: small turn × repeats = <b>360</b>.",
+        fig: { k: "rows", rows: [
+          { code: [{ c: "12", r: "v" }, { c: " squares × ", r: "i" }, { c: "30", r: "v" }, { c: "° each", r: "i" }], res: "360° — it closes" },
+        ], note: "12×30 · 8×45 · 10×36 · 6×60 — all roads to 360" } },
       { t: "Twelve squares × turns of 30 = a rose window." },
     ],
     predict: "Twelve overlapping squares — what blooms where they cross?",
@@ -584,7 +622,16 @@ const WORLD3_LESSONS = [
     title: "Counting your way",
     subtitle: "range with start, stop, step",
     beats: [
-      { t: "range can count YOUR way: start, stop, step." },
+      { t: "range can count YOUR way:",
+        fig: { k: "anat", p: [
+          { c: "range(", r: "k" },
+          { c: "20", r: "v", l: "START here" },
+          { c: ", ", r: "i" },
+          { c: "121", r: "v", l: "STOP before this" },
+          { c: ", ", r: "i" },
+          { c: "20", r: "v", l: "STEP by this" },
+          { c: ")", r: "i" },
+        ], eff: "20 40 60 80 100 120" } },
       { t: "Watch the three numbers take their places:",
         build: {
           steps: [
@@ -629,7 +676,9 @@ const WORLD3_LESSONS = [
           effect: "6 petals — then it stops itself",
           done: "No promise, no escape. The counter is the loop's word of honor.",
         } },
-      { t: "Forget the promise → the loop runs forever." },
+      { t: "Forget the promise → the loop runs forever.",
+        fig: { k: "cycle", title: "while n < 6", steps: ["check: n < 6 ?", "yes → draw a petal", "n = n + 1"],
+               note: "the promise grows n — one day the check says no, and the loop stops itself" } },
       { t: "Don't fear it: I catch runaway loops and tell you kindly." },
     ],
     predict: "What happens if n = n + 1 is deleted? (Try it later — I'll catch you.)",
@@ -654,7 +703,12 @@ const WORLD3_LESSONS = [
     subtitle: "Nested loops light the sky",
     beats: [
       { t: "December 2nd. The sky over the Union. Your code lights it." },
-      { t: "Each rocket: jump somewhere, pick a color, burst in a circle." },
+      { t: "Each rocket, three moves:",
+        fig: { k: "rows", rows: [
+          { code: [{ c: "jump somewhere", r: "i" }], res: "a new spot" },
+          { code: [{ c: "pick a color", r: "i" }], res: "a new color" },
+          { code: [{ c: "burst 12 rays", r: "i" }], res: "boom 🎆" },
+        ] } },
       { t: "Nested: outer loop = rockets. Inner loop = one burst." },
     ],
     predict: "Eight rockets of twelve rays — how many lines will light the sky?",
@@ -717,7 +771,11 @@ const WORLD4_LESSONS = [
           effect: "the star appears — the word obeyed",
           done: "Teach once. Say it whenever you want, forever.",
         } },
-      { t: "The great secret: <b>teaching a word is silent — saying it makes it happen</b>." },
+      { t: "The great secret: <b>teaching is silent — saying makes it happen</b>.",
+        fig: { k: "rows", rows: [
+          { lab: "teaching", code: [{ c: "def star():", r: "k" }, { c: " + recipe", r: "i" }], res: "silence" },
+          { lab: "saying", code: [{ c: "star()", r: "n" }], res: "⭐ it happens!" },
+        ] } },
       { t: "Python only knows the words you teach it. Today, its dictionary grew." },
     ],
     predict: "The code teaches star() but says it TWICE — how many stars appear?",
@@ -752,7 +810,12 @@ const WORLD4_LESSONS = [
           effect: "two squares, one word",
           done: "One recipe, endless sizes. The door makes the word powerful.",
         } },
-      { t: "Same word + different gift = different result." },
+      { t: "Same word + different gift = different result.",
+        fig: { k: "rows", rows: [
+          { code: [{ c: "def square(", r: "k" }, { c: "size", r: "n" }, { c: "):", r: "k" }], res: "a door" },
+          { code: [{ c: "square(", r: "n" }, { c: "50", r: "v" }, { c: ")", r: "n" }], res: "small square" },
+          { code: [{ c: "square(", r: "n" }, { c: "110", r: "v" }, { c: ")", r: "n" }], res: "big square" },
+        ] } },
     ],
     predict: "square(50), square(110), square(170) — what family of squares appears?",
     starter: `def square(size):\n    for i in range(4):\n        forward(size)\n        right(90)\n\ncolor("teal")\nwidth(3)\nsquare(50)\nsquare(110)\nsquare(170)\n`,
@@ -775,7 +838,14 @@ const WORLD4_LESSONS = [
     title: "The universal shape",
     subtitle: "Two doors — sides AND size",
     beats: [
-      { t: "Two doors: <code class=\"k\">def</code> <code class=\"v\">poly</code>(<code class=\"v\">sides</code>, <code class=\"v\">size</code>)." },
+      { t: "Two doors:",
+        fig: { k: "anat", p: [
+          { c: "def poly(", r: "k" },
+          { c: "sides", r: "n", l: "door 1" },
+          { c: ", ", r: "i" },
+          { c: "size", r: "n", l: "door 2" },
+          { c: "):", r: "k" },
+        ], eff: "right(360 / sides)", effl: "the turn computes ITSELF" } },
       { t: "The turn is computed: 360 ÷ sides. Python writes ÷ as <b>/</b>." },
       { t: "One word now draws EVERY regular shape that exists." },
     ],
@@ -812,7 +882,11 @@ const WORLD4_LESSONS = [
           effect: "size = 150",
           done: "Ask a word a question. Catch its answer in a jar. Use it.",
         } },
-      { t: "print shows a human. <code class=\"k\">return</code> hands to the PROGRAM." },
+      { t: "print shows a human. <code class=\"k\">return</code> hands to the PROGRAM.",
+        fig: { k: "rows", rows: [
+          { code: [{ c: "double(", r: "n" }, { c: "75", r: "v" }, { c: ")", r: "n" }], res: "150 comes BACK" },
+          { code: [{ c: "size", r: "n" }, { c: " = ", r: "i" }, { c: "double(75)", r: "n" }], res: "the jar catches it" },
+        ] } },
     ],
     predict: "Each square's size is double the last — 40, then ?, then ? — how big is the third?",
     starter: `def double(n):\n    return n * 2\n\ndef square(size):\n    for i in range(4):\n        forward(size)\n        right(90)\n\nwidth(3)\ns = 40\ncolor("teal")\nsquare(s)\ns = double(s)\ncolor("goldenrod")\nsquare(s)\ns = double(s)\ncolor("crimson")\nsquare(s)\n`,
@@ -837,7 +911,12 @@ const WORLD4_LESSONS = [
     beats: [
       { t: "The deepest magic: a new word may USE your words." },
       { t: "<code class=\"v\">ray</code>() is taught… then <code class=\"v\">sun</code>() is taught USING ray()." },
-      { t: "Words build words build words. <b>All software is this tower.</b>" },
+      { t: "Words build words build words. <b>All software is this tower.</b>",
+        fig: { k: "rows", rows: [
+          { code: [{ c: "ray()", r: "n" }], res: "one line" },
+          { code: [{ c: "sun()", r: "n" }, { c: " says 12 × ", r: "i" }, { c: "ray()", r: "n" }], res: "a sun" },
+          { code: [{ c: "sky()", r: "n" }, { c: " says 3 × ", r: "i" }, { c: "sun()", r: "n" }], res: "a whole sky" },
+        ] } },
     ],
     predict: "sun() says ray() twelve times, turning 30 between — what rises?",
     starter: `def ray():\n    forward(75)\n    back(75)\n\ndef sun():\n    for i in range(12):\n        ray()\n        right(30)\n\ncolor("gold")\nwidth(4)\nsun()\npenup()\njump(150, 90)\npendown()\ncolor("darkorange")\nsun()\n`,
@@ -903,7 +982,9 @@ const WORLD5_LESSONS = [
           effect: "colors[0] → gold",
           done: "Slot 0 is the first. Slot 1 the second. The zero is our gift to mathematics.",
         } },
-      { t: "The trap everyone falls in once: <b>the first slot is 0, not 1</b>." },
+      { t: "The trap everyone falls in once: <b>the first slot is 0, not 1</b>.",
+        fig: { k: "slots", name: "colors", items: ["\"gold\"", "\"teal\"", "\"crimson\""],
+               note: "boxes count from zero — always" } },
     ],
     predict: "Three dots, painted from slots 0, 1, 2 — which colors, in which order?",
     starter: `colors = ["gold", "teal", "crimson"]\n\npenup()\njump(-90, 0)\ncolor(colors[0])\ndot(30)\njump(0, 0)\ncolor(colors[1])\ndot(30)\njump(90, 0)\ncolor(colors[2])\ndot(30)\n`,
@@ -938,7 +1019,9 @@ const WORLD5_LESSONS = [
           effect: "one ray per treasure, each in its color",
           done: "However many treasures the box holds — the loop visits them all.",
         } },
-      { t: "Add a treasure to the box → the loop draws one more. Automatically." },
+      { t: "Add a treasure to the box → the loop draws one more. Automatically.",
+        fig: { k: "cycle", title: "for c in colors", steps: ["c = next treasure", "draw with c", "more in the box?"],
+               note: "one more treasure → one more lap, no code changes" } },
     ],
     predict: "Five colors in the box, rays turning 72 — what wheel appears?",
     starter: `colors = ["gold", "crimson", "teal", "mediumorchid", "darkorange"]\n\nwidth(5)\nfor c in colors:\n    color(c)\n    forward(90)\n    back(90)\n    right(72)\n`,
@@ -971,7 +1054,12 @@ const WORLD5_LESSONS = [
           effect: "len(guests) → 2",
           done: "append grows the box. len counts it. in checks who's inside.",
         } },
-      { t: "And <code class=\"k\">in</code> asks a question: is \"Maryam\" <b>in</b> guests?" },
+      { t: "Three powers for one majlis:",
+        fig: { k: "rows", rows: [
+          { code: [{ c: "guests.append(", r: "k" }, { c: "\"Sara\"", r: "v" }, { c: ")", r: "k" }], res: "the box grows" },
+          { code: [{ c: "len(", r: "k" }, { c: "guests", r: "n" }, { c: ")", r: "k" }], res: "3" },
+          { code: [{ c: "\"Sara\"", r: "v" }, { c: " in ", r: "k" }, { c: "guests", r: "n" }], res: "True" },
+        ] } },
     ],
     starter: `guests = []\n\nfor i in range(3):\n    name = input("Who is arriving at the majlis?")\n    if name in guests:\n        print(name + " is already inside!")\n    else:\n        guests.append(name)\n\nprint("Tonight we are " + str(len(guests)) + ":")\nfor g in guests:\n    print("Ahlan, " + g + "!")\n`,
     task: "Host the majlis: welcome 3 guests, catch any double arrival, count them, greet each by name.",
@@ -994,7 +1082,9 @@ const WORLD5_LESSONS = [
     subtitle: "Strings have slots and length",
     beats: [
       { t: "A secret: every WORD is already a box — of letters." },
-      { t: "<code class=\"v\">word</code>[<code class=\"a\">0</code>] is its first letter. <code class=\"k\">len</code>(<code class=\"v\">word</code>) counts them." },
+      { t: "<code class=\"v\">word</code>[<code class=\"a\">0</code>] is its first letter. <code class=\"k\">len</code>(<code class=\"v\">word</code>) counts them.",
+        fig: { k: "slots", name: "word", items: ["\"s\"", "\"a\"", "\"l\"", "\"a\"", "\"m\""],
+               note: "a word is a box of letters — len(word) is 5" } },
       { t: "And the visiting loop walks words: <code class=\"k\">for</code> <code class=\"v\">letter</code> <code class=\"k\">in</code> <code class=\"v\">word</code>:" },
     ],
     predict: "A name walks through the loop, one dot per letter — how long is the trail for YOUR name?",
@@ -1018,7 +1108,12 @@ const WORLD5_LESSONS = [
     subtitle: "صفر — the zero that named the codes",
     beats: [
       { t: "The word <b>cipher</b> comes from <b>صفر — sifr, zero</b>. Arab mathematicians named the secret codes." },
-      { t: "The oldest trick: slide every letter 3 steps down the alphabet." },
+      { t: "The oldest trick: slide every letter 3 steps down the alphabet.",
+        fig: { k: "rows", rows: [
+          { lab: "find", code: [{ c: "alphabet.find(", r: "k" }, { c: "\"a\"", r: "v" }, { c: ")", r: "k" }], res: "0" },
+          { lab: "slide", code: [{ c: "0 + 3", r: "i" }], res: "3" },
+          { lab: "collect", code: [{ c: "alphabet[", r: "n" }, { c: "3", r: "v" }, { c: "]", r: "n" }], res: "\"d\"" },
+        ], note: "a → d · b → e · z wraps back to c" } },
       { t: "Watch the machine's heart:",
         build: {
           steps: [
@@ -1054,7 +1149,11 @@ const WORLD5_LESSONS = [
     subtitle: "Make — everything in one box",
     beats: [
       { t: "The final make: a quiz machine — questions in one box, answers in another." },
-      { t: "Slot i of questions matches slot i of answers. Twins by number." },
+      { t: "Slot i of questions matches slot i of answers. Twins by number.",
+        fig: { k: "rows", rows: [
+          { code: [{ c: "questions[", r: "n" }, { c: "0", r: "v" }, { c: "]", r: "n" }], res: "answers[0]" },
+          { code: [{ c: "questions[", r: "n" }, { c: "1", r: "v" }, { c: "]", r: "n" }], res: "answers[1]" },
+        ], note: "same number, same pair — twins" } },
       { t: "Ask, compare, count the score. Then judge — kindly." },
     ],
     starter: `questions = ["What is the capital of the UAE?"]\nanswers = ["abu dhabi"]\n\nscore = 0\n\nfor i in range(len(questions)):\n    reply = input(questions[i])\n    if reply == answers[i]:\n        print("Correct!")\n        score = score + 1\n    else:\n        print("It was: " + answers[i])\n\nprint("Score: " + str(score) + " of " + str(len(questions)))\n`,
@@ -1096,7 +1195,9 @@ const WORLD6_LESSONS = [
           effect: "a falcon gliding across the sky",
           done: "Run doesn't finish anymore. Run begins a LIFE. Esc ends it.",
         } },
-      { t: "The frame is wiped every blink — whatever tick draws IS the world." },
+      { t: "The frame is wiped every blink — whatever tick draws IS the world.",
+        fig: { k: "cycle", title: "30× a second", steps: ["wipe the frame", "run tick()", "draw the world"],
+               note: "tiny moves, thirty a second — that IS motion" } },
     ],
     predict: "x grows 3 per blink and wraps at the edge — describe the motion before you see it.",
     starter: `game.x = -200\n\ndef tick():\n    game.x = game.x + 3\n    if game.x > 220:\n        game.x = -220\n    color("peru")\n    penup()\n    jump(game.x, -130)\n    dot(16)\n    color("saddlebrown")\n    jump(game.x + 11, -123)\n    dot(5)\n`,
@@ -1121,7 +1222,11 @@ const WORLD6_LESSONS = [
     subtitle: "The player enters the world",
     beats: [
       { t: "A living game listens: <code class=\"k\">key_pressed</code>(<code class=\"a\">\"left\"</code>) asks — held right now?" },
-      { t: "Ask every blink. Move only while the answer is yes." },
+      { t: "Ask every blink. Move only while the answer is yes.",
+        fig: { k: "rows", rows: [
+          { lab: "held down", code: [{ c: "key_pressed(\"left\")", r: "k" }], res: "True → move" },
+          { lab: "not held", code: [{ c: "key_pressed(\"left\")", r: "k" }], res: "False → wait" },
+        ] } },
       { t: "Now the falcon obeys not the code — but the CHILD at the keys." },
     ],
     predict: "No key held → what does the falcon do? (Hint: what SHOULD a waiting falcon do?)",
@@ -1149,7 +1254,11 @@ const WORLD6_LESSONS = [
     beats: [
       { t: "Enter the houbara — the falcon's legendary quarry — falling from the sky." },
       { t: "It needs its OWN jars: game.prey_x, game.prey_y." },
-      { t: "Past the ground? Respawn at the top — at a random x. The sky never empties." },
+      { t: "Past the ground? Respawn at the top. The sky never empties.",
+        fig: { k: "rows", rows: [
+          { lab: "every blink", code: [{ c: "game.prey_y - 6", r: "n" }], res: "it falls" },
+          { lab: "below ground", code: [{ c: "back to the top", r: "i" }], res: "random new x" },
+        ] } },
     ],
     predict: "The prey falls 6 per blink from 240 — roughly how many blinks to cross the sky?",
     starter: `import random\n\ngame.x = 0\ngame.prey_x = 60\ngame.prey_y = 240\n\ndef tick():\n    if key_pressed("left"):\n        game.x = game.x - 6\n    if key_pressed("right"):\n        game.x = game.x + 6\n    game.prey_y = game.prey_y - 6\n    if game.prey_y < -240:\n        game.prey_y = 240\n        game.prey_x = random.randint(-200, 200)\n    color("slategray")\n    penup()\n    jump(game.prey_x, game.prey_y)\n    dot(10)\n    color("peru")\n    jump(game.x, -130)\n    dot(16)\n`,
@@ -1176,7 +1285,14 @@ const WORLD6_LESSONS = [
     title: "The catch",
     subtitle: "distance, score, and the writing on the sky",
     beats: [
-      { t: "The hunt needs a judge: <code class=\"k\">distance</code>(x1, y1, x2, y2) — how far apart, in steps?" },
+      { t: "The hunt needs a judge:",
+        fig: { k: "anat", p: [
+          { c: "distance(", r: "k" },
+          { c: "falcon x, y", r: "n", l: "me" },
+          { c: ", ", r: "i" },
+          { c: "prey x, y", r: "n", l: "it" },
+          { c: ")", r: "i" },
+        ], eff: "steps apart", effl: "closer than 30 = CATCH" } },
       { t: "Watch the judging line:",
         build: {
           steps: [
@@ -1210,7 +1326,12 @@ const WORLD6_LESSONS = [
     title: "Game feel",
     subtitle: "Edges, difficulty, mercy",
     beats: [
-      { t: "A finished game respects three laws." },
+      { t: "A finished game respects three laws:",
+        fig: { k: "rows", rows: [
+          { lab: "EDGES", code: [], res: "the falcon can't leave the world" },
+          { lab: "CHALLENGE", code: [], res: "every catch — a little faster" },
+          { lab: "MERCY", code: [], res: "a miss costs nothing" },
+        ] } },
       { t: "EDGES: the falcon may not leave the world — clamp it at both walls." },
       { t: "CHALLENGE: every catch, the sky falls a little faster. Mastery earns storm." },
       { t: "MERCY: a miss costs nothing. The hunt simply continues." },
@@ -1267,7 +1388,11 @@ const WORLD7_LESSONS = [
     subtitle: "A chart is just drawing, driven by numbers",
     beats: [
       { t: "A secret before the fancy tools: <b>a chart is just drawing driven by data</b>." },
-      { t: "A bar is a line whose LENGTH is a number from your box." },
+      { t: "A bar is a line whose LENGTH is a number from your box.",
+        fig: { k: "rows", rows: [
+          { code: [{ c: "3", r: "v" }], res: "▮▮▮" },
+          { code: [{ c: "5", r: "v" }], res: "▮▮▮▮▮" },
+        ], note: "bigger number, longer bar — that is the whole secret of charts" } },
       { t: "Build one by hand once — and no chart will ever be magic again." },
     ],
     predict: "Goals per week: 3, 1, 4, 2, 5 — which bar will tower, which will shrink?",
@@ -1302,7 +1427,11 @@ const WORLD7_LESSONS = [
           effect: "temps[\"Jul\"] → 41",
           done: "And the visiting loop walks the names: for month in temps:",
         } },
-      { t: "Numbers approximate — real data is honest about that." },
+      { t: "Ask by NAME, not by slot:",
+        fig: { k: "rows", rows: [
+          { code: [{ c: "temps[", r: "n" }, { c: "\"Jan\"", r: "v" }, { c: "]", r: "n" }], res: "24" },
+          { code: [{ c: "temps[", r: "n" }, { c: "\"Jul\"", r: "v" }, { c: "]", r: "n" }], res: "41" },
+        ], note: "numbers approximate — real data is honest about that" } },
     ],
     predict: "Four months, four bars from the dictionary — which month towers?",
     starter: `temps = {"Jan": 24, "Apr": 34, "Jul": 41, "Oct": 35}\n\nx = -150\npenup()\nfor month in temps:\n    t = temps[month]\n    jump(x, -100)\n    color("darkorange")\n    width(16)\n    pendown()\n    forward(t * 4)\n    penup()\n    color("dimgray")\n    write(x - 14, -128, month)\n    write(x - 10, t * 4 - 92, str(t))\n    x = x + 90\n`,
@@ -1358,7 +1487,12 @@ const WORLD7_LESSONS = [
     subtitle: "An unlabeled chart is a rumor",
     beats: [
       { t: "The scientist's law: <b>an unlabeled chart is a rumor</b>." },
-      { t: "Three duties, every chart, forever: title · xlabel · ylabel." },
+      { t: "Three duties, every chart, forever:",
+        fig: { k: "rows", rows: [
+          { code: [{ c: "plt.title", r: "k" }], res: "what am I?" },
+          { code: [{ c: "plt.xlabel", r: "k" }], res: "what's across?" },
+          { code: [{ c: "plt.ylabel", r: "k" }], res: "what's up?" },
+        ] } },
       { t: "plt.bar makes bars; the labels make them TRUE." },
     ],
     predict: "Dubai's rain, month by month — how many bars will barely exist?",
@@ -1381,7 +1515,12 @@ const WORLD7_LESSONS = [
     title: "Raw data, tamed",
     subtitle: "split — reading real records",
     beats: [
-      { t: "Real data arrives MESSY — lines of text, commas between values." },
+      { t: "Real data arrives MESSY — lines of text, commas between values.",
+        fig: { k: "rows", rows: [
+          { code: [{ c: "\"Dubai,41\"", r: "v" }, { c: ".split(\",\")", r: "k" }], res: "[\"Dubai\", \"41\"]" },
+          { code: [{ c: "parts[0]", r: "n" }], res: "\"Dubai\"" },
+          { code: [{ c: "int(parts[1])", r: "k" }], res: "41" },
+        ] } },
       { t: "Watch the taming tool:",
         build: {
           steps: [
@@ -1445,7 +1584,12 @@ const WORLD8_LESSONS = [
       { t: "The word ALGORITHM is a NAME: <b>الخوارزمي — al-Khwarizmi</b>, mathematician of Baghdad." },
       { t: "Our civilization named the cipher (صفر) — and the algorithm too. We end at our giants." },
       { t: "An algorithm: a recipe so precise, even a machine can follow it." },
-      { t: "Your first classic — the CHAMPION pattern: keep the best seen so far." },
+      { t: "Your first classic — the CHAMPION pattern:",
+        fig: { k: "rows", rows: [
+          { lab: "start", code: [{ c: "champion = numbers[0]", r: "n" }], res: "first holds the title" },
+          { lab: "fight", code: [{ c: "n > champion ?", r: "i" }], res: "bigger takes it" },
+          { lab: "the end", code: [{ c: "last one standing", r: "i" }], res: "the champion 🏆" },
+        ] } },
     ],
     predict: "The champion starts as slot 0 and fights every number — who survives [38, 12, 45, 7, 29]?",
     starter: `numbers = [38, 12, 45, 7, 29]\n\nchampion = numbers[0]\nfor n in numbers:\n    if n > champion:\n        champion = n\n\nprint("The champion: " + str(champion))\n\nx = -140\npenup()\nfor n in numbers:\n    jump(x, -100)\n    if n == champion:\n        color("gold")\n    else:\n        color("steelblue")\n    width(16)\n    pendown()\n    forward(n * 3)\n    penup()\n    x = x + 60\n`,
@@ -1466,7 +1610,12 @@ const WORLD8_LESSONS = [
     title: "The patient hunter",
     subtitle: "Linear search — and counting its steps",
     beats: [
-      { t: "Searching is walking the box, asking each slot: is it you?" },
+      { t: "Searching is walking the box, asking each slot: is it you?",
+        fig: { k: "rows", rows: [
+          { lab: "slot 0", code: [{ c: "\"Maryam\" — you?", r: "i" }], res: "no" },
+          { lab: "slot 1", code: [{ c: "\"Khalid\" — you?", r: "i" }], res: "no" },
+          { lab: "slot 3", code: [{ c: "\"Sara\" — you?", r: "i" }], res: "YES — 4 questions" },
+        ] } },
       { t: "The new habit of this world: <b>COUNT the steps</b>." },
       { t: "A recipe isn't just correct — it has a COST. Scientists measure it." },
     ],
@@ -1503,7 +1652,12 @@ const WORLD8_LESSONS = [
           effect: "[38, 12, 45, 7, 29] → [7, 12, 29, 38, 45]",
           done: "Chaos shrinks, order grows. Every sort in the world is a cousin of this.",
         } },
-      { t: "The staircase below is the PROOF — bars that only ever rise." },
+      { t: "The staircase below is the PROOF — bars that only ever rise.",
+        fig: { k: "rows", rows: [
+          { code: [{ c: "find the smallest", r: "i" }], res: "move it out" },
+          { code: [{ c: "again… and again", r: "i" }], res: "order grows" },
+          { code: [{ c: "chaos box empty", r: "i" }], res: "[7, 12, 29, 38, 45]" },
+        ] } },
     ],
     predict: "Five chaotic bars enter the sorter — what shape must come out, always?",
     starter: `numbers = [38, 12, 45, 7, 29]\nsorted_list = []\n\nwhile len(numbers) > 0:\n    smallest = numbers[0]\n    for n in numbers:\n        if n < smallest:\n            smallest = n\n    sorted_list.append(smallest)\n    numbers.remove(smallest)\n\nprint(sorted_list)\n\nx = -140\npenup()\nfor v in sorted_list:\n    jump(x, -100)\n    color("seagreen")\n    width(16)\n    pendown()\n    forward(v * 3)\n    penup()\n    x = x + 60\n`,
@@ -1529,7 +1683,12 @@ const WORLD8_LESSONS = [
     subtitle: "Steps vs size — complexity, felt",
     beats: [
       { t: "Same recipe, bigger box — what happens to the COST?" },
-      { t: "Measure it like a scientist: hunt in 5, in 10, in 20. Chart the steps." },
+      { t: "Measure it like a scientist: hunt in 5, in 10, in 20. Chart the steps.",
+        fig: { k: "rows", rows: [
+          { code: [{ c: "5 names", r: "v" }], res: "5 steps" },
+          { code: [{ c: "10 names", r: "v" }], res: "10 steps" },
+          { code: [{ c: "20 names", r: "v" }], res: "20 steps" },
+        ], note: "double the box → double the hunt. A straight line." } },
       { t: "Double the names, double the hunt. A straight line. Recipes have SHAPES." },
       { t: "Honesty: cleverer recipes exist — university will hand them to you. Today you learned to MEASURE." },
     ],
@@ -1554,7 +1713,11 @@ const WORLD8_LESSONS = [
     subtitle: "The honest taste of machine learning",
     beats: [
       { t: "The finale's promise, kept: teach a machine to tell <b>dates from olives</b>." },
-      { t: "Honesty first: the machine won't UNDERSTAND. It will find a PATTERN in your examples." },
+      { t: "Honesty first: the machine won't UNDERSTAND. It will find a PATTERN.",
+        fig: { k: "rows", rows: [
+          { lab: "study", code: [{ c: "brain.fit(", r: "k" }, { c: "examples, labels", r: "n" }, { c: ")", r: "k" }], res: "finds the pattern" },
+          { lab: "judge", code: [{ c: "brain.predict(", r: "k" }, { c: "[39, 8]", r: "v" }, { c: ")", r: "k" }], res: "\"date\"" },
+        ], note: "a pattern-finder — it never truly understands" } },
       { t: "Watch the two sacred verbs:",
         build: {
           steps: [

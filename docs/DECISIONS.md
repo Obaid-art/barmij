@@ -1,5 +1,25 @@
 # Decisions Log — Barmij
 
+- **2026-09-15 / B58 — Flood complete + figures ANIMATE + the spoiler audit (founder: "flood
+  the rest… fair-paced animations… no silly mistakes like the one I just caught").**
+  1. EVERY FIGURE NOW BUILDS ITSELF, fair-paced: parts land one by one (~0.4-0.85s apart),
+     the arrow draws AFTER the code, the result arrives LAST — cause before effect, always.
+     Cycle steps land around the circle, then the arrows connect them and the loop visibly
+     turns. Implemented as staged SVG groups (CSS animation-delay); animations start the
+     moment a beat is revealed; reduced-motion users get everything instantly (global
+     charter rule reaches inside the SVGs).
+  2. SECOND WAVE: 16 more figures — instructions-in-order, the color shelf, pen tricks, the
+     jar's power (100 vs 180), the i-jar filling, 90° vs 144°, the + glue anatomy, the
+     = / == twins, the three elif roads, counting backwards, the zellij recipe, the card
+     machine, the four organs of a living world, the sacred pen lines, collect-chart-read,
+     and capstone mix ideas. TOTAL: 59 figures, 48/48 lessons covered, zero faults.
+  3. THE SPOILER AUDIT (the founder's "dinosaur" catch, generalized): five predict prompts
+     asked questions their own neighboring figure had just answered (w1l1, w6l2, w7l2,
+     w8l2, w8l4). All five rewritten to predict what is NOT shown — the quotes themselves,
+     both keys held, the absent guest, the box of 100. LAW: a prediction must never be
+     answerable by looking up two centimeters.
+  Gates PASS. Assets v34, deployed.
+
 - **2026-09-15 / B57 — THE FIGURE FLOOD (founder: "flood it with figures, explaining what's
   happening at each stage, then make them practice — text is boring… figures kids easily
   comprehend").** The charter's oldest promise ("every concept gets a beautiful figure"),

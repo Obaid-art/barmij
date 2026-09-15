@@ -94,7 +94,12 @@ const WORLD1_LESSONS = [
     subtitle: "Every program starts with hello",
     beats: [
       { t: "Computers do exactly what you tell them." },
-      { t: "You tell them with <b>instructions</b> — one per line." },
+      { t: "You tell them with <b>instructions</b> — one per line.",
+        fig: { k: "rows", rows: [
+          { lab: "line 1", code: [], res: "done first" },
+          { lab: "line 2", code: [], res: "then this" },
+          { lab: "line 3", code: [], res: "then this" },
+        ] } },
       { t: "Watch your first instruction build itself:",
         build: {
           steps: [
@@ -114,7 +119,7 @@ const WORLD1_LESSONS = [
           { c: ")", r: "i" },
         ], eff: "Ahlan!", effl: "what happens" } },
     ],
-    predict: "Before you press Run — what exactly do you think will appear?",
+    predict: "The quotes wrap your words — will the quotes THEMSELVES get printed? Look closely when you Run.",
     starter: `print("Ahlan! I am the computer")\n`,
     task: "Make the computer say YOUR name — then make it say two more things (one print per line).",
     hints: [
@@ -171,9 +176,16 @@ const WORLD1_LESSONS = [
           { code: [{ c: "width(", r: "k" }, { c: "8", r: "v" }, { c: ")", r: "k" }], res: "a thick pen" },
         ] } },
       { t: "They style whatever the pen draws <b>next</b>." },
-      { t: "It knows 100+ colors: <code class=\"a\">\"red\"</code> <code class=\"a\">\"teal\"</code> <code class=\"a\">\"hotpink\"</code> <code class=\"a\">\"royalblue\"</code> <code class=\"a\">\"orchid\"</code>…" },
+      { t: "It knows 100+ colors:",
+        fig: { k: "slots", items: ["\"red\"", "\"teal\"", "\"hotpink\"", "\"gold\"", "\"orchid\""], idx: false,
+               note: "over one hundred names — every one yours to try" } },
       { t: "Change color between lines → every side different." },
-      { t: "Bonus pen tricks: <code class=\"k\">penup()</code> lifts the pen · <code class=\"k\">jump(x, y)</code> teleports · <code class=\"k\">dot()</code> stamps." },
+      { t: "Bonus pen tricks:",
+        fig: { k: "rows", rows: [
+          { code: [{ c: "penup()", r: "k" }], res: "the pen lifts — walk without drawing" },
+          { code: [{ c: "jump(50, 80)", r: "k" }], res: "teleport there" },
+          { code: [{ c: "dot()", r: "k" }], res: "stamp a dot ●" },
+        ] } },
     ],
     starter: `color("royalblue")\nwidth(8)\nforward(120)\nright(120)\ncolor("gold")\nforward(120)\nright(120)\ncolor("seagreen")\nforward(120)\n`,
     task: "Draw a picture that uses at least 3 different colors. Any shape you like — this is YOUR art.",
@@ -207,7 +219,11 @@ const WORLD1_LESSONS = [
           effect: "the turtle walks 100",
           done: "One jar, ready to feed every line below.",
         } },
-      { t: "Change the jar once → the <b>whole drawing</b> changes with it." },
+      { t: "Change the jar once → the <b>whole drawing</b> changes with it.",
+        fig: { k: "rows", rows: [
+          { code: [{ c: "size", r: "n" }, { c: " = ", r: "i" }, { c: "100", r: "v" }], res: "a small square" },
+          { code: [{ c: "size", r: "n" }, { c: " = ", r: "i" }, { c: "180", r: "v" }], res: "a BIG square" },
+        ], note: "one change, four sides obey — that is the jar's power" } },
     ],
     predict: "If you change ONLY the first line to size = 180 and run again — what changes?",
     starter: `size = 100\n\nforward(size)\nright(90)\nforward(size)\nright(90)\nforward(size)\nright(90)\nforward(size)\n`,
@@ -233,7 +249,9 @@ const WORLD1_LESSONS = [
     beats: [
       { t: "Never copy-paste the same lines. Command repetition itself:", fig: "loop" },
       { t: "The indent (4 spaces) means: <b>I belong to the loop</b>." },
-      { t: "<code class=\"v\">i</code> is a jar the loop fills: 0, 1, 2, 3…" },
+      { t: "<code class=\"v\">i</code> is a jar the loop fills:",
+        fig: { k: "slots", name: "i", items: ["0", "1", "2", "3"], idx: false,
+               note: "one lap, one value — the loop refills the jar every time around" } },
       { t: "Watch the spell being cast:",
         build: {
           steps: [
@@ -270,7 +288,11 @@ const WORLD1_LESSONS = [
         fig: { k: "rows", rows: [
           { lab: "5 times", code: [{ c: "forward(150)", r: "k" }, { c: " then ", r: "i" }, { c: "right(144)", r: "k" }], res: "⭐" },
         ] } },
-      { t: "(A square turned 90. A star folds sharper.)" },
+      { t: "(A square turned 90. A star folds sharper.)",
+        fig: { k: "rows", rows: [
+          { code: [{ c: "right(90)", r: "k" }], res: "a square corner" },
+          { code: [{ c: "right(144)", r: "k" }], res: "a star point ⭐" },
+        ] } },
       { t: "Loop or no loop — your call. Mastery means <b>your way</b>." },
     ],
     starter: `# Draw your star here.\n# You know: 5 lines, right(144) after each.\n\n`,
@@ -382,7 +404,14 @@ const WORLD2_LESSONS = [
           effect: "the program waits for YOU",
           done: "Ask, wait, catch the answer in the jar.",
         } },
-      { t: "Glue words with +: <code class=\"k\">print</code>(<code class=\"a\">\"Ahlan, \"</code> + <code class=\"v\">name</code>)" },
+      { t: "Glue words with +:",
+        fig: { k: "anat", p: [
+          { c: "print(", r: "k" },
+          { c: "\"Ahlan, \"", r: "v", l: "your words" },
+          { c: " + ", r: "i" },
+          { c: "name", r: "n", l: "the jar" },
+          { c: ")", r: "i" },
+        ], eff: "Ahlan, Sara", effl: "glued into one sentence" } },
     ],
     predict: "Where will the question appear — and where will your answer go?",
     starter: `name = input("What is your name?")\nprint("Ahlan wa sahlan, " + name + "!")\nprint("Welcome to World 2, " + name)\n`,
@@ -407,7 +436,11 @@ const WORLD2_LESSONS = [
     beats: [
       { t: "Now — code that <b>decides</b>." },
       { t: "<code class=\"k\">if</code> opens two roads. Python takes exactly one:", fig: "fork" },
-      { t: "The twins: <b>=</b> fills a jar. <b>==</b> asks \"equal?\". Not the same!" },
+      { t: "The twins — not the same!",
+        fig: { k: "rows", rows: [
+          { code: [{ c: "answer", r: "n" }, { c: " = ", r: "i" }, { c: "\"blue\"", r: "v" }], res: "fills the jar" },
+          { code: [{ c: "answer", r: "n" }, { c: " == ", r: "i" }, { c: "\"blue\"", r: "v" }], res: "asks: equal?" },
+        ] } },
       { t: "Indented lines belong to their road." },
     ],
     predict: "If you type banana instead of blue — which road runs? What color will the square be?",
@@ -495,7 +528,12 @@ const WORLD2_LESSONS = [
           { c: ")", r: "i" },
         ], eff: "7", effl: "a real number — now > and < work" } },
       { t: "<code class=\"k\">str</code>(...) is the twin, reversed — numbers back into words, ready for +." },
-      { t: "Between if and else lives <code class=\"k\">elif</code>: \"else, if…\"" },
+      { t: "Between if and else lives <code class=\"k\">elif</code> — three roads:",
+        fig: { k: "rows", rows: [
+          { lab: "if", code: [{ c: "guess == secret", r: "i" }], res: "gold! you won" },
+          { lab: "elif", code: [{ c: "guess > secret", r: "i" }], res: "too high" },
+          { lab: "else", code: [], res: "too low" },
+        ], note: "Python walks down and takes the FIRST road that is true" } },
       { t: "That's everything a guessing game needs. 🎯" },
     ],
     predict: "The spiral's color will tell you how your guess went. Which color means victory?",
@@ -643,7 +681,10 @@ const WORLD3_LESSONS = [
           effect: "size = 20, 40, 60, 80, 100, 120",
           done: "Six sizes from one line. The step is yours to choose.",
         } },
-      { t: "Backwards too: range(120, 19, -20) counts <b>down</b>." },
+      { t: "Backwards too:",
+        fig: { k: "rows", rows: [
+          { code: [{ c: "range(120, 19, ", r: "k" }, { c: "-20", r: "v" }, { c: ")", r: "k" }], res: "120 100 80 60 40 20" },
+        ], note: "a negative step counts DOWN" } },
     ],
     predict: "Six squares, each 20 bigger, all from one corner — what staircase of squares appears?",
     starter: `color("goldenrod")\nwidth(3)\nfor size in range(20, 121, 20):\n    for j in range(4):\n        forward(size)\n        right(90)\n`,
@@ -732,7 +773,12 @@ const WORLD3_LESSONS = [
     subtitle: "Make — the tile only you would make",
     beats: [
       { t: "Design YOUR tile — the one only you would make." },
-      { t: "Choose N shapes: 6, 8, 10 or 12. Turn = 360 ÷ N." },
+      { t: "The recipe of every tile:",
+        fig: { k: "rows", rows: [
+          { lab: "choose N", code: [{ c: "6, 8, 10 or 12", r: "v" }], res: "how many shapes" },
+          { lab: "the turn", code: [{ c: "360 ÷ N", r: "i" }], res: "the ring closes" },
+          { lab: "inside", code: [{ c: "any shape you love", r: "i" }], res: "YOUR tile" },
+        ] } },
       { t: "Any inner shape: square, triangle, hexagon… or something stranger." },
       { t: "Mosques kept these patterns for centuries. Yours starts today." },
     ],
@@ -941,7 +987,12 @@ const WORLD4_LESSONS = [
     beats: [
       { t: "The final make: a machine that generates Eid cards." },
       { t: "Teach your words: a frame word, a star word — whatever your card needs." },
-      { t: "Ask the name with <code class=\"k\">input</code>. Draw with your words. Greet with <code class=\"k\">print</code>." },
+      { t: "The card machine, in three moves:",
+        fig: { k: "rows", rows: [
+          { code: [{ c: "input(...)", r: "k" }], res: "whose card?" },
+          { code: [{ c: "frame()", r: "n" }, { c: " and ", r: "i" }, { c: "star()", r: "n" }], res: "YOUR words draw it" },
+          { code: [{ c: "print(...)", r: "k" }], res: "Eid Mubarak, Sara! 🌙" },
+        ] } },
       { t: "Every card it makes is different. Every card is yours." },
     ],
     starter: `# The Eid Card Generator\n# Your words, your card. A frame? Stars? A crescent?\n\nname = input("Who is this Eid card for?")\n\n`,
@@ -1229,7 +1280,7 @@ const WORLD6_LESSONS = [
         ] } },
       { t: "Now the falcon obeys not the code — but the CHILD at the keys." },
     ],
-    predict: "No key held → what does the falcon do? (Hint: what SHOULD a waiting falcon do?)",
+    predict: "Hold LEFT and RIGHT at the same time — what will the falcon do? Try it after you Run.",
     starter: `game.x = 0\n\ndef tick():\n    if key_pressed("left"):\n        game.x = game.x - 6\n    if key_pressed("right"):\n        game.x = game.x + 6\n    color("peru")\n    penup()\n    jump(game.x, -130)\n    dot(16)\n    color("saddlebrown")\n    jump(game.x + 11, -123)\n    dot(5)\n`,
     task: "Run, then FLY it with the arrow keys. Then give it a vertical life too: up and down arrows.",
     hints: [
@@ -1358,7 +1409,13 @@ const WORLD6_LESSONS = [
     beats: [
       { t: "The final make: a living world that is entirely yours." },
       { t: "An idea if you want one: the dhow dodge — steer a dhow, dodge what falls." },
-      { t: "The laws: a heartbeat, keys, a judge, a score on the sky." },
+      { t: "Every living world carries four organs:",
+        fig: { k: "rows", rows: [
+          { code: [{ c: "def tick():", r: "k" }], res: "the heartbeat" },
+          { code: [{ c: "key_pressed(...)", r: "k" }], res: "the player's hands" },
+          { code: [{ c: "distance(...)", r: "k" }], res: "the judge" },
+          { code: [{ c: "write(...)", r: "k" }], res: "the score on the sky" },
+        ] } },
       { t: "Or ignore the idea entirely. Living worlds obey their makers." },
     ],
     starter: `# Your living world.\n# Needs: game jars · def tick() · key_pressed · distance · write\n\nimport random\n\n`,
@@ -1433,7 +1490,7 @@ const WORLD7_LESSONS = [
           { code: [{ c: "temps[", r: "n" }, { c: "\"Jul\"", r: "v" }, { c: "]", r: "n" }], res: "41" },
         ], note: "numbers approximate — real data is honest about that" } },
     ],
-    predict: "Four months, four bars from the dictionary — which month towers?",
+    predict: "The loop walks the NAMES — so what does temps[month] hand back on each lap?",
     starter: `temps = {"Jan": 24, "Apr": 34, "Jul": 41, "Oct": 35}\n\nx = -150\npenup()\nfor month in temps:\n    t = temps[month]\n    jump(x, -100)\n    color("darkorange")\n    width(16)\n    pendown()\n    forward(t * 4)\n    penup()\n    color("dimgray")\n    write(x - 14, -128, month)\n    write(x - 10, t * 4 - 92, str(t))\n    x = x + 90\n`,
     task: "Run Dubai's year in four bars. Then pack YOUR dictionary — favorite foods and their scores, and chart them.",
     hints: [
@@ -1452,7 +1509,11 @@ const WORLD7_LESSONS = [
     title: "The professional's pen",
     subtitle: "matplotlib — the tool scientists actually use",
     beats: [
-      { t: "You built charts by hand. Now meet the pen the world's scientists use." },
+      { t: "You built charts by hand. Now meet the pen the world's scientists use.",
+        fig: { k: "rows", rows: [
+          { code: [{ c: "plt.plot(", r: "k" }, { c: "months, temps", r: "n" }, { c: ")", r: "k" }], res: "a line through your data" },
+          { code: [{ c: "plt.show()", r: "k" }], res: "the chart appears" },
+        ], note: "the same pen used in research papers — now in your hand" } },
       { t: "One honest note: it downloads ONCE, and it's big. Patience, then power." },
       { t: "Watch the four sacred lines:",
         build: {
@@ -1552,7 +1613,12 @@ const WORLD7_LESSONS = [
     subtitle: "Make — your data, your chart, your sentence",
     beats: [
       { t: "The final make: chart something TRUE about your own life." },
-      { t: "Screen hours? Goals? Quran pages? Laps? — collect a real week." },
+      { t: "Screen hours? Goals? Quran pages? Laps? — collect a real week.",
+        fig: { k: "rows", rows: [
+          { lab: "collect", code: [{ c: "your real 7 numbers", r: "i" }], res: "the data" },
+          { lab: "chart", code: [{ c: "plt.bar + full labels", r: "i" }], res: "the picture" },
+          { lab: "read it", code: [{ c: "print(...)", r: "k" }], res: "one honest sentence" },
+        ] } },
       { t: "Then the scientist's finish: print ONE honest sentence about what the chart says." },
     ],
     starter: `import matplotlib.pyplot as plt\n\n# Your real week. Your real numbers.\ndays = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"]\n\n`,
@@ -1619,7 +1685,7 @@ const WORLD8_LESSONS = [
       { t: "The new habit of this world: <b>COUNT the steps</b>." },
       { t: "A recipe isn't just correct — it has a COST. Scientists measure it." },
     ],
-    predict: "Sara hides at slot 3 of five guests — how many questions until she's found?",
+    predict: "And if the guest is NOT in the box at all — how many questions before the hunter gives up?",
     starter: `guests = ["Maryam", "Khalid", "Omar", "Sara", "Alia"]\ntarget = "Sara"\n\nsteps = 0\nspot = -1\nfor i in range(len(guests)):\n    if spot == -1:\n        steps = steps + 1\n        if guests[i] == target:\n            spot = i\n\nif spot == -1:\n    print(target + " is not at this majlis.")\nelse:\n    print(target + " found at slot " + str(spot) + " - questions asked: " + str(steps))\n`,
     task: "Hunt Sara. Then hunt someone absent — what does the hunter report? Then move Sara to slot 0 — what happens to the steps?",
     hints: [
@@ -1692,7 +1758,7 @@ const WORLD8_LESSONS = [
       { t: "Double the names, double the hunt. A straight line. Recipes have SHAPES." },
       { t: "Honesty: cleverer recipes exist — university will hand them to you. Today you learned to MEASURE." },
     ],
-    predict: "Worst case — the target hides LAST. Before charting: what will the three bars look like?",
+    predict: "A box of 100 names, worst case — how many steps? Say the number before you run.",
     starter: `import matplotlib.pyplot as plt\n\nsizes = [5, 10, 20]\nsteps_taken = []\n\nfor size in sizes:\n    names = []\n    for i in range(size):\n        names.append("guest" + str(i))\n    target = "guest" + str(size - 1)\n    steps = 0\n    for name in names:\n        steps = steps + 1\n        if name == target:\n            print("Box of " + str(size) + ": found in " + str(steps) + " steps")\n    steps_taken.append(steps)\n\nplt.bar(["5 names", "10 names", "20 names"], steps_taken)\nplt.title("The patient hunter: cost vs box size (worst case)")\nplt.xlabel("Box size")\nplt.ylabel("Steps")\nplt.show()\n`,
     task: "Run the measurement. Then add a box of 40 — predict its bar BEFORE running. Were you right?",
     hints: [
@@ -1752,7 +1818,12 @@ const WORLD8_LESSONS = [
     beats: [
       { t: "Eight worlds live in your hands: speak, decide, pattern, extend, collect, animate, measure, teach." },
       { t: "The capstone: build something REAL that mixes at least three of them." },
-      { t: "A quiz that charts scores. A game with a champion board. A cipher with statistics." },
+      { t: "Mix worlds — ideas:",
+        fig: { k: "rows", rows: [
+          { code: [{ c: "quiz", r: "n" }, { c: " + ", r: "i" }, { c: "chart", r: "n" }], res: "a report card machine" },
+          { code: [{ c: "game", r: "n" }, { c: " + ", r: "i" }, { c: "champion", r: "n" }], res: "a high-score board" },
+          { code: [{ c: "cipher", r: "n" }, { c: " + ", r: "i" }, { c: "statistics", r: "n" }], res: "a spy toolkit" },
+        ] } },
       { t: "Sign it. Universities call this a <b>portfolio piece</b>. We call it yours." },
     ],
     starter: `# THE CAPSTONE\n# Mix at least three worlds. Build the thing only you can build.\n# Ideas: quiz + chart of scores - game + champion pattern - cipher + letter statistics\n\nimport matplotlib.pyplot as plt\nimport random\n\n`,

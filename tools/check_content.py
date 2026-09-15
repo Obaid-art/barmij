@@ -3,7 +3,7 @@ readability at/below the rank's grade ceiling (Mustakshif-facing Worlds 1-2: aim
 tolerate <= 5 for Bannaa-flavored lessons; the report prints the numbers, the founder judges).
 
 ADHD limits EVERYWHERE (B49/B50 — no wall of text on ANY surface):
-lessons: task <= 30w, hint <= 26w, check msg <= 24w, caption(say) <= 16w;
+lessons: task <= 30w, hint <= 26w, check msg <= 24w, caption(say) <= 12w (B52);
 bank: caption/remix <= 22w, think step <= 30w; challenges: goal/hints <= 26w;
 engine (barmij.js): any child-visible string <= 32w.
 
@@ -84,7 +84,7 @@ def adhd_everywhere():
     app = SRC.parent
     bad = []
     js = SRC.read_text(encoding="utf-8")
-    for field, cap in (("task", 30), ("msg", 24), ("say", 16)):
+    for field, cap in (("task", 30), ("msg", 24), ("say", 12)):
         for m in re.finditer(rf'\b{field}:\s*"((?:[^"\\]|\\.)*)"', js):
             if _wc(m.group(1)) > cap:
                 bad.append(f"lessons {field} {_wc(m.group(1))}w: {clean(m.group(1))[:55]}")

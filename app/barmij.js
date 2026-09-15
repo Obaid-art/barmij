@@ -537,8 +537,8 @@ function renderBank() {
 /* ---------------- beats — the page writes itself, one idea at a time (charter §I) --------- */
 const REDUCED_MOTION = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 const sleep = (ms) => new Promise(r => setTimeout(r, ms));
-/* a caption stays long enough to be READ by a child: ~380ms a word, never under ~2s */
-const readTime = (t) => Math.min(4200, Math.max(1900, String(t).split(/\s+/).length * 380));
+/* a caption stays long enough to be READ by a child: ~520ms a word, never under ~2.6s */
+const readTime = (t) => Math.min(5600, Math.max(2600, String(t).split(/\s+/).length * 520));
 let beatIdx = 0;
 let buildSession = 0;
 
@@ -1408,6 +1408,25 @@ function heroKey(e) {
       $d("demoSay").textContent = "New line! In Python, every instruction gets its own line.";
     } else if (expect === " " && demo.chars[demo.pos - 2]?.ch === "\n") {
       $d("demoSay").textContent = "Now the secret handshake — spaces that say 'I belong to the loop'.";
+    }
+  } else if (expect === "\n" || expect === " ") {
+    /* invisible keys are never a wall: typing the next LETTER presses Enter + spaces for you */
+    let j = demo.pos;
+    while (j < demo.chars.length && (demo.chars[j].ch === "\n" || demo.chars[j].ch === " ")) j++;
+    if (j < demo.chars.length && key === demo.chars[j].ch) {
+      demo.pos = j + 1; demo.wrong = 0;
+      renderDemoCode(demo.pos, true);
+      const sp2 = $d("demoCode").querySelectorAll("span:not(.demo-cursor):not(.ghost)");
+      if (sp2.length) sp2[sp2.length - 1].classList.add("pop");
+      $d("demoSay").textContent = "I pressed Enter and the spaces with you — keep going, hero!";
+      if (demo.pos >= demo.chars.length) {
+        demoButtons("done");
+        $d("demoSay").innerHTML = "🎉 <b>You typed real Python, hero!</b> Every character, yours. Now the big editor belongs to you.";
+        confetti();
+        if (lessonStage < 2) setTimeout(() => revealCodeStage(true), 1200);
+      }
+    } else {
+      heroNudge();
     }
   } else {
     heroNudge();

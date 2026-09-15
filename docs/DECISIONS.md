@@ -1,5 +1,22 @@
 # Decisions Log — Barmij
 
+- **2026-09-15 / B52 — The founder's own live test (first real user!): the Enter trap, and
+  captions still "fast and long."**
+  1. THE ENTER TRAP: in hero typing, at a line break the child sees the next line's letters
+     (right(90)) and naturally types "r" — but the machine silently demanded the invisible
+     Enter first, answering "Hmm, not that key." The founder himself hit this wall on the
+     live site. LAW: invisible keys are never a wall — typing the next visible LETTER now
+     auto-presses Enter and the indent spaces, with "I pressed Enter and the spaces with
+     you — keep going, hero!" Typing them manually still works (the handshake caption still
+     teaches them). Verified with real key events: f-o-r-w-a-r-d-(1-0-0-)-r flows straight
+     through to the celebration.
+  2. PACING, second pass: readTime raised ~40% — 520ms/word, floor 2.6s, cap 5.6s
+     (B48 was 380/1.9/4.2).
+  3. LENGTH: caption cap tightened 16 → 12 words in the permanent gate; the seven captions
+     over it trimmed (the w1l5 handshake line, the w5l2 visiting loop, the w6l1 heartbeat,
+     four more). Gate PASS at the new cap.
+  Assets v28; redeployed to the live site.
+
 - **2026-09-15 / B51 — BARMIJ IS LIVE. 🌍** The founder created his GitHub account
   (Obaid-art), authorized the CLI himself from Abu Dhabi, and the gift went to the world:
   - Repository: https://github.com/Obaid-art/barmij (public — the code, the docs, all

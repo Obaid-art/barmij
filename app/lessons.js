@@ -195,7 +195,7 @@ const WORLD1_LESSONS = [
       { say: "Invent a name — this jar is YOURS. See it turn lavender:", text: "size" },
       { say: "The filling sign — one =, meaning 'put this inside':", text: " = " },
       { say: "What goes in the jar:", text: "100" },
-      { say: "Now USE the jar — write its name and Python fetches what's inside:", text: "\nforward(size)" },
+      { say: "Now USE the jar — its name fetches what's inside:", text: "\nforward(size)" },
     ]},
     starter: `size = 100\n\nforward(size)\nright(90)\nforward(size)\nright(90)\nforward(size)\nright(90)\nforward(size)\n`,
     task: "Run it. Then change ONLY the number in the first line and run again. Finish with a square you like, drawn from the jar.",
@@ -225,8 +225,8 @@ const WORLD1_LESSONS = [
     ],
     predict: "range(36) with right(100) — 36 repeats. What could THAT look like?",
     demo: { steps: [
-      { say: "The repeat spell. Watch the whole first line — ending with its special ':' —", text: "for i in range(4):" },
-      { say: "Enter, then FOUR spaces — the secret handshake that says 'I belong to the loop':", text: "\n    forward(100)" },
+      { say: "The repeat spell — one whole line, ending with its special ':'", text: "for i in range(4):" },
+      { say: "Enter, FOUR spaces — the handshake: 'I belong to the loop.'", text: "\n    forward(100)" },
       { say: "Same handshake, next instruction:", text: "\n    right(90)" },
     ]},
     starter: `for i in range(36):\n    forward(i * 4)\n    right(100)\n`,
@@ -717,7 +717,7 @@ const WORLD4_LESSONS = [
     ],
     predict: "The code teaches star() but says it TWICE — how many stars appear?",
     demo: { steps: [
-      { say: "def, a space, then YOUR word's name — and the empty doors ():", text: "def burst():" },
+      { say: "def, a space, YOUR word's name — and empty doors ():", text: "def burst():" },
       { say: "Enter, four spaces — the recipe belongs to the word:", text: "\n    forward(80)" },
       { say: "Still inside the word:", text: "\n    back(80)" },
       { say: "Now leave the recipe — NO spaces — and say your word:", text: "\nburst()" },
@@ -932,7 +932,7 @@ const WORLD5_LESSONS = [
       { t: "Watch the visiting loop:",
         build: {
           steps: [
-            { text: "for c in colors:", say: "for c in colors — no range! The loop walks the box itself." },
+            { text: "for c in colors:", say: "No range! The loop walks the box itself." },
             { text: "\n    color(c)", say: "Each lap, c holds the NEXT treasure." },
             { text: "\n    forward(80)\n    back(80)\n    right(45)", say: "…and the drawing uses whatever c holds." },
           ],
@@ -1025,7 +1025,7 @@ const WORLD5_LESSONS = [
           steps: [
             { text: "spot = alphabet.find(letter)", say: "find asks: WHERE does this letter live? (-1 means: nowhere.)" },
             { text: "\nspot = spot + 3", say: "Slide three steps down the alphabet…" },
-            { text: "\nif spot >= 26:\n    spot = spot - 26", say: "Past z? Wrap around to the start — the alphabet is a circle." },
+            { text: "\nif spot >= 26:\n    spot = spot - 26", say: "Past z? Wrap to the start — the alphabet is a circle." },
             { text: "\ncoded = coded + alphabet[spot]", say: "…and collect the disguised letter." },
           ],
           effect: "a → d,  z → c",
@@ -1091,7 +1091,7 @@ const WORLD6_LESSONS = [
           steps: [
             { text: "game.x = -200", say: "game. — the game's own jars, remembered between blinks." },
             { text: "\n\ndef tick():", say: "tick — Python calls this word THIRTY times a second." },
-            { text: "\n    game.x = game.x + 3", say: "Each blink: slide a little. Tiny moves, thirty a second — that IS motion." },
+            { text: "\n    game.x = game.x + 3", say: "Each blink, slide a little. Tiny moves, fast — that IS motion." },
             { text: "\n    penup()\n    jump(game.x, -130)\n    dot(16)", say: "…and draw the world as it is THIS blink." },
           ],
           effect: "a falcon gliding across the sky",

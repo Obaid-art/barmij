@@ -1,5 +1,23 @@
 # Decisions Log — Barmij
 
+- **2026-09-15 / B62 — The facelift (founder: "the platform itself — whoever sees it says
+  this is truly professional, aesthetic, clean to the eyes").** A pure design-craft pass,
+  inside the charter (calm, roles, no decoration):
+  - IDENTITY: the zellij star mark now lives in the header beside the wordmark — favicon,
+    tab, and page finally one brand. Header is sticky with a soft blur, the role ribbon
+    beneath it.
+  - DEPTH & CRISPNESS: layered two-tier shadows + hairline borders on every raised card;
+    a quiet vertical atmosphere gradient behind the page; styled scrollbars; antialiased
+    type everywhere.
+  - TYPE & CHROME: lesson titles 28px with tight tracking; refined crumb chip; editor with
+    a gradient toolbar, tinted gutter, and a focus ring on the whole card; figure panels
+    softened; Run button larger with a green-glow hover; every button now has real hover
+    life (lift + shadow) and a press state.
+  - THE DRAWER GREW UP: each world shows its progress pill (2/6 → ✓ 6/6 in green) beside
+    gold stars per lesson — the Journey reads like a map of achievement at a glance.
+  Verified: header mark + sticky, drawer pills, lesson pass and drawing flows unaffected.
+  Assets v38, deployed.
+
 - **2026-09-15 / B61 — The short-circuit hunt (founder: "you sure — no short circuits? no
   nonsense hiding?").** Attacked the guided steps the way a clever child would, and found
   ONE real hole: THE COMMENT CHEAT. Step checks read code with regexes, so a construct

@@ -752,7 +752,8 @@ function renderSidebar() {
     const head = document.createElement("div");
     head.className = "world-title";
     if (wi > 0) head.style.marginTop = "16px";
-    head.textContent = world.title;
+    const doneN = world.lessons.filter(l => (progress[l.id] || 0) > 0).length;
+    head.innerHTML = `<span>${world.title}</span><span class="wprog${doneN === world.lessons.length ? " full" : ""}">${doneN === world.lessons.length ? "✓ " : ""}${doneN}/${world.lessons.length}</span>`;
     const sub = document.createElement("div");
     sub.className = "world-sub";
     sub.textContent = world.sub;

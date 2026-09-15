@@ -24,7 +24,8 @@
   --rose-text: #A84300;
   --green: #007A59;       /* actions (darkened OI bluish-green; white text passes AA) */
   --radius: 16px;
-  --shadow: 0 3px 14px rgba(46, 58, 70, .08);
+  --shadow: 0 1px 2px rgba(30, 41, 59, .05), 0 10px 28px rgba(30, 41, 59, .08);
+  --hair: 1px solid rgba(46, 58, 70, .07);
 }
 
 /* Charter §III.8 — color is never the only channel: each role also differs by border style
@@ -36,17 +37,26 @@ html { scroll-behavior: smooth; }
 :focus-visible { outline: 3px solid var(--blue); outline-offset: 2px; border-radius: 6px; }
 html, body { height: 100%; }
 body {
-  margin: 0; background: var(--bg); color: var(--ink);
+  margin: 0; color: var(--ink);
+  background: linear-gradient(180deg, #fafbfe 0%, #f3f5fa 340px, var(--bg) 100%);
   font: 16px/1.55 "Nunito", "Segoe UI", system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased; text-rendering: optimizeLegibility;
   min-height: 100vh; display: flex; flex-direction: column; /* footer rests at the bottom, never mid-void */
 }
+::-webkit-scrollbar { width: 11px; height: 11px; }
+::-webkit-scrollbar-thumb { background: #ccd4df; border-radius: 8px; border: 3px solid #f3f5fa; }
+::-webkit-scrollbar-thumb:hover { background: #b7c1cf; }
+::-webkit-scrollbar-track { background: transparent; }
 
 /* ---------- header ---------- */
 header {
   display: flex; align-items: center; gap: 14px;
-  padding: 12px 22px; background: var(--card); border-bottom: 1px solid var(--line);
-  position: relative;
+  padding: 13px 24px; background: rgba(255, 255, 255, .92); backdrop-filter: blur(6px);
+  border-bottom: 1px solid var(--line);
+  position: sticky; top: 0; z-index: 40;
 }
+.logo .mark { display: block; }
+.logo { gap: 10px; align-items: center; }
 /* the signature ribbon: the four role colors, in teaching order — the design language itself */
 header::after {
   content: ""; position: absolute; inset-inline: 0; bottom: -1px; height: 3px;
@@ -69,9 +79,10 @@ header::after {
 }
 .lesson { margin-bottom: 14px; }
 .crumb {
-  display: inline-block; font-size: 12.5px; font-weight: 800;
+  display: inline-block; font-size: 12.5px; font-weight: 800; letter-spacing: .2px;
   background: var(--blue-soft); color: var(--blue-text);
-  border-radius: 999px; padding: 3px 14px; margin-bottom: 10px;
+  border: 1px solid rgba(0, 114, 178, .18);
+  border-radius: 999px; padding: 4px 15px; margin-bottom: 12px;
 }
 
 /* ---------- journey drawer (worlds & bank live here, out of the way) ---------- */
@@ -86,7 +97,11 @@ body.drawer-open .side { transform: none; }
   position: fixed; inset: 0; background: rgba(46,58,70,.35); z-index: 55; display: none;
 }
 body.drawer-open #drawerOverlay { display: block; }
-.world-title { font-weight: 900; font-size: 15px; margin-bottom: 4px; }
+.world-title { font-weight: 900; font-size: 15px; margin-bottom: 4px;
+  display: flex; justify-content: space-between; align-items: baseline; gap: 8px; }
+.wprog { font-size: 11px; font-weight: 800; color: var(--muted); background: var(--panel);
+  border-radius: 999px; padding: 1px 9px; flex: none; }
+.wprog.full { color: #1f6b45; background: #e2f3ea; }
 .world-sub { color: var(--muted); font-size: 12.5px; margin-bottom: 12px; }
 .lesson-item {
   display: flex; align-items: center; gap: 10px;
@@ -104,11 +119,11 @@ body.drawer-open #drawerOverlay { display: block; }
 .lesson-item .stars { margin-inline-start: auto; font-size: 12px; letter-spacing: 1px; color: var(--amber-text); }
 
 /* ---------- lesson panel ---------- */
-.lesson { background: var(--card); border-radius: var(--radius); box-shadow: var(--shadow); padding: 22px 24px; }
-.lesson h1 { font-size: 25px; margin: 0 0 2px; font-weight: 900; letter-spacing: -.2px; }
+.lesson { background: var(--card); border: var(--hair); border-radius: var(--radius); box-shadow: var(--shadow); padding: 26px 28px; }
+.lesson h1 { font-size: 28px; margin: 2px 0 3px; font-weight: 900; letter-spacing: -.4px; }
 .lesson .sub { color: var(--muted); font-size: 14px; margin-bottom: 14px; }
 .lesson p { margin: 10px 0; }
-.lesson figure { margin: 16px 0; background: var(--panel); border-radius: 12px; padding: 12px; }
+.lesson figure { margin: 16px 0; background: #f7f9fd; border: 1px solid rgba(46, 58, 70, .05); border-radius: 14px; padding: 16px 14px; }
 .lesson figure svg { display: block; max-width: 100%; height: auto; margin: 0 auto; }
 .lesson figcaption { text-align: center; color: var(--muted); font-size: 12.5px; margin-top: 6px; }
 
@@ -141,25 +156,34 @@ code.r { background: var(--rose-soft); color: var(--rose-text); border: 3px doub
 
 /* ---------- workbench ---------- */
 .bench { display: flex; flex-direction: column; gap: 14px; }
-.editor-card { background: var(--card); border-radius: var(--radius); box-shadow: var(--shadow); overflow: hidden; }
+.editor-card { background: var(--card); border: var(--hair); border-radius: var(--radius); box-shadow: var(--shadow); overflow: hidden; }
+.editor-card:focus-within { box-shadow: 0 1px 2px rgba(30,41,59,.05), 0 10px 28px rgba(30,41,59,.08), 0 0 0 3px var(--blue-soft); }
 .editor-head {
-  display: flex; align-items: center; gap: 10px; padding: 10px 14px;
+  display: flex; align-items: center; gap: 10px; padding: 11px 14px;
   border-bottom: 1px solid var(--line);
+  background: linear-gradient(#ffffff, #fbfcfe);
 }
 .editor-head .title { font-weight: 800; font-size: 14px; color: var(--muted); }
 .btn {
   border: 0; border-radius: 10px; padding: 9px 20px; font: inherit; font-weight: 800;
   cursor: pointer;
+  transition: transform .15s ease, box-shadow .15s ease, filter .15s ease, background .15s ease;
 }
-.btn.run { background: var(--green); color: #fff; font-size: 16px; }
-.btn.run:hover { filter: brightness(1.07); }
+.btn:hover:not(:disabled) { transform: translateY(-1px); box-shadow: 0 4px 12px rgba(30, 41, 59, .12); }
+.btn:active:not(:disabled) { transform: translateY(0); box-shadow: none; }
+.btn.run { background: var(--green); color: #fff; font-size: 16.5px; padding: 10px 24px; }
+.btn.run:hover:not(:disabled) { filter: brightness(1.06); box-shadow: 0 4px 14px rgba(0, 122, 89, .32); }
 .btn.ghost { background: var(--panel); color: var(--muted); }
+.btn.ghost:hover:not(:disabled) { color: var(--ink); }
 .btn:disabled { opacity: .55; cursor: default; }
 
 .CodeMirror {
   height: 230px; font-family: "JetBrains Mono", Consolas, monospace;
-  font-size: 15.5px; line-height: 1.65; padding: 6px 4px;
+  font-size: 15.5px; line-height: 1.7; padding: 8px 6px;
+  background: #fcfdff;
 }
+.CodeMirror-gutters { background: #f6f8fc; border-right: 1px solid #eceff5; }
+.CodeMirror-linenumber { color: #a9b3c1; }
 /* role-colored syntax (same roles as the figures; keywords also BOLD — redundant channel) */
 .cm-s-barmij .cm-keyword { color: var(--blue-text); font-weight: 800; }
 .cm-s-barmij .cm-builtin { color: var(--blue-text); font-weight: 700; }
@@ -171,7 +195,7 @@ code.r { background: var(--rose-soft); color: var(--rose-text); border: 3px doub
 .cm-s-barmij .cm-comment { color: #7a8694; font-style: italic; }
 
 .canvas-card {
-  background: var(--card); border-radius: var(--radius); box-shadow: var(--shadow);
+  background: var(--card); border: var(--hair); border-radius: var(--radius); box-shadow: var(--shadow);
   padding: 12px; position: relative;
 }
 #world { display: block; width: 100%; border-radius: 10px;

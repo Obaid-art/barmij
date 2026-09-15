@@ -1,5 +1,23 @@
 # Decisions Log — Barmij
 
+- **2026-09-15 / B54 — Founder's flow notes: the Next door, smoother seams, and the end of
+  "hero".**
+  1. THE NEXT-LESSON DOOR: previously the Next button simply didn't exist until a pass — a
+     child wondering "how do I go on?" met silence. Now the door is always visible once the
+     mission shows: locked ("🔒 Next lesson", muted) with a kind refusal on click — "Not yet
+     — finish this mission first, and the door opens. 🙂" — and it turns blue and opens the
+     moment they pass. Verified: locked click stays put with the message; pass unlocks;
+     click flows to the next lesson.
+  2. SMOOTHER SEAMS: every lesson opens with a gentle 0.3s rise-and-fade (reduced-motion
+     safe); html scroll-behavior: smooth unifies all remaining scrolls. No more jump cuts
+     between finishing one thing and starting the next.
+  3. "HERO" RETIRED from all child-facing text (founder: a child may think the turtle means
+     ITSELF — ambiguous). The typing button is now the child's own voice: "✍️ I try now"
+     ("▶ Watch me first" stays). All captions re-addressed directly (your turn / YOU try /
+     keep going); the two bank items that said hero reworded (one now says ya sadiqi).
+     Code-internal identifiers (demoHero, heroKey) untouched. Zero "hero" in the visible UI.
+  Gates PASS, assets v30, redeployed live.
+
 - **2026-09-15 / B53 — Full pass ON THE LIVE LINK, typed like a child (founder: "go through
   it… don't embarrass me").** Everything driven at https://obaid-art.github.io/barmij/:
   - All 48 lessons' stories opened live: beats render, builds fill, every figure exists,

@@ -233,7 +233,10 @@ window.addEventListener("DOMContentLoaded", async () => {
     try { localStorage.removeItem("barmij_code_" + LESSONS[current].id); } catch (e) {}
   });
   document.getElementById("hintBtn").addEventListener("click", showHint);
-  document.getElementById("nextBtn").addEventListener("click", () => openLesson(current + 1));
+  document.getElementById("nextBtn").addEventListener("click", () => {
+    if ((progress[LESSONS[current].id] || 0) > 0) openLesson(current + 1);
+    else flashFeedback("err", "Not yet — finish this mission first, and the door opens. 🙂");
+  });
   document.getElementById("demoWatchBtn").addEventListener("click", demoWatch);
   document.getElementById("demoAgainBtn").addEventListener("click", demoWatch);
   document.getElementById("demoHeroBtn").addEventListener("click", demoHero);
@@ -695,7 +698,21 @@ function revealCodeStage(scroll) {
   lessonStage = 2;
   setCodeStage(true);
   document.getElementById("storyGoBtn").style.display = "none";
+  renderNextBar(); /* the door is always visible from here — locked until the mission is passed */
   if (scroll) document.getElementById("taskText").scrollIntoView({ behavior: "smooth", block: "center" });
+}
+
+/* the Next-lesson door: always there once the mission shows; kind refusal until passed */
+function renderNextBar() {
+  const wrap = document.getElementById("nextWrap");
+  const btn = document.getElementById("nextBtn");
+  if (bankMode || galleryMode || challengeMode || current + 1 >= LESSONS.length || lessonStage < 2) {
+    wrap.style.display = "none"; return;
+  }
+  wrap.style.display = "block";
+  const passed = (progress[LESSONS[current].id] || 0) > 0;
+  btn.classList.toggle("locked", !passed);
+  btn.textContent = passed ? "Next lesson →" : "🔒 Next lesson";
 }
 function storyGo() {
   const ls = LESSONS[current];
@@ -794,6 +811,8 @@ function openLesson(i, keepQuiet) {
   clearOutputs(); clearCanvas();
   showCanvas(DRAWY.test(ls.starter) || DRAWY.test(ls.hints.join(" ")));
   renderSidebar();
+  const lp = document.getElementById("lessonPanel");
+  lp.classList.remove("lesson-enter"); void lp.offsetWidth; lp.classList.add("lesson-enter");
   if (!keepQuiet) window.scrollTo({ top: 0, behavior: "smooth" });
 }
 
@@ -809,7 +828,7 @@ function showHint() {
 /* ---------------- running code ---------------- */
 let runSeq = 0; /* a newer Run supersedes an older one still awaiting — no interleaved verdicts */
 async function run() {
-  if (!pyReady) { flashFeedback("err", "Python is still waking up — one moment, hero."); return; }
+  if (!pyReady) { flashFeedback("err", "Python is still waking up — one moment."); return; }
   const myRun = ++runSeq;
   stashEditor(); /* the typed code survives even a closed browser */
   runsThisLesson++;
@@ -896,7 +915,7 @@ async function run() {
         renderSidebar(); renderRank();
         scheduleReview(lessonGateOf(current));
         confetti();
-        if (current + 1 < LESSONS.length) document.getElementById("nextWrap").style.display = "block";
+        renderNextBar();
       } else {
         fb.className = "feedback err";
         fb.textContent = "🧭 " + verdict.msg + " (It still runs — play, observe, adjust.)";
@@ -935,7 +954,7 @@ async function run() {
     renderRank();
     scheduleReview(lessonGateOf(current)); /* today's skills return in 2 days — then 7, then 21 */
     confetti();
-    if (current + 1 < LESSONS.length) document.getElementById("nextWrap").style.display = "block";
+    renderNextBar();
   } else {
     fb.className = "feedback err";
     fb.textContent = "🧭 " + verdict.msg;
@@ -1273,10 +1292,10 @@ function initDemo(ls) {
   demo.pos = 0; demo.wrong = 0;
   if ((ls.beats || []).some(b => b.build)) {
     /* the build beat already showed the construction — go straight to the hero */
-    $d("demoSay").innerHTML = "You watched it build itself. Now — <b>your turn, hero.</b> ✍️";
+    $d("demoSay").innerHTML = "You watched it build itself. Now — <b>your turn.</b> ✍️";
     demoButtons("watched");
   } else {
-    $d("demoSay").innerHTML = "Watch my fingers first — then it's your turn, hero.";
+    $d("demoSay").innerHTML = "Watch my fingers first — then YOU try.";
     demoButtons("idle");
   }
   renderDemoCode(0, false);
@@ -1337,7 +1356,7 @@ async function demoWatch() {
       }
     }
   }
-  $d("demoSay").innerHTML = "That's the whole spell. Now — <b>go on, hero. Your turn.</b> ✍️";
+  $d("demoSay").innerHTML = "That's the whole spell. Now — <b>your turn.</b> ✍️";
   demoButtons("watched");
 }
 
@@ -1385,7 +1404,7 @@ function heroKey(e) {
   e.preventDefault();
   /* keyboard left in Arabic? the most common UAE mix-up — say it kindly */
   if (key !== expect && /[؀-ۿ]/.test(key)) {
-    heroNudge("Your keyboard is speaking Arabic right now 🙂 — switch it to English (try Alt+Shift) and continue, hero.");
+    heroNudge("Your keyboard is speaking Arabic right now 🙂 — switch it to English (try Alt+Shift) and continue.");
     return;
   }
   /* right letter, wrong size → Caps Lock / Shift, named gently */
@@ -1401,7 +1420,7 @@ function heroKey(e) {
     if (lastTyped) lastTyped.classList.add("pop");
     if (demo.pos >= demo.chars.length) {
       demoButtons("done");
-      $d("demoSay").innerHTML = "🎉 <b>You typed real Python, hero!</b> Every character, yours. Now the big editor belongs to you.";
+      $d("demoSay").innerHTML = "🎉 <b>You typed real Python!</b> Every character, yours. Now the big editor belongs to you.";
       confetti();
       if (lessonStage < 2) setTimeout(() => revealCodeStage(true), 1200);
     } else if (expect === "\n") {
@@ -1418,10 +1437,10 @@ function heroKey(e) {
       renderDemoCode(demo.pos, true);
       const sp2 = $d("demoCode").querySelectorAll("span:not(.demo-cursor):not(.ghost)");
       if (sp2.length) sp2[sp2.length - 1].classList.add("pop");
-      $d("demoSay").textContent = "I pressed Enter and the spaces with you — keep going, hero!";
+      $d("demoSay").textContent = "I pressed Enter and the spaces with you — keep going!";
       if (demo.pos >= demo.chars.length) {
         demoButtons("done");
-        $d("demoSay").innerHTML = "🎉 <b>You typed real Python, hero!</b> Every character, yours. Now the big editor belongs to you.";
+        $d("demoSay").innerHTML = "🎉 <b>You typed real Python!</b> Every character, yours. Now the big editor belongs to you.";
         confetti();
         if (lessonStage < 2) setTimeout(() => revealCodeStage(true), 1200);
       }
@@ -1496,7 +1515,7 @@ function renderChallenges() {
 }
 
 async function startChallenge(c) {
-  if (!pyReady) { flashFeedback("err", "Python is still waking up — one moment, hero."); return; }
+  if (!pyReady) { flashFeedback("err", "Python is still waking up — one moment."); return; }
   challengeMode = true; chHintIdx = 0;
   document.getElementById("chGoalCard").style.display = "block";
   document.getElementById("chTitle").textContent = `🎯 ${c.emoji} ${c.title}`;
@@ -1775,7 +1794,7 @@ function drawGhost(cmds) {
 }
 
 async function puzzleStart(it) {
-  if (!pyReady) { flashFeedback("err", "Python is still waking up — one moment, hero."); return; }
+  if (!pyReady) { flashFeedback("err", "Python is still waking up — one moment."); return; }
   exitStep();
   hideSaveBar();
   document.getElementById("thinkCard").style.display = "none";

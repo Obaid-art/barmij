@@ -2017,7 +2017,8 @@ function exitStep() {
 function flashFeedback(kind, text) {
   const fb = document.getElementById("feedback");
   fb.className = "feedback " + kind; fb.textContent = text;
-  setTimeout(() => { fb.className = "feedback"; }, 2200);
+  /* the timer may only erase ITS OWN message — never a verdict that arrived after it */
+  setTimeout(() => { if (fb.textContent === text) fb.className = "feedback"; }, 2200);
 }
 function confetti() {
   const c = document.getElementById("confetti"), ctx = c.getContext("2d");

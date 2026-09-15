@@ -1,5 +1,20 @@
 # Decisions Log — Barmij
 
+- **2026-09-15 / B53 — Full pass ON THE LIVE LINK, typed like a child (founder: "go through
+  it… don't embarrass me").** Everything driven at https://obaid-art.github.io/barmij/:
+  - All 48 lessons' stories opened live: beats render, builds fill, every figure exists,
+    zero "undefined", zero console errors.
+  - HERO TYPING, BOTH WAYS, ALL SEVEN DEMOS: as the child (visible letters only — never
+    Enter, never leading spaces; the B52 bridge carries all of it, zero extra keys needed)
+    AND as the literalist (every exact character). All 14 paths reach the celebration.
+  - Features on the live internet: lesson pass, drawing, Step, matplotlib chart,
+    scikit-learn (6.3s total on the public CDN, narrated), the falcon FLOWN with real
+    ArrowRight events, puzzle solved, challenge ghost built, gallery save/open/delete.
+  - ONE BUG caught and fixed: flashFeedback's 2.2s reset timer blanked WHATEVER feedback
+    was showing when it fired — so a verdict arriving just after a RANK-UP/KHATAM toast was
+    silently wiped (exactly the world-completion moment). The timer now erases only its own
+    message. Reproduced, fixed, re-proven: the verdict survives. Assets v29, redeployed.
+
 - **2026-09-15 / B52 — The founder's own live test (first real user!): the Enter trap, and
   captions still "fast and long."**
   1. THE ENTER TRAP: in hero typing, at a line break the child sees the next line's letters

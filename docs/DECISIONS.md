@@ -1,5 +1,25 @@
 # Decisions Log — Barmij
 
+- **2026-09-15 / B56 — THE TYPING CARD IS DEAD (founder: keyboard failed him twice on the
+  live site; "blank space then 'watch me first' is very strange… should happen
+  automatically… I prefer it like the figures… I will not publish this").** When a component
+  fails the founder twice while passing every synthetic test, the component is the bug.
+  The entire "Watch, then try" apparatus is REMOVED (~200 lines: the card, the blank code
+  box, all five buttons, hero typing, key interception, dead-key/CapsLock/Arabic nudges,
+  the Enter bridge). The flow is now what the founder specified:
+  - The code writes itself AUTOMATICALLY in the story (build beats — paced captions in the
+    same box, ↺ replay); the four demo-only lessons (w1l2/w1l4/w1l5/w2l1) got their demos
+    CONVERTED into build beats (a backlog item since B22, closed by necessity).
+  - Explanation stays the FIGURE way: the anatomy figures with arrows (print/turtle/jar/
+    loop/input) remain in the same stories.
+  - The child types in the REAL editor, where every key on earth works natively. No
+    imitation keyboard surface exists anymore — that class of bug is extinct.
+  - The "🔮 Predict first" pink box (founder: "the hell is this?") is now simply the turtle
+    asking — "🐢 Think first: …" — as a normal story line. Element and style deleted.
+  Story flow: beats+builds → Yalla continue → mission. One path, no branches, no blanks.
+  Verified: all 48 stories render (22 builds), 34 predict lines, story→mission direct,
+  259/259 programs, zero console errors, gates PASS. Assets v32, redeployed.
+
 - **2026-09-15 / B55 — ONE box, one gaze (founder: "no more writing below — a child should
   not be watching two things simultaneously").** The Watch-then-try card used to split
   attention: code typing in the box, the turtle's sentence below it. Now they share ONE

@@ -109,12 +109,6 @@ const WORLD1_LESSONS = [
       { t: "The colors never lie: <code class=\"k\">Python's word</code> → <code class=\"a\">your words</code> → <code class=\"r\">what happens</code>." },
     ],
     predict: "Before you press Run — what exactly do you think will appear?",
-    demo: { steps: [
-      { say: "Watch my fingers. First, Python's magic word — see it turn blue:", text: "print" },
-      { say: "Now open the doors — the parentheses:", text: "(" },
-      { say: "Your words live inside quotes — watch them turn amber:", text: "\"Ahlan!\"" },
-      { say: "Close the quote's twin… and close the door.", text: ")" },
-    ]},
     starter: `print("Ahlan! I am the computer")\n`,
     task: "Make the computer say YOUR name — then make it say two more things (one print per line).",
     hints: [
@@ -135,14 +129,19 @@ const WORLD1_LESSONS = [
     beats: [
       { t: "Meet the turtle 🐢 — it walks, and its pen draws." },
       { t: "It only understands code. Read the arrows:", fig: "turtle" },
+      { t: "Watch the walk write itself:",
+        build: {
+          steps: [
+            { text: "forward(100)", say: "The walking word — one hundred steps." },
+            { text: "\nright(90)", say: "New line, new order: turn right ninety." },
+            { text: "\nforward(100)", say: "And walk again. Top to bottom, always." },
+          ],
+          effect: "walk → turn → walk",
+          done: "Three orders, obeyed in order.",
+        } },
       { t: "Code runs <b>top to bottom</b>. Nothing skipped, nothing guessed." },
     ],
     predict: "Two forward lines with a turn between them — what shape will the pen leave?",
-    demo: { steps: [
-      { say: "The walking word:", text: "forward" },
-      { say: "Doors open — how many steps? — doors closed:", text: "(100)" },
-      { say: "Press Enter — every instruction gets its own line. Now, a turn:", text: "\nright(90)" },
-    ]},
     starter: `forward(120)\nright(90)\nforward(120)\n`,
     task: "Make the turtle draw a longer path — at least 4 lines, using forward and right (or left). Try big numbers!",
     hints: [
@@ -187,16 +186,20 @@ const WORLD1_LESSONS = [
       { t: "A superpower: invent a name, give it a value." },
       { t: "Follow the arrow — the value goes into a jar:", fig: "jar",
         figcap: "= means \"put this inside\" — not \"equals\" like math class!" },
-      { t: "Write the name anywhere → Python fetches what's inside." },
+      { t: "Watch a jar being filled, then used:",
+        build: {
+          steps: [
+            { text: "size", say: "Invent a name — this jar is YOURS." },
+            { text: " = ", say: "The filling sign: 'put this inside'." },
+            { text: "100", say: "What goes in the jar." },
+            { text: "\nforward(size)", say: "Now USE it — the name fetches what's inside." },
+          ],
+          effect: "the turtle walks 100",
+          done: "One jar, ready to feed every line below.",
+        } },
       { t: "Change the jar once → the <b>whole drawing</b> changes with it." },
     ],
     predict: "If you change ONLY the first line to size = 180 and run again — what changes?",
-    demo: { steps: [
-      { say: "Invent a name — this jar is YOURS. See it turn lavender:", text: "size" },
-      { say: "The filling sign — one =, meaning 'put this inside':", text: " = " },
-      { say: "What goes in the jar:", text: "100" },
-      { say: "Now USE the jar — its name fetches what's inside:", text: "\nforward(size)" },
-    ]},
     starter: `size = 100\n\nforward(size)\nright(90)\nforward(size)\nright(90)\nforward(size)\nright(90)\nforward(size)\n`,
     task: "Run it. Then change ONLY the number in the first line and run again. Finish with a square you like, drawn from the jar.",
     hints: [
@@ -221,14 +224,19 @@ const WORLD1_LESSONS = [
       { t: "Never copy-paste the same lines. Command repetition itself:", fig: "loop" },
       { t: "The indent (4 spaces) means: <b>I belong to the loop</b>." },
       { t: "<code class=\"v\">i</code> is a jar the loop fills: 0, 1, 2, 3…" },
+      { t: "Watch the spell being cast:",
+        build: {
+          steps: [
+            { text: "for i in range(4):", say: "The repeat spell — one line, ending with ':'" },
+            { text: "\n    forward(100)", say: "FOUR spaces — the handshake: 'I belong to the loop.'" },
+            { text: "\n    right(90)", say: "Same handshake, next instruction." },
+          ],
+          effect: "a whole square",
+          done: "Two indented lines, four times around.",
+        } },
       { t: "Use <code class=\"v\">i</code> inside → <code class=\"k\">forward</code>(<code class=\"v\">i</code> * <code class=\"a\">4</code>) → every step grows 🌀" },
     ],
     predict: "range(36) with right(100) — 36 repeats. What could THAT look like?",
-    demo: { steps: [
-      { say: "The repeat spell — one whole line, ending with its special ':'", text: "for i in range(4):" },
-      { say: "Enter, FOUR spaces — the handshake: 'I belong to the loop.'", text: "\n    forward(100)" },
-      { say: "Same handshake, next instruction:", text: "\n    right(90)" },
-    ]},
     starter: `for i in range(36):\n    forward(i * 4)\n    right(100)\n`,
     task: "Run the spiral! Then experiment: change range(36), the * 4, and right(100). When you find a pattern you love, you've passed.",
     hints: [
@@ -351,15 +359,19 @@ const WORLD2_LESSONS = [
     beats: [
       { t: "Your programs can speak. Now they learn to <b>listen</b>." },
       { t: "<code class=\"k\">input</code> asks a question — then <b>waits</b>. Follow the arrows:", fig: "input" },
-      { t: "The answer lands in your jar, ready to use." },
+      { t: "Watch a question being built:",
+        build: {
+          steps: [
+            { text: "name = ", say: "A jar, ready and waiting for the answer." },
+            { text: "input", say: "The listening word." },
+            { text: "(\"What is your name?\")", say: "Your question goes inside — quotes and all." },
+          ],
+          effect: "the program waits for YOU",
+          done: "Ask, wait, catch the answer in the jar.",
+        } },
       { t: "Glue words with +: <code class=\"k\">print</code>(<code class=\"a\">\"Ahlan, \"</code> + <code class=\"v\">name</code>)" },
     ],
     predict: "Where will the question appear — and where will your answer go?",
-    demo: { steps: [
-      { say: "First a jar, ready and waiting for the answer:", text: "name = " },
-      { say: "The listening word:", text: "input" },
-      { say: "Your question goes inside — quotes and all:", text: "(\"What is your name?\")" },
-    ]},
     starter: `name = input("What is your name?")\nprint("Ahlan wa sahlan, " + name + "!")\nprint("Welcome to World 2, " + name)\n`,
     task: "Run it and answer! Then add a SECOND question (favorite color? favorite food?) and print a reply that uses the answer.",
     hints: [
@@ -528,13 +540,6 @@ const WORLD3_LESSONS = [
       { t: "Small code, huge work — that's what computers are FOR." },
     ],
     predict: "Six hexagons, each drawn after a turn of 60 — what ring appears?",
-    demo: { steps: [
-      { say: "The outer spell first — you know this one:", text: "for i in range(4):" },
-      { say: "Enter, FOUR spaces — then a second for. The double handshake begins:", text: "\n    for j in range(4):" },
-      { say: "Enter, EIGHT spaces now — the deepest level:", text: "\n        forward(50)" },
-      { say: "Still eight spaces deep:", text: "\n        right(90)" },
-      { say: "Back to four — this turn belongs to the outer loop:", text: "\n    right(90)" },
-    ]},
     starter: `color("darkslateblue")\nwidth(2)\nfor i in range(6):\n    for j in range(6):\n        forward(60)\n        right(60)\n    right(60)\n`,
     task: "Run the ring. Then change BOTH range numbers and the last right() — hunt for a ring you love.",
     hints: [
@@ -716,12 +721,6 @@ const WORLD4_LESSONS = [
       { t: "Python only knows the words you teach it. Today, its dictionary grew." },
     ],
     predict: "The code teaches star() but says it TWICE — how many stars appear?",
-    demo: { steps: [
-      { say: "def, a space, YOUR word's name — and empty doors ():", text: "def burst():" },
-      { say: "Enter, four spaces — the recipe belongs to the word:", text: "\n    forward(80)" },
-      { say: "Still inside the word:", text: "\n    back(80)" },
-      { say: "Now leave the recipe — NO spaces — and say your word:", text: "\nburst()" },
-    ]},
     starter: `def star():\n    for i in range(5):\n        forward(120)\n        right(144)\n\ncolor("gold")\nstar()\npenup()\njump(-150, -60)\npendown()\ncolor("crimson")\nstar()\n`,
     task: "Run the twin stars. Then teach a SECOND word — burst() or box() — and say both words in one program.",
     hints: [

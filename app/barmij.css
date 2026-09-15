@@ -131,10 +131,6 @@ code.r { background: var(--rose-soft); color: var(--rose-text); border: 3px doub
   border-inline-start: 4px solid var(--amber); background: var(--amber-soft);
   border-radius: 0 12px 12px 0; padding: 12px 14px; margin-top: 16px; font-weight: 700;
 }
-.predict {
-  border-inline-start: 4px solid var(--lav); background: var(--lav-soft);
-  border-radius: 0 12px 12px 0; padding: 10px 14px; margin-top: 12px; font-size: 14.5px;
-}
 
 /* ---------- workbench ---------- */
 .bench { display: flex; flex-direction: column; gap: 14px; }
@@ -413,42 +409,12 @@ figure svg [fill="#3f9d6e"] { fill: var(--green); }
 }
 .demo-head { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
 .demo-title { font-weight: 900; font-size: 14.5px; color: #55418a; }
-/* ONE box, one gaze (B55): the turtle's line and the code live together — caption on top,
-   code right under it. A child never watches two places at once. */
-.demo-box {
-  background: #fdfcff; border: 1.5px solid var(--line); border-radius: 12px;
-}
-.demo-box:focus-within { border-color: var(--lav); box-shadow: 0 0 0 3px var(--lav-soft); }
-.demo-code {
-  background: transparent; border: 0;
-  padding: 12px 16px 14px; min-height: 50px; margin: 0;
-  font-family: "JetBrains Mono", Consolas, monospace; font-size: 17px; line-height: 1.8;
-  white-space: pre-wrap; overflow-wrap: anywhere; outline: none; cursor: text;
-}
-.demo-code .r-kw { color: var(--blue-text); font-weight: 800; }
-.demo-code .r-name { color: var(--lav-text); font-weight: 700; }
-.demo-code .r-val { color: var(--amber-text); font-weight: 700; }
-.demo-code .r-ink { color: #2e3a46; }
-.demo-code .ghost { color: #aab4c2; font-weight: 400; } /* target letters, deliberately faint */
-.demo-code .pop { animation: pop .18s ease-out; display: inline-block; }
 @keyframes pop { 0% { transform: scale(1.7); } 100% { transform: scale(1); } }
 .demo-cursor {
   display: inline-block; width: 2.5px; height: 1.15em; background: var(--lav);
   vertical-align: text-bottom; margin: 0 1px; animation: blink 1s steps(1) infinite;
 }
 @keyframes blink { 50% { opacity: 0; } }
-.demo-cursor.wobble { animation: wobble .3s ease; }
-@keyframes wobble { 25% { transform: translateX(-4px); } 75% { transform: translateX(4px); } }
-.demo-caption {
-  display: flex; align-items: flex-start; gap: 9px; min-height: 30px;
-  padding: 10px 14px 8px; border-bottom: 1px dashed var(--line);
-  font-size: 15px; font-weight: 700; color: var(--lav-text);
-}
-.demo-caption .who { font-size: 20px; line-height: 1.2; }
-.demo-caption kbd {
-  background: var(--lav-deep); color: #fff; border-radius: 7px; padding: 2px 10px;
-  font-family: "JetBrains Mono", monospace; font-size: 15px; margin: 0 3px;
-}
 .demo-btns { display: flex; gap: 8px; margin-top: 10px; flex-wrap: wrap; }
 .btn.demo-primary { background: var(--lav-deep); color: #fff; }
 .btn.demo-primary:hover { filter: brightness(1.08); }

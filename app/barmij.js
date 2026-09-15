@@ -5,9 +5,9 @@
 /* English-only UI (founder, 2026-09-14). Latin warmth words (Ahlan, Yalla, Mumtaz) stay. */
 const STR = {
   en: { journey: "🗺️ Journey", run: "▶ Run", reset: "Reset code", hint: "💡 Hint", next: "Next lesson →",
-        task: "Your mission", predict: "🔮 Predict first", loading: "Waking Python up… (first time takes a moment)",
+        task: "Your mission", loading: "Waking Python up… (first time takes a moment)",
         editor: "Your code", locked: "Finish the lesson before this one first 🙂",
-        storyGo: "Yalla — continue ▸", skip: "Skip to the mission ▸" },
+        storyGo: "Yalla — continue ▸" },
 };
 const lang = "en";
 
@@ -237,13 +237,7 @@ window.addEventListener("DOMContentLoaded", async () => {
     if ((progress[LESSONS[current].id] || 0) > 0) openLesson(current + 1);
     else flashFeedback("err", "Not yet — finish this mission first, and the door opens. 🙂");
   });
-  document.getElementById("demoWatchBtn").addEventListener("click", demoWatch);
-  document.getElementById("demoAgainBtn").addEventListener("click", demoWatch);
-  document.getElementById("demoHeroBtn").addEventListener("click", demoHero);
-  document.getElementById("demoTakeBtn").addEventListener("click", demoTake);
-  document.getElementById("demoSkipBtn").addEventListener("click", () => revealCodeStage(true));
   document.getElementById("storyGoBtn").addEventListener("click", storyGo);
-  document.getElementById("demoCode").addEventListener("keydown", heroKey);
   document.getElementById("bankBtn").addEventListener("click", openBank);
   document.getElementById("bankCount").textContent = CODEBANK.length;
   document.getElementById("galleryBtn").addEventListener("click", openGallery);
@@ -292,7 +286,6 @@ function applyLang() {
   document.getElementById("editorTitle").textContent = s.editor;
   document.getElementById("journeyBtn").textContent = s.journey;
   document.getElementById("storyGoBtn").textContent = s.storyGo;
-  document.getElementById("demoSkipBtn").textContent = s.skip;
 }
 
 /* ---------------- ranks — earned by mastery, never by age (DECISIONS B14) ---------------- */
@@ -475,7 +468,6 @@ function openBank() {
   bankMode = true; currentBankItem = null;
   document.getElementById("lessonPanel").style.display = "none";
   document.getElementById("bankPanel").style.display = "block";
-  document.getElementById("demoCard").style.display = "none";
   setCodeStage(true); /* the bank IS the doing stage */
   showCanvas(false); /* appears the moment something draws */
   document.getElementById("taskText").style.display = "none";
@@ -681,8 +673,13 @@ function revealBeat(upto, instant) {
 
 function finishBeats() {
   const ls = LESSONS[current];
-  const pr = document.getElementById("predictBox");
-  if (ls.predict) { pr.style.display = "block"; pr.innerHTML = `<b>${STR[lang].predict}:</b> ${ls.predict}`; }
+  if (ls.predict) {
+    /* the predict prompt is just the turtle asking — a normal story line, no strange box */
+    const p = document.createElement("div");
+    p.className = "beat on in";
+    p.innerHTML = `🐢 <b>Think first:</b> ${ls.predict}`;
+    document.getElementById("lessonBody").appendChild(p);
+  }
   document.getElementById("storyGoBtn").style.display = "";
 }
 
@@ -715,15 +712,7 @@ function renderNextBar() {
   btn.textContent = passed ? "Next lesson →" : "🔒 Next lesson";
 }
 function storyGo() {
-  const ls = LESSONS[current];
-  if (ls.demo && lessonStage === 0) {
-    lessonStage = 1;
-    document.getElementById("demoCard").style.display = "block";
-    document.getElementById("storyGoBtn").style.display = "none";
-    document.getElementById("demoCard").scrollIntoView({ behavior: "smooth", block: "center" });
-  } else {
-    revealCodeStage(true);
-  }
+  revealCodeStage(true); /* story → mission, one step — the builds already showed the code */
 }
 
 /* ---------------- lessons & navigation ---------------- */
@@ -794,14 +783,11 @@ function openLesson(i, keepQuiet) {
   document.getElementById("lessonTitle").textContent = ls.title;
   document.getElementById("lessonSub").textContent = ls.subtitle;
   document.getElementById("taskText").innerHTML = `<b>${STR[lang].task}:</b> ${ls.task}`;
-  document.getElementById("predictBox").style.display = "none";
   const savedCode = loadStr("barmij_code_" + ls.id);
   editor.setValue(savedCode !== null ? savedCode : ls.starter);
   editorOwner = ls.id;
-  initDemo(ls);
-  /* staged reveal: beats first (storyGo appears when they finish), then demo, then mission */
+  /* staged reveal: the story (beats + builds) first, then the mission */
   lessonStage = 0;
-  document.getElementById("demoCard").style.display = "none";
   setCodeStage(false);
   document.getElementById("storyGoBtn").style.display = "none";
   renderBeats(ls);
@@ -1273,191 +1259,10 @@ function tokenizeRoles(text) {
   return out;
 }
 
-const demo = { state: "idle", chars: [], pos: 0, wrong: 0, session: 0, heroText: "" };
+/* The separate "Watch, then try" typing card was REMOVED (B56, founder call): the story's
+   build beats already write the code letter-by-letter automatically, the anatomy figures
+   explain with arrows, and the child types in the REAL editor — where every key works. */
 const $d = (id) => document.getElementById(id);
-
-function initDemo(ls) {
-  demo.session++;
-  const card = $d("demoCard");
-  card.style.display = "none"; /* stage logic (storyGo) reveals it when its turn comes */
-  if (!ls.demo) return;
-  demo.state = "idle";
-  demo.heroText = ls.demo.steps.map(s => s.text).join("");
-  demo.chars = [];
-  let pos = 0;
-  ls.demo.steps.forEach((step, si) => {
-    for (const t of tokenizeRoles(step.text)) demo.chars.push({ ...t, step: si });
-    pos += step.text.length;
-  });
-  demo.pos = 0; demo.wrong = 0;
-  if ((ls.beats || []).some(b => b.build)) {
-    /* the build beat already showed the construction — go straight to the hero */
-    $d("demoSay").innerHTML = "You watched it build itself. Now — <b>your turn.</b> ✍️";
-    demoButtons("watched");
-  } else {
-    $d("demoSay").innerHTML = "Watch my fingers first — then YOU try.";
-    demoButtons("idle");
-  }
-  renderDemoCode(0, false);
-}
-
-function demoButtons(state) {
-  demo.state = state;
-  $d("demoWatchBtn").style.display = state === "idle" ? "" : "none";
-  $d("demoHeroBtn").style.display = (state === "watched") ? "" : "none";
-  $d("demoAgainBtn").style.display = (state === "watched" || state === "hero" || state === "done") ? "" : "none";
-  $d("demoTakeBtn").style.display = state === "done" ? "" : "none";
-  $d("demoSkipBtn").style.display =
-    (lessonStage < 2 && (state === "idle" || state === "watched" || state === "hero")) ? "" : "none";
-}
-
-function renderDemoCode(upto, heroMode) {
-  const pre = $d("demoCode");
-  pre.innerHTML = "";
-  demo.chars.forEach((c, i) => {
-    const span = document.createElement("span");
-    if (i < upto) { span.className = c.cls; span.textContent = c.ch; }
-    else if (heroMode) { span.className = "ghost"; span.textContent = c.ch === "\n" ? "⏎\n" : c.ch; }
-    else return;
-    pre.appendChild(span);
-    if (i === upto - 1 || (upto === 0 && i === 0)) { /* cursor added after loop */ }
-  });
-  const cur = document.createElement("span");
-  cur.className = "demo-cursor"; cur.id = "demoCursor";
-  const spans = pre.querySelectorAll("span:not(.demo-cursor)");
-  if (upto === 0) pre.insertBefore(cur, pre.firstChild);
-  else if (heroMode && upto < demo.chars.length) {
-    let seen = 0, ref = null;
-    for (const s of spans) { if (seen === upto) { ref = s; break; } seen++; }
-    pre.insertBefore(cur, ref);
-  } else pre.appendChild(cur);
-}
-
-async function demoWatch() {
-  const mySession = ++demo.session;
-  demoButtons("watching");
-  /* a child's watching pace: ~4-5 characters per second, with a breath at each word break */
-  const speed = 175;
-  let lastStep = -1;
-  for (let i = 0; i <= demo.chars.length; i++) {
-    if (demo.session !== mySession) return; /* aborted by navigation or restart */
-    renderDemoCode(i, false);
-    if (i < demo.chars.length) {
-      const st = demo.chars[i].step;
-      if (st !== lastStep) {
-        lastStep = st;
-        $d("demoSay").textContent = LESSONS[current].demo.steps[st].say;
-        if (!window._demoFast) await new Promise(r => setTimeout(r, readTime(LESSONS[current].demo.steps[st].say)));
-      }
-      if (!window._demoFast) {
-        const ch = demo.chars[i].ch;
-        const extra = (ch === " " || ch === "\n") ? 320 : 0;
-        await new Promise(r => setTimeout(r, speed + extra + Math.random() * 85));
-      }
-    }
-  }
-  $d("demoSay").innerHTML = "That's the whole spell. Now — <b>your turn.</b> ✍️";
-  demoButtons("watched");
-}
-
-function demoHero() {
-  demo.pos = 0; demo.wrong = 0;
-  demoButtons("hero");
-  renderDemoCode(0, true);
-  $d("demoSay").textContent = "Type it yourself — I'll light up every key you get right. Take your time.";
-  $d("demoCode").focus();
-}
-
-function heroKeyName(ch) {
-  if (ch === "\n") return "Enter ⏎";
-  if (ch === " ") return "space ␣";
-  return ch;
-}
-
-/* keys that keyboard layouts often make "dead" (they wait to combine with the next letter) */
-const DEAD_CANDIDATES = new Set(['"', "'", "`", "^", "~"]);
-
-function heroNudge(msg) {
-  demo.wrong++;
-  const cur = $d("demoCursor");
-  if (cur) { cur.classList.remove("wobble"); void cur.offsetWidth; cur.classList.add("wobble"); }
-  const expect = demo.chars[demo.pos]?.ch;
-  if (msg) $d("demoSay").innerHTML = msg;
-  else if (demo.wrong >= 2) $d("demoSay").innerHTML = `Almost! The next key is <kbd>${heroKeyName(expect)}</kbd> — you've got this.`;
-  else $d("demoSay").textContent = "Hmm, not that key — look at the gray letters and try again. No rush.";
-}
-
-function heroKey(e) {
-  if (demo.state !== "hero") return;
-  const expect = demo.chars[demo.pos]?.ch;
-  if (expect === undefined) return;
-  let key = e.key;
-  if (key === "Enter") key = "\n";
-  /* dead keys (US-International & friends): the browser says "Dead" instead of the character.
-     If a quote-like key was expected, accept it directly — no child should fight a keyboard. */
-  if (key === "Dead" || key === "Unidentified") {
-    e.preventDefault();
-    if (DEAD_CANDIDATES.has(expect)) key = expect;
-    else { heroNudge(); return; }
-  }
-  if (key.length !== 1 && key !== "\n") return; /* ignore shift, arrows, etc. */
-  e.preventDefault();
-  /* keyboard left in Arabic? the most common UAE mix-up — say it kindly */
-  if (key !== expect && /[؀-ۿ]/.test(key)) {
-    heroNudge("Your keyboard is speaking Arabic right now 🙂 — switch it to English (try Alt+Shift) and continue.");
-    return;
-  }
-  /* right letter, wrong size → Caps Lock / Shift, named gently */
-  if (key !== expect && key.toLowerCase() === expect.toLowerCase() && /[a-zA-Z]/.test(expect)) {
-    heroNudge(`So close — same letter, wrong size! You need <kbd>${expect}</kbd>. Check Caps Lock ⇪ or Shift.`);
-    return;
-  }
-  if (key === expect) {
-    demo.pos++; demo.wrong = 0;
-    renderDemoCode(demo.pos, true);
-    const spans = $d("demoCode").querySelectorAll("span:not(.demo-cursor):not(.ghost)");
-    const lastTyped = spans[spans.length - 1];
-    if (lastTyped) lastTyped.classList.add("pop");
-    if (demo.pos >= demo.chars.length) {
-      demoButtons("done");
-      $d("demoSay").innerHTML = "🎉 <b>You typed real Python!</b> Every character, yours. Now the big editor belongs to you.";
-      confetti();
-      if (lessonStage < 2) setTimeout(() => revealCodeStage(true), 1200);
-    } else if (expect === "\n") {
-      $d("demoSay").textContent = "New line! In Python, every instruction gets its own line.";
-    } else if (expect === " " && demo.chars[demo.pos - 2]?.ch === "\n") {
-      $d("demoSay").textContent = "Now the secret handshake — spaces that say 'I belong to the loop'.";
-    }
-  } else if (expect === "\n" || expect === " ") {
-    /* invisible keys are never a wall: typing the next LETTER presses Enter + spaces for you */
-    let j = demo.pos;
-    while (j < demo.chars.length && (demo.chars[j].ch === "\n" || demo.chars[j].ch === " ")) j++;
-    if (j < demo.chars.length && key === demo.chars[j].ch) {
-      demo.pos = j + 1; demo.wrong = 0;
-      renderDemoCode(demo.pos, true);
-      const sp2 = $d("demoCode").querySelectorAll("span:not(.demo-cursor):not(.ghost)");
-      if (sp2.length) sp2[sp2.length - 1].classList.add("pop");
-      $d("demoSay").textContent = "I pressed Enter and the spaces with you — keep going!";
-      if (demo.pos >= demo.chars.length) {
-        demoButtons("done");
-        $d("demoSay").innerHTML = "🎉 <b>You typed real Python!</b> Every character, yours. Now the big editor belongs to you.";
-        confetti();
-        if (lessonStage < 2) setTimeout(() => revealCodeStage(true), 1200);
-      }
-    } else {
-      heroNudge();
-    }
-  } else {
-    heroNudge();
-  }
-}
-
-function demoTake() {
-  if (lessonStage < 2) revealCodeStage(false);
-  editor.replaceRange(demo.heroText + "\n", { line: 0, ch: 0 });
-  $d("demoSay").textContent = "It's in your editor — now press ▶ Run and make it yours!";
-  editor.focus();
-}
 
 /* 🔊 Narration REMOVED by the founder (B48, 2026-09-14) — the written captions, paced for
    reading, are the single voice. (The feature lives in git history if ever reopened.) */
@@ -1480,7 +1285,7 @@ function openChallenges() {
   if (puz) puzzleExit();
   stopLive();
   exitStep(); hideSaveBar();
-  ["lessonPanel", "bankPanel", "galleryPanel", "demoCard", "taskText", "thinkCard", "hintBox", "nextWrap", "chGoalCard"]
+  ["lessonPanel", "bankPanel", "galleryPanel", "taskText", "thinkCard", "hintBox", "nextWrap", "chGoalCard"]
     .forEach(id => document.getElementById(id).style.display = "none");
   document.getElementById("challengesPanel").style.display = "block";
   setCodeStage(true);
@@ -1696,7 +1501,6 @@ function openGallery() {
   document.getElementById("lessonPanel").style.display = "none";
   document.getElementById("bankPanel").style.display = "none";
   document.getElementById("galleryPanel").style.display = "block";
-  document.getElementById("demoCard").style.display = "none";
   setCodeStage(true);
   showCanvas(false);
   document.getElementById("taskText").style.display = "none";
